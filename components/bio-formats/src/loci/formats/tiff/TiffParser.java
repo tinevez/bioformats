@@ -359,6 +359,7 @@ public class TiffParser {
         count = (int) ((inputLen - pointer) / bpe);
         LOGGER.trace("getIFDs: truncated {} array elements for tag {}",
           (oldCount - count), tag);
+        if (count < 0) count = oldCount;
       }
       if (count < 0 || count > in.length()) break;
 
@@ -399,6 +400,10 @@ public class TiffParser {
 
     LOGGER.trace("Reading entry {} from {}; type={}, count={}",
       new Object[] {entry.getTag(), offset, type, count});
+
+    if (offset >= in.length()) {
+      return null;
+    }
 
     if (offset != in.getFilePointer()) {
       in.seek(offset);
@@ -659,14 +664,16 @@ public class TiffParser {
       long[] stripOffsets = ifd.getStripOffsets();
       long[] stripByteCounts = ifd.getStripByteCounts();
 
-      int tile = (int) ((y / tileLength) * numTileCols + (x / tileWidth));
+      if (stripOffsets != null && stripByteCounts != null) {
+        int tile = (int) ((y / tileLength) * numTileCols + (x / tileWidth));
 
-      if (stripByteCounts[tile] == numSamples && pixel > 1) {
-        stripByteCounts[tile] *= pixel;
+        if (stripByteCounts[tile] == numSamples && pixel > 1) {
+          stripByteCounts[tile] *= pixel;
+        }
+
+        in.seek(stripOffsets[tile]);
+        in.read(buf, 0, (int) Math.min(buf.length, stripByteCounts[tile]));
       }
-
-      in.seek(stripOffsets[tile]);
-      in.read(buf, 0, (int) Math.min(buf.length, stripByteCounts[tile]));
       return buf;
     }
 
