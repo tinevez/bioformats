@@ -191,6 +191,9 @@ public class OMEXMLServiceImpl extends AbstractService implements OMEXMLService
    */
   public OMEXMLMetadata createOMEXMLMetadata(String xml, String version)
     throws ServiceException {
+    if (xml != null) {
+      xml = XMLTools.sanitizeXML(xml);
+    }
     OMEModelObject ome =
       xml == null ? null : createRoot(transformToLatestVersion(xml));
 
