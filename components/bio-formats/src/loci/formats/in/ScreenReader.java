@@ -323,7 +323,7 @@ public class ScreenReader extends FormatReader {
       omexmlMeta = service.createOMEXMLMetadata();
     }
     catch (DependencyException de) {
-      throw new MissingLibraryException(OMEXMLServiceImpl.NO_OME_XML_MSG, de);
+      throw new MissingLibraryException(OMETiffReader.NO_OME_XML_MSG, de);
     }
     catch (ServiceException se) {
       throw new FormatException(se);
