@@ -85,7 +85,7 @@ public class OpenlabReader extends FormatReader {
   // -- Static fields --
 
   /** Helper reader to read PICT data. */
-  private static PictReader pict = new PictReader();
+  private PictReader pict = new PictReader();
 
   // -- Fields --
 
@@ -107,6 +107,7 @@ public class OpenlabReader extends FormatReader {
   private int lastPlane;
 
   private String gain, detectorOffset, xPos, yPos, zPos;
+  private boolean specialPlateNames = false;
 
   // -- Constructor --
 
@@ -141,23 +142,28 @@ public class OpenlabReader extends FormatReader {
 
     lastPlane = no;
 
-    if (no >= planeOffsets[series].length) return buf;
-    int index = planeOffsets[series][no];
+    PlaneInfo planeInfo = null;
+    if (specialPlateNames) {
+      planeInfo = getPlane(getZCTCoords(no));
+    }
+    else if (no < planeOffsets[series].length) {
+      int index = planeOffsets[series][no];
+      planeInfo = planes[index];
+    }
+    if (planeInfo == null) return buf;
 
-    long first = planes[index].planeOffset;
-    long last = no == planeOffsets[series].length - 1 ||
-      planeOffsets[series][no + 1] >= planes.length ? in.length() :
-      planes[planeOffsets[series][no + 1]].planeOffset;
-    in.seek(first);
+    long first = planeInfo.planeOffset;
+    long last = first + FormatTools.getPlaneSize(this) * 2;
 
     int bpp = FormatTools.getBytesPerPixel(getPixelType());
 
-    if (!planes[index].pict) {
+    if (!planeInfo.pict) {
       if (version == 2) {
+        in.seek(first);
         readPlane(in, x, y, w, h, buf);
       }
       else {
-        in.skipBytes(16);
+        in.seek(first + 16);
         int bytes = bpp * getRGBChannelCount();
         byte[] b = new byte[(int) (last - first)];
         in.read(b);
@@ -187,8 +193,8 @@ public class OpenlabReader extends FormatReader {
         }
         b = null;
       }
-      if (planes[index].volumeType == MAC_256_GREYS ||
-        planes[index].volumeType == MAC_256_COLORS)
+      if (planeInfo.volumeType == MAC_256_GREYS ||
+        planeInfo.volumeType == MAC_256_COLORS)
       {
         for (int i=0; i<buf.length; i++) {
           buf[i] = (byte) (~buf[i] & 0xff);
@@ -197,54 +203,54 @@ public class OpenlabReader extends FormatReader {
     }
     else {
       // PICT plane
-      byte[] b = new byte[(int) (last - first) + 512];
-      in.read(b, 512, b.length - 512);
       Exception exc = null;
-      IFormatReader r =
-        getRGBChannelCount() == 1 ? new ChannelSeparator(pict) : pict;
-      try {
-        Location.mapFile("OPENLAB_PICT", new ByteArrayHandle(b));
-        r.setId("OPENLAB_PICT");
+      if (getPixelType() == FormatTools.UINT8) {
+        in.seek(first);
+        byte[] b = new byte[(int) (last - first) + 512];
+        in.read(b, 512, b.length - 512);
 
-        if (getPixelType() != pict.getPixelType()) {
-          throw new FormatException("Pixel type of inner PICT does not match " +
-            "pixel type of Openlab file");
+        IFormatReader r =
+          getRGBChannelCount() == 1 ? new ChannelSeparator(pict) : pict;
+        try {
+          Location.mapFile("OPENLAB_PICT", new ByteArrayHandle(b));
+          r.setId("OPENLAB_PICT");
+
+          if (getPixelType() != r.getPixelType()) {
+            throw new FormatException("Pixel type of inner PICT does not " +
+              "match pixel type of Openlab file");
+          }
+
+          if (isIndexed()) {
+            luts.setElementAt(pict.get8BitLookupTable(),
+              planeOffsets[series][lastPlane]);
+          }
+
+          r.openBytes(0, buf, x, y, w, h);
         }
-
-        if (isIndexed()) {
-          luts.setElementAt(pict.get8BitLookupTable(),
-            planeOffsets[series][lastPlane]);
+        catch (FormatException e) { exc = e; }
+        catch (IOException e) { exc = e; }
+        finally {
+          r.close();
+          // remove file from map
+          Location.mapFile("OPENLAB_PICT", null);
         }
-
-        r.openBytes(0, buf, x, y, w, h);
-        r.close();
-        // remove file from map
-        Location.mapFile("OPENLAB_PICT", null);
+        b = null;
       }
-      catch (FormatException e) { exc = e; }
-      catch (IOException e) { exc = e; }
-      b = null;
-
-      if (exc != null) {
-        r.close();
+      if (exc != null || getPixelType() != FormatTools.UINT8) {
         LOGGER.debug("", exc);
-        in.seek(planes[index].planeOffset - 298);
+        in.seek(planeInfo.planeOffset - 298);
 
-        if (in.readByte() == 1) in.skipBytes(128);
-        in.skipBytes(169);
+        if (in.readByte() == 1) in.skipBytes(297);
+        else in.skipBytes(169);
 
         int size = 0, expectedBlock = 0, totalBlocks = -1, pixPos = 0;
 
         byte[] plane = new byte[FormatTools.getPlaneSize(this)];
 
-        while (expectedBlock != totalBlocks &&
-          in.getFilePointer() + 32 < in.length())
+        while (expectedBlock != totalBlocks && pixPos < plane.length &&
+          in.getFilePointer() + 32 < last)
         {
-          while (in.readLong() != 0x4956454164627071L &&
-            in.getFilePointer() < in.length())
-          {
-            in.seek(in.getFilePointer() - 7);
-          }
+          findNextBlock();
 
           if (in.getFilePointer() + 4 >= in.length()) break;
 
@@ -254,10 +260,12 @@ public class OpenlabReader extends FormatReader {
           }
 
           expectedBlock++;
-          if (totalBlocks == -1) totalBlocks = in.readInt();
-          else in.skipBytes(4);
+          if (totalBlocks == -1) {
+            totalBlocks = in.readInt();
+            in.skipBytes(8);
+          }
+          else in.skipBytes(12);
 
-          in.skipBytes(8);
           size = in.readInt();
           in.skipBytes(4);
 
@@ -267,12 +275,9 @@ public class OpenlabReader extends FormatReader {
           pixPos += size;
         }
 
-        int srcRow = getSizeX() * bpp * getRGBChannelCount();
-        int rowLen = w * bpp * getRGBChannelCount();
-        for (int row=0; row<h; row++) {
-          System.arraycopy(plane, (row + y) * srcRow +
-            x * bpp * getRGBChannelCount(), buf, row*rowLen, rowLen);
-        }
+        RandomAccessInputStream pix = new RandomAccessInputStream(plane);
+        readPlane(pix, x, y, w, h, buf);
+        pix.close();
         plane = null;
       }
     }
@@ -297,6 +302,7 @@ public class OpenlabReader extends FormatReader {
       planeOffsets = null;
       gain = detectorOffset = null;
       xPos = yPos = zPos = null;
+      specialPlateNames = false;
     }
   }
 
@@ -589,25 +595,34 @@ public class OpenlabReader extends FormatReader {
       // link DetectorSettings to an actual Detector
       String detectorID = MetadataTools.createLSID("Detector", 0, 0);
       store.setDetectorID(detectorID, 0, 0);
-      store.setDetectorSettingsID(detectorID, 0, 0);
 
       store.setDetectorType(getDetectorType("Other"), 0, 0);
+
+      for (int c=0; c<getEffectiveSizeC(); c++) {
+        PlaneInfo plane = getPlane(new int[] {0, c, 0});
+        if (plane != null) {
+          store.setChannelName(plane.channelName, 0, c);
+          store.setDetectorSettingsID(detectorID, 0, c);
+        }
+      }
 
       Double stageX = xPos == null ? null : new Double(xPos);
       Double stageY = yPos == null ? null : new Double(yPos);
       Double stageZ = zPos == null ? null : new Double(zPos);
 
-      for (int series=0; series<getSeriesCount(); series++) {
-        setSeries(series);
-        for (int plane=0; plane<getImageCount(); plane++) {
-          if (stageX != null) {
-            store.setPlanePositionX(stageX, series, plane);
-          }
-          if (stageY != null) {
-            store.setPlanePositionY(stageY, series, plane);
-          }
-          if (stageZ != null) {
-            store.setPlanePositionZ(stageZ, series, plane);
+      if (stageX != null || stageY != null || stageZ != null) {
+        for (int series=0; series<getSeriesCount(); series++) {
+          setSeries(series);
+          for (int plane=0; plane<getImageCount(); plane++) {
+            if (stageX != null) {
+              store.setPlanePositionX(stageX, series, plane);
+            }
+            if (stageY != null) {
+              store.setPlanePositionY(stageY, series, plane);
+            }
+            if (stageZ != null) {
+              store.setPlanePositionZ(stageZ, series, plane);
+            }
           }
         }
       }
@@ -683,9 +698,44 @@ public class OpenlabReader extends FormatReader {
 
     core[s].dimensionOrder = "XY";
     for (PlaneInfo plane : planes) {
-      if (plane == null) continue;
-      if (plane.series == s) {
-        String name = plane.planeName;
+      if (plane == null || plane.series != s) continue;
+
+      String name = plane.planeName;
+
+      // check for a specific name format:
+      // <channel name><optional timepoint>_<plate>_<well>_<Z section>
+
+      String[] tokens = name.split("_");
+      if (tokens.length == 4) {
+        specialPlateNames = true;
+
+        if (!uniqueZ.contains(tokens[3])) {
+          uniqueZ.add(tokens[3]);
+        }
+        plane.channelName = tokens[0];
+        int endIndex = 0;
+        while (endIndex < plane.channelName.length() &&
+          !Character.isDigit(plane.channelName.charAt(endIndex)))
+        {
+          endIndex++;
+        }
+        String timepoint = plane.channelName.substring(endIndex);
+        if (timepoint.equals("")) timepoint = "1";
+        plane.channelName = plane.channelName.substring(0, endIndex);
+
+        if (!uniqueC.contains(plane.channelName)) {
+          uniqueC.add(plane.channelName);
+        }
+        if (!uniqueT.contains(timepoint)) {
+          uniqueT.add(timepoint);
+        }
+
+        core[s].dimensionOrder = "XYCTZ";
+        plane.wavelength = uniqueC.indexOf(plane.channelName);
+        plane.timepoint = uniqueT.indexOf(timepoint);
+        plane.zPosition = uniqueZ.indexOf(tokens[3]);
+      }
+      else {
         for (String axis : axes) {
           Vector<String> unique = null;
           if (axis.equals("Z")) unique = uniqueZ;
@@ -714,6 +764,14 @@ public class OpenlabReader extends FormatReader {
           }
         }
       }
+    }
+
+    if (specialPlateNames) {
+      core[s].sizeC *= uniqueC.size();
+      core[s].sizeT = uniqueT.size();
+      core[s].sizeZ = uniqueZ.size();
+      core[s].imageCount = core[s].sizeC * core[s].sizeZ * core[s].sizeT;
+      return;
     }
 
     if (core[s].rgb && uniqueC.size() <= 1) {
@@ -749,6 +807,43 @@ public class OpenlabReader extends FormatReader {
     else if (newCount > getImageCount()) core[s].imageCount = newCount;
   }
 
+  private PlaneInfo getPlane(int[] zct) {
+    for (PlaneInfo plane : planes) {
+      if (plane != null && plane.zPosition == zct[0] &&
+        plane.wavelength == zct[1] && plane.timepoint == zct[2] &&
+        plane.series == getSeries())
+      {
+        return plane;
+      }
+    }
+    return null;
+  }
+
+  private void findNextBlock() throws IOException {
+    byte[] buf = new byte[8192];
+    in.read(buf);
+    boolean found = false;
+
+    while (!found) {
+      for (int i=0; i<buf.length-7; i++) {
+        if (buf[i] == 0x49 && buf[i + 1] == 0x56 && buf[i + 2] == 0x45 &&
+          buf[i + 3] == 0x41 && buf[i + 4] == 0x64 && buf[i + 5] == 0x62 &&
+          buf[i + 6] == 0x70 && buf[i + 7] == 0x71)
+        {
+          found = true;
+          in.seek(in.getFilePointer() - buf.length + i + 8);
+          break;
+        }
+      }
+      if (!found) {
+        for (int i=6; i>=0; i--) {
+          buf[6 - i] = buf[buf.length - i];
+        }
+        in.read(buf, 7, buf.length - 7);
+      }
+    }
+  }
+
   // -- Helper classes --
 
   /** Helper class for storing plane info. */
@@ -756,6 +851,7 @@ public class OpenlabReader extends FormatReader {
     protected long planeOffset;
     protected int zPosition;
     protected int wavelength;
+    protected int timepoint;
     protected String planeName;
     protected long timestamp;
     protected boolean pict;
@@ -764,6 +860,7 @@ public class OpenlabReader extends FormatReader {
     protected int width;
     protected int height;
     protected int series = -1;
+    protected String channelName;
   }
 
 }
