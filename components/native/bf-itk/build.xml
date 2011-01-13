@@ -160,23 +160,43 @@ usage and/or distribution.
     <if>
       <isset property="isWindows"/>
       <then>
-        <property name="bf-cpp.dir" value="${bf-cpp.dir.windows}"/>
+        <property name="bf-cpp.build" value="${bf-cpp.build.windows}"/>
+        <property name="jace.build" value="${jace.build.windows}"/>
+        <property name="bf-itk.lib" value="${bf-itk.lib.windows}"/>
+        <property name="bf-itk.build" value="${bf-itk.build.windows}"/>
       </then>
       <else>
-        <property name="bf-cpp.dir" value="${bf-cpp.dir.other}"/>
+        <property name="bf-cpp.build" value="${bf-cpp.build.other}"/>
+        <property name="jace.build" value="${jace.build.other}"/>
+        <property name="bf-itk.lib" value="${bf-itk.lib.other}"/>
+        <property name="bf-itk.build" value="${bf-itk.build.other}"/>
       </else>
     </if>
-    <copy file="${bf-cpp.dir}/loci_tools.jar" todir="${bf-itk.dist.dir}"/>
-    <copy file="${bf-cpp.dir}/jace-runtime.jar" todir="${bf-itk.dist.dir}"/>
+    <copy file="${bf-cpp.build}/loci_tools.jar" todir="${bf-itk.dist.dir}"/>
+    <copy file="${bf-cpp.build}/jace-runtime.jar" todir="${bf-itk.dist.dir}"/>
 
     <echo/>
     <echo>-- Copying Bio-Formats C++ shared libraries --</echo>
     <echo/>
     <copy todir="${bf-itk.dist.dir}">
-      <fileset dir="${bf-cpp.dir}" includes="*.so"/>
-      <fileset dir="${bf-cpp.dir}" includes="*.dylib"/>
-      <fileset dir="${bf-cpp.dir}" includes="*.jnilib"/>
-      <fileset dir="${bf-cpp.dir}" includes="*.dll"/>
+      <fileset dir="${bf-cpp.build}" includes="*.so"/>
+      <fileset dir="${bf-cpp.build}" includes="*.dylib"/>
+      <fileset dir="${bf-cpp.build}" includes="*.jnilib"/>
+      <fileset dir="${bf-cpp.build}" includes="*.dll"/>
+      <fileset dir="${jace.build}" includes="*.so"/>
+      <fileset dir="${jace.build}" includes="*.dylib"/>
+      <fileset dir="${jace.build}" includes="*.jnilib"/>
+      <fileset dir="${jace.build}" includes="*.dll"/>
+    </copy>
+
+    <echo/>
+    <echo>-- Copying Bio-Formats IO library --</echo>
+    <echo/>
+    <copy todir="${bf-itk.dist.dir}">
+      <fileset dir="${bf-itk.build}" includes="*.so"/>
+      <fileset dir="${bf-itk.build}" includes="*.dylib"/>
+      <fileset dir="${bf-itk.build}" includes="*.jnilib"/>
+      <fileset dir="${bf-itk.build}" includes="*.dll"/>
     </copy>
 
     <echo/>
@@ -190,7 +210,7 @@ usage and/or distribution.
     <echo>-- Copying Bio-Formats ITK plugin --</echo>
     <echo/>
     <copy todir="${bf-itk.dist.dir}">
-      <fileset dir="${build.dir}/lib"/>
+      <fileset dir="${bf-itk.lib}"/>
     </copy>
 
     <echo/>
@@ -225,9 +245,13 @@ usage and/or distribution.
 If you compiled ITK with BUILD_EXAMPLES set to ON,
 you can test the plugin with the following commands:
 
-  export ITK_AUTOLOAD_PATH="${build.dir}/lib/ITKFactories"
+  export ITK_AUTOLOAD_PATH="${build.dir}/lib/"
   cd "${itk-bin.dir}"
   ./ImageHistogram1 /path/to/sample/dataset
+
+If you run the ant dist target, use this command instead:
+
+  export ITK_AUTOLOAD_PATH="${build.dir}/dist/bf-itk/"
 
 If you use a TIFF file, you can compare the histogram results between
 the Bio-Formats importer and the built-in ITK TIFF reader by setting

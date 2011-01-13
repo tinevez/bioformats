@@ -68,6 +68,14 @@ http://www.itk.org/Wiki/Plugin_IO_mechanisms
 #include <stdio.h>
 #include <stdlib.h>
 
+#if defined (_WIN32)
+#define PATHSTEP ';'
+#define SLASH '\\'
+#else
+#define PATHSTEP ':'
+#define SLASH '/'
+#endif
+
 //--------------------------------------
 //
 // BioFormatsImageIO
@@ -81,39 +89,40 @@ namespace itk {
     m_FileType = Binary;
 
     try {
-      // initialize the Java virtual machine
-      itkDebugMacro("Creating JVM...");
-      jace::StaticVmLoader loader(JNI_VERSION_1_4);
-      jace::OptionList list;
+      jace::StaticVmLoader* tmpLoader = (jace::StaticVmLoader*)jace::helper::getVmLoader();
+      if(tmpLoader == NULL) {
 
-      const char name[] = "ITK_AUTOLOAD_PATH";
-      const char* namePtr;
-      namePtr = name;
-      char* path;
-      path = getenv(name);
-      std::string dir("");
-      if( path != NULL) {
-        dir.assign(path);
+        // initialize the Java virtual machine
+        itkDebugMacro("Creating JVM...");
+        jace::OptionList list;
+        jace::StaticVmLoader loader(JNI_VERSION_1_4);
+
+        const char name[] = "ITK_AUTOLOAD_PATH";
+        const char* namePtr;
+        namePtr = name;
+        char* path;
+        path = getenv(name);
+        std::string dir("");
+        if( path != NULL) {
+          dir.assign(path);
+        }
+
+        if( dir.at(dir.length() - 1) != SLASH ) {
+          dir.append(1,SLASH);
+        } 
+
+        list.push_back(jace::ClassPath(
+        dir+"jace-runtime.jar"+PATHSTEP+dir+"bio-formats.jar"+PATHSTEP+dir+"loci_tools.jar"
+        ));
+        list.push_back(jace::CustomOption("-Xcheck:jni"));
+        list.push_back(jace::CustomOption("-Xmx256m"));
+        list.push_back(jace::CustomOption("-Djava.awt.headless=true"));
+        list.push_back(jace::CustomOption("-Djava.library.path=" + dir));
+        //list.push_back(jace::CustomOption("-verbose"));
+        //list.push_back(jace::CustomOption("-verbose:jni"));
+        jace::helper::createVm(loader, list, false);
+        itkDebugMacro("JVM created.");
       }
-      list.push_back(jace::ClassPath(
-
- // To solve issue where JARs must live in current working directory:
- // somehow discover my own origin directory
- // e.g.: I am part of libBioFormatsIOPlugin.dylib
- // and I live in folder:
- //   /Users/hinerm/loci/bioformats/components/native/bf-itk/build/dist/bf-itk
- // so, we want a string variable "dir" containing that folder name.
- // Then, can pass classpath elements with that prefix.
- //        dir+"jace-runtime.jar:"+dir+"bio-formats.jar:"+dir+"loci_tools.jar"
-      dir+"jace-runtime.jar:"+dir+"bio-formats.jar:"+dir+"loci_tools.jar"
-      ));
-      list.push_back(jace::CustomOption("-Xcheck:jni"));
-      list.push_back(jace::CustomOption("-Xmx256m"));
-      list.push_back(jace::CustomOption("-Djava.awt.headless=true"));
-      //list.push_back(jace::CustomOption("-verbose"));
-      //list.push_back(jace::CustomOption("-verbose:jni"));
-      jace::helper::createVm(loader, list, false);
-      itkDebugMacro("JVM created.");
     }
     catch (JNIException& jniException) {
       itkDebugMacro("Exception creating JVM: " << jniException.what());
@@ -249,7 +258,7 @@ namespace itk {
         << "\tSizeC = " << sizeC << std::endl
         << "\tSizeT = " << sizeT << std::endl
         << "\tRGB Channel Count = " << rgbChannelCount << std::endl
-        << "\tEffective SizeC = " << rgbChannelCount << std::endl
+        << "\tEffective SizeC = " << effSizeC << std::endl
         << "\tImage Count = " << imageCount);
 
       // NB: Always return 5D, to be unambiguous.
@@ -286,16 +295,21 @@ namespace itk {
       SetNumberOfComponents(rgbChannelCount); // m_NumberOfComponents
 
       // get physical resolution
-      double physX = 1, physY = 1;
+      double physX = 1, physY = 1, physZ = 1, timeIncrement = 1;
       // CTR - avoid invalid memory access error on some systems (OS X 10.5)
       //MetadataRetrieve retrieve = MetadataTools::asRetrieve(omeMeta);
       //physX = retrieve.getPixelsPhysicalSizeX(0).doubleValue();
       //physY = retrieve.getPixelsPhysicalSizeY(0).doubleValue();
+      //physZ = retrieve.getPixelsPhysicalSizeZ(0).doubleValue();
+      //timeIncrement = retrieve.getPixelsTimeIncrement(0).doubleValue();
       m_Spacing[0] = physX;
       m_Spacing[1] = physY;
-      if (imageCount > 1) m_Spacing[2] = 1;
+      // TODO: verify m_Spacing.length > 2
+      if (imageCount > 1) m_Spacing[2] = physZ;
+      m_Spacing[3] = timeIncrement;
 
-      itkDebugMacro("Physical resolution = " << physX << " x " << physY);
+      itkDebugMacro("Physical resolution = " << physX << " x " << physY
+        << " x " << physZ << " x " << timeIncrement);
     }
     catch (Exception& e) {
       itkDebugMacro("A Java error occurred: " << DebugTools::getStackTrace(e));
@@ -374,6 +388,7 @@ namespace itk {
         }
       }
       int bytesPerPlane = xCount * yCount * bpp * rgbChannelCount;
+      bool isInterleaved = reader->isInterleaved();
 
       itkDebugMacro("Region extents:" << std::endl
         << "\tRegion dimension = " << regionDim << std::endl
@@ -382,12 +397,14 @@ namespace itk {
         << "\tZ: start = " << zStart << ", count = " << zCount << std::endl
         << "\tT: start = " << tStart << ", count = " << tCount << std::endl
         << "\tC: start = " << cStart << ", count = " << cCount << std::endl
-        << "\tBytes per plane = " << bytesPerPlane);
+        << "\tBytes per plane = " << bytesPerPlane << std::endl
+        << "\tIsInterleaved = " << isInterleaved);
+
 
       int imageCount = reader->getImageCount();
 
       // allocate temporary array
-      bool canDoDirect = rgbChannelCount == 1;
+      bool canDoDirect = (rgbChannelCount == 1 || isInterleaved);
       jbyte* tmpData = NULL;
       if (!canDoDirect) tmpData = new jbyte[bytesPerPlane];
 
@@ -397,7 +414,7 @@ namespace itk {
         for (int t=tStart; t<tStart+tCount; t++) {
           for (int z=zStart; z<zStart+zCount; z++) {
             int no = reader->getIndex(z, c, t);
-            itkDebugMacro("Reading image plane " << no
+            itkDebugMacro("Reading image plane " << no + 1
               << " (Z=" << z << ", T=" << t << ", C=" << c << ")"
               << " of " << imageCount << " available planes)");
             reader->openBytes(no, buf, xStart, yStart, xCount, yCount);
