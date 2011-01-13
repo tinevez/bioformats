@@ -4,7 +4,7 @@
 
 /*
 OME Bio-Formats C++ bindings for native access to Bio-Formats Java library.
-Copyright (c) 2008-2010, UW-Madison LOCI.
+Copyright (c) 2008-2011, UW-Madison LOCI.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
@@ -41,7 +41,7 @@ your combined work must be distributed under the terms of the GPL.
 /*-----------------------------------------------------------------------------
  *
  * THIS IS AUTOMATICALLY GENERATED CODE.  DO NOT MODIFY.
- * Created by melissa via JaceHeaderAutogen on Nov 3, 2010 12:12:02 PM CDT
+ * Created by hinerm via JaceHeaderAutogen on Jan 13, 2011 2:39:13 PM CST
  *
  *-----------------------------------------------------------------------------
  */
@@ -155,6 +155,7 @@ your combined work must be distributed under the terms of the GPL.
 #include "jace/proxy/loci/formats/gui/XMLWindow.h"
 //using namespace jace::proxy::loci::formats::gui;
 
+#include "jace/proxy/loci/formats/in/AIMReader.h"
 #include "jace/proxy/loci/formats/in/APLReader.h"
 #include "jace/proxy/loci/formats/in/APNGReader.h"
 #include "jace/proxy/loci/formats/in/ARFReader.h"
@@ -260,6 +261,7 @@ your combined work must be distributed under the terms of the GPL.
 #include "jace/proxy/loci/formats/in/SMCameraReader.h"
 #include "jace/proxy/loci/formats/in/SVSReader.h"
 #include "jace/proxy/loci/formats/in/ScanrReader.h"
+#include "jace/proxy/loci/formats/in/ScreenReader.h"
 #include "jace/proxy/loci/formats/in/SeikoReader.h"
 #include "jace/proxy/loci/formats/in/SimplePCITiffReader.h"
 #include "jace/proxy/loci/formats/in/SlidebookReader.h"
