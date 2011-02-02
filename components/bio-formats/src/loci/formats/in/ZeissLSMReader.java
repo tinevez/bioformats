@@ -386,10 +386,9 @@ public class ZeissLSMReader extends FormatReader {
       RandomAccessInputStream stream =
         new RandomAccessInputStream(lsmFilenames[i]);
       int count = seriesCounts.get(lsmFilenames[i]);
-      boolean littleEndian = stream.read() == TiffConstants.LITTLE;
-      stream.order(littleEndian);
 
       TiffParser tp = new TiffParser(stream);
+      Boolean littleEndian = tp.checkHeader();
       long[] ifdOffsets = tp.getIFDOffsets();
       int ifdsPerSeries = (ifdOffsets.length / 2) / count;
 
@@ -401,6 +400,7 @@ public class ZeissLSMReader extends FormatReader {
 
         IFDList ifds = new IFDList();
         while (ifds.size() < ifdsPerSeries) {
+          tp.setDoCaching(offset == 0);
           IFD ifd = tp.getIFD(ifdOffsets[offset]);
           if (offset == 0) zeissTag = ifd.get(ZEISS_ID);
           if (offset > 0 && ifds.size() == 0) {
@@ -410,6 +410,11 @@ public class ZeissLSMReader extends FormatReader {
           if (zeissTag != null) offset += 2;
           else offset++;
         }
+
+        for (IFD ifd : ifds) {
+          tp.fillInIFD(ifd);
+        }
+
         ifdsList.set(realSeries, ifds);
       }
       stream.close();
