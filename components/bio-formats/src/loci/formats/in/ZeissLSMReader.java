@@ -1117,7 +1117,6 @@ public class ZeissLSMReader extends FormatReader {
       }
     }
     ras.close();
-    in.close();
   }
 
   protected void populateMetadataStore(SubBlock block, MetadataStore store,
