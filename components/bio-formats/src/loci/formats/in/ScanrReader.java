@@ -511,6 +511,8 @@ public class ScanrReader extends FormatReader {
 
     private String wellIndex;
 
+    private boolean validChannel = false;
+
     // -- DefaultHandler API methods --
 
     public void characters(char[] ch, int start, int length) {
@@ -538,13 +540,13 @@ public class ScanrReader extends FormatReader {
         else if (key.equals("timeloop count")) {
           core[0].sizeT = Integer.parseInt(value) + 1;
         }
-        else if (key.equals("name")) {
+        else if (key.equals("name") && validChannel) {
           channelNames.add(value);
         }
         else if (key.equals("plate name")) {
           plateName = value;
         }
-        else if (key.equals("idle")) {
+        else if (key.equals("idle") && validChannel) {
           int lastIndex = channelNames.size() - 1;
           if (value.equals("0") &&
             !channelNames.get(lastIndex).equals("Autofocus"))
@@ -573,6 +575,15 @@ public class ScanrReader extends FormatReader {
       Attributes attributes)
     {
       this.qName = qName;
+      if (qName.equals("Array")) {
+        validChannel = true;
+      }
+    }
+
+    public void endElement(String uri, String localName, String qName) {
+      if (qName.equals("Array")) {
+        validChannel = false;
+      }
     }
 
   }
