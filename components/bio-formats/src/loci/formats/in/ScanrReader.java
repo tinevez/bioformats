@@ -84,6 +84,9 @@ public class ScanrReader extends FormatReader {
   private String[] tiffs;
   private MinimalTiffReader reader;
 
+  private double[] fieldPositionX;
+  private double[] fieldPositionY;
+
   // -- Constructor --
 
   /** Constructs a new ScanR reader. */
@@ -179,6 +182,10 @@ public class ScanrReader extends FormatReader {
       wellNumbers.clear();
       wellCount = 0;
       pixelSize = null;
+      tileWidth = 0;
+      tileHeight = 0;
+      fieldPositionX = null;
+      fieldPositionY = null;
     }
   }
 
@@ -440,7 +447,7 @@ public class ScanrReader extends FormatReader {
     }
 
     MetadataStore store = makeFilterMetadata();
-    MetadataTools.populatePixels(store, this);
+    MetadataTools.populatePixels(store, this, true);
 
     store.setPlateID(MetadataTools.createLSID("Plate", 0), 0);
 
@@ -492,6 +499,17 @@ public class ScanrReader extends FormatReader {
           store.setPixelsPhysicalSizeX(pixelSize, i);
           store.setPixelsPhysicalSizeY(pixelSize, i);
         }
+
+        if (fieldPositionX != null && fieldPositionY != null) {
+          int field = i % nFields;
+          int well = i / nFields;
+          store.setWellSamplePositionX(fieldPositionX[field], 0, well, field);
+          store.setWellSamplePositionY(fieldPositionY[field], 0, well, field);
+          for (int image=0; image<getImageCount(); image++) {
+            store.setPlanePositionX(fieldPositionX[field], i, image);
+            store.setPlanePositionY(fieldPositionY[field], i, image);
+          }
+        }
       }
 
       String row = wellRows > 26 ? "Number" : "Letter";
@@ -512,6 +530,9 @@ public class ScanrReader extends FormatReader {
     private String wellIndex;
 
     private boolean validChannel = false;
+    private boolean foundPositions = false;
+    private int nextXPos = 0;
+    private int nextYPos = 0;
 
     // -- DefaultHandler API methods --
 
@@ -520,6 +541,17 @@ public class ScanrReader extends FormatReader {
       if (v.trim().length() == 0) return;
       if (qName.equals("Name")) {
         key = v;
+
+        if (v.equals("subposition list")) {
+          foundPositions = true;
+        }
+      }
+      else if (qName.equals("Dimsize") && foundPositions &&
+        fieldPositionX == null)
+      {
+        int nPositions = Integer.parseInt(v);
+        fieldPositionX = new double[nPositions];
+        fieldPositionY = new double[nPositions];
       }
       else if (qName.equals("Val")) {
         value = v.trim();
@@ -567,6 +599,18 @@ public class ScanrReader extends FormatReader {
         }
         else if (key.equals("conversion factor um/pixel")) {
           pixelSize = new Double(value);
+        }
+        else if (foundPositions) {
+          if (nextXPos == nextYPos) {
+            if (nextXPos < fieldPositionX.length) {
+              fieldPositionX[nextXPos++] = Double.parseDouble(value);
+            }
+          }
+          else {
+            if (nextYPos < fieldPositionY.length) {
+              fieldPositionY[nextYPos++] = Double.parseDouble(value);
+            }
+          }
         }
       }
     }
