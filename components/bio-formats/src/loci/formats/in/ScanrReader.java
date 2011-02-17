@@ -183,8 +183,6 @@ public class ScanrReader extends FormatReader {
       wellNumbers.clear();
       wellCount = 0;
       pixelSize = null;
-      tileWidth = 0;
-      tileHeight = 0;
       fieldPositionX = null;
       fieldPositionY = null;
       exposures.clear();
