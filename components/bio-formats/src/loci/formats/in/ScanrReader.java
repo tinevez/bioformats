@@ -447,7 +447,7 @@ public class ScanrReader extends FormatReader {
     }
 
     MetadataStore store = makeFilterMetadata();
-    MetadataTools.populatePixels(store, this, true);
+    MetadataTools.populatePixels(store, this);
 
     store.setPlateID(MetadataTools.createLSID("Plate", 0), 0);
 
@@ -505,9 +505,11 @@ public class ScanrReader extends FormatReader {
           int well = i / nFields;
           store.setWellSamplePositionX(fieldPositionX[field], 0, well, field);
           store.setWellSamplePositionY(fieldPositionY[field], 0, well, field);
-          for (int image=0; image<getImageCount(); image++) {
-            int c = getZCTCoords(image)[1];
-
+          for (int c=0; c<getSizeC(); c++) {
+            int image = getIndex(0, c, 0);
+            store.setPlaneTheZ(new NonNegativeInteger(0), i, image);
+            store.setPlaneTheC(new NonNegativeInteger(c), i, image);
+            store.setPlaneTheT(new NonNegativeInteger(0), i, image);
             store.setPlanePositionX(fieldPositionX[field], i, image);
             store.setPlanePositionY(fieldPositionY[field], i, image);
             store.setPlaneExposureTime(exposures.get(c), i, image);
