@@ -321,12 +321,12 @@ public class BDReader extends FormatReader {
       store.setWellRow(new NonNegativeInteger(row.charAt(0) - 'A'), 0, i);
 
       String wellSampleID =
-        MetadataTools.createLSID("WellSample", 0, index, field);
-      store.setWellSampleID(wellSampleID, 0, index, field);
-      store.setWellSampleIndex(new NonNegativeInteger(i), 0, index, field);
+        MetadataTools.createLSID("WellSample", 0, well, field);
+      store.setWellSampleID(wellSampleID, 0, well, field);
+      store.setWellSampleIndex(new NonNegativeInteger(i), 0, well, field);
 
       String imageID = MetadataTools.createLSID("Image", i);
-      store.setWellSampleImageRef(imageID, 0, index, field);
+      store.setWellSampleImageRef(imageID, 0, well, field);
       store.setImageID(imageID, i);
       store.setImageName(name + " Field #" + (field + 1), i);
     }
