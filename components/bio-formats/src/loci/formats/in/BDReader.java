@@ -287,12 +287,9 @@ public class BDReader extends FormatReader {
     MetadataTools.populatePixels(store, this, populatePlanes);
 
     for (int i=0; i<getSeriesCount(); i++) {
-      int well = i / (fieldRows * fieldCols);
-      int field = i % (fieldRows * fieldCols);
+      MetadataTools.setDefaultCreationDate(store, id, i);
 
-      MetadataTools.setDefaultCreationDate(store, tiffs[well][0], i);
-
-      String name = wellLabels.get(well);
+      String name = wellLabels.get(i);
       String row = name.substring(0, 1);
       Integer col = Integer.parseInt(name.substring(1));
 
