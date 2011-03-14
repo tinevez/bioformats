@@ -1611,6 +1611,8 @@ public class ZeissLSMReader extends FormatReader {
     Vector<Vector<String[]>> tables = mdbService.parseDatabase();
     Vector<String> referencedLSMs = new Vector<String>();
 
+    int referenceCount = 0;
+
     for (Vector<String[]> table : tables) {
       String[] columnNames = table.get(0);
       String tableName = columnNames[0];
@@ -1637,21 +1639,29 @@ public class ZeissLSMReader extends FormatReader {
                 referencedLSMs.add(file.getAbsolutePath());
               }
             }
+            referenceCount++;
           }
         }
       }
     }
 
-    if (referencedLSMs.size() > 0) {
+    if (referencedLSMs.size() == referenceCount) {
       return referencedLSMs.toArray(new String[0]);
     }
 
+    referencedLSMs.clear();
+
     String[] fileList = parent.list(true);
     for (int i=0; i<fileList.length; i++) {
-      if (checkSuffix(fileList[i], new String[] {"lsm"}) &&
-        !fileList[i].startsWith("."))
+      String absolutePath = new Location(parent, fileList[i]).getAbsolutePath();
+      if (checkSuffix(fileList[i], new String[] {"lsm"})) {
+        referencedLSMs.add(absolutePath);
+      }
+      else if (checkSuffix(fileList[i], "mdb") &&
+        (!absolutePath.equals(mdbFile) && !fileList[i].equals(mdbFile)))
       {
-        referencedLSMs.add(new Location(parent, fileList[i]).getAbsolutePath());
+        referencedLSMs.clear();
+        break;
       }
     }
     return referencedLSMs.toArray(new String[0]);
