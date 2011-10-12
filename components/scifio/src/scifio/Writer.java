@@ -7,6 +7,6 @@ package scifio;
  * <dd><a href="">Trac</a>,
  * <a href="">Gitweb</a></dd></dl>
  */
-public interface Writer {
+public interface Writer<M extends Metadata> {
 
 }
