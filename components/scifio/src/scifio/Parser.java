@@ -9,4 +9,13 @@ package scifio;
  */
 public interface Parser {
 
+	// -- Parser API methods --
+	
+	/**
+	 * Returns the most specific Metadata object possible, for the provided file.
+	 * 
+	 * @param fileName Path to an image file to be parsed.  Parsers are typically
+	 *   specific to the file type discovered here.
+	 */
+	Metadata parse(String fileName);
 }
