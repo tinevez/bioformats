@@ -9,4 +9,6 @@ package scifio;
  */
 public interface Metadata {
 
+	// -- Metadata API methods --
+
 }

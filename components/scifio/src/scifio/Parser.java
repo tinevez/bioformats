@@ -7,7 +7,7 @@ package scifio;
  * <dd><a href="">Trac</a>,
  * <a href="">Gitweb</a></dd></dl>
  */
-public interface Parser {
+public interface Parser<M extends Metadata> extends MetadataHandler<M> {
 
 	// -- Parser API methods --
 	
@@ -17,5 +17,5 @@ public interface Parser {
 	 * @param fileName Path to an image file to be parsed.  Parsers are typically
 	 *   specific to the file type discovered here.
 	 */
-	Metadata parse(String fileName);
+	M parse(String fileName);
 }
