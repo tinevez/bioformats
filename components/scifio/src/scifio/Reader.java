@@ -2,16 +2,11 @@ package scifio;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 
-import loci.formats.CoreMetadata;
 import loci.formats.FileInfo;
 import loci.formats.FormatException;
 import loci.formats.FormatTools;
-import loci.formats.IFormatHandler;
-import loci.formats.IFormatReader;
-import loci.formats.meta.MetadataStore;
 
 /**
  * Interface for all SciFIO Readers.
@@ -22,69 +17,7 @@ import loci.formats.meta.MetadataStore;
  */
 public interface Reader<M extends Metadata> extends MetadataHandler<M> {
 	
-	// -- Constants --
-	/** Allows for N-dimensional tracking */
-	final Map<String, Integer> dimensionSizes = new HashMap<String, Integer>();
-
 	// -- Reader API methods --
-	/** Determines the number of image planes in the current file. */
-	int getImageCount();
-
-	/**
-	 * Checks if the image planes in the file have more than one channel per
-	 * {@link #openBytes} call.
-	 * This method returns true if and only if {@link #getRGBChannelCount()}
-	 * returns a value greater than 1.
-	 */
-	boolean isRGB();
-	
-	/** Gets the size of the dimension specified by dim */
-	int getSize(String dim);
-
-	/**
-	 * Gets the pixel type.
-	 * @return the pixel type as an enumeration from {@link FormatTools}
-	 * <i>static</i> pixel types such as {@link FormatTools#INT8}.
-	 */
-	int getPixelType();
-
-	/**
-	 * Gets the number of valid bits per pixel. The number of valid bits per
-	 * pixel is always less than or equal to the number of bits per pixel
-	 * that correspond to {@link #getPixelType()}.
-	 */
-	int getBitsPerPixel();
-
-	/**
-	 * Gets the effective size of the C dimension, guaranteeing that
-	 * getEffectiveSizeC() * getSize("Z") * getSize("T") == getImageCount()
-	 * regardless of the result of isRGB().
-	 */
-	int getEffectiveSizeC();
-
-	/**
-	 * Gets the number of channels returned with each call to openBytes.
-	 * The most common case where this value is greater than 1 is for interleaved
-	 * RGB data, such as a 24-bit color image plane. However, it is possible for
-	 * this value to be greater than 1 for non-interleaved data, such as an RGB
-	 * TIFF with Planar rather than Chunky configuration.
-	 */
-	int getRGBChannelCount();
-
-	/**
-	 * Gets whether the image planes are indexed color.
-	 * This value has no impact on {@link #getSizeC()},
-	 * {@link #getEffectiveSizeC()} or {@link #getRGBChannelCount()}.
-	 */
-	boolean isIndexed();
-
-	/**
-	 * Returns false if {@link #isIndexed()} is false, or if {@link #isIndexed()}
-	 * is true and the lookup table represents "real" color data. Returns true
-	 * if {@link #isIndexed()} is true and the lookup table is only present to aid
-	 * in visualization.
-	 */
-	boolean isFalseColor();
 
 	/**
 	 * Gets the 8-bit color lookup table associated with
@@ -125,51 +58,11 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
 	/** Get the size of the Y dimension for the thumbnail. */
 	int getThumbSizeY();
 
-	/** Gets whether the data is in little-endian format. */
-	boolean isLittleEndian();
-
-	/**
-	 * Gets a N-character string representing the
-	 * dimension order in which planes will be returned.
-	 * In cases where the channels are interleaved (e.g., CXYTZ), C will be
-	 * the first dimension after X and Y (e.g., XYCTZ) and the
-	 * {@link #isInterleaved()} method will return true.
-	 */
-	String getDimensionOrder();
-
-	/**
-	 * Gets whether the dimension order and sizes are known, or merely guesses.
-	 */
-	boolean isOrderCertain();
-
 	/**
 	 * Gets whether the current series is a lower resolution copy of a different
 	 * series.
 	 */
 	boolean isThumbnailSeries();
-
-	/**
-	 * Gets whether or not the channels are interleaved. This method exists
-	 * because X and Y must appear first in the dimension order. For
-	 * interleaved data, {@link #getDimensionOrder()} returns XYCTZ or XYCZT,
-	 * and this method returns true.
-	 *
-	 * Note that this flag returns whether or not the data returned by
-	 * {@link #openBytes(int)} is interleaved.  In most cases, this will
-	 * match the interleaving in the original file, but for some formats (e.g.
-	 * TIFF) channel re-ordering is done internally and the return value of
-	 * this method will not match what is in the original file.
-	 */
-	boolean isInterleaved();
-
-	/**
-	 * Gets whether or not the given sub-channel is interleaved. This method
-	 * exists because some data with multiple rasterized sub-dimensions within
-	 * C have one sub-dimension interleaved, and the other not&mdash;e.g.,
-	 * {@link loci.formats.in.SDTReader} handles spectral-lifetime data with
-	 * interleaved lifetime bins and non-interleaved spectral channels.
-	 */
-	boolean isInterleaved(int subC);
 
 	/**
 	 * Obtains the specified image plane from the current file as a byte array.
@@ -181,7 +74,7 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
 	 * Obtains a sub-image of the specified image plane,
 	 * whose upper-left corner is given by (x, y).
 	 */
-	byte[] openBytes(int no, int x, int y, int w, int h)
+	byte[] openBytes(int no, Map<String, Integer> dims)
 	throws FormatException, IOException;
 
 	/**
@@ -205,16 +98,14 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
 	 *
 	 * @param no the image index within the file.
 	 * @param buf a pre-allocated buffer.
-	 * @param x X coordinate of the upper-left corner of the sub-image
-	 * @param y Y coordinate of the upper-left corner of the sub-image
-	 * @param w width of the sub-image
-	 * @param h height of the sub-image
+	 * @param dims a map of dimension labels (e.g., "x", "y") to the size of the
+	 *             corresponding dimension (e.g., sizeX, sizeY) 
 	 * @return the pre-allocated buffer <code>buf</code> for convenience.
 	 * @throws FormatException if there was a problem parsing the metadata of the
 	 *   file.
 	 * @throws IOException if there was a problem reading the file.
 	 */
-	byte[] openBytes(int no, byte[] buf, int x, int y, int w, int h)
+	byte[] openBytes(int no, byte[] buf, Map<String, Integer> dims)
 	throws FormatException, IOException;
 
 	/**
@@ -228,7 +119,7 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
 	 * @see loci.formats.FormatReader
 	 * @see loci.formats.gui.BufferedImageReader
 	 */
-	Object openPlane(int no, int x, int y, int w, int h)
+	Object openPlane(int no, Map<String, Integer> dims)
 	throws FormatException, IOException;
 
 	/**
@@ -253,32 +144,11 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
 	/** Gets the currently active series. */
 	int getSeries();
 
-	/** Specifies whether or not to normalize float data. */
-	void setNormalized(boolean normalize);
-
-	/** Returns true if we should normalize float data. */
-	boolean isNormalized();
-
-	/**
-	 * Specifies whether or not to save proprietary metadata
-	 * in the MetadataStore.
-	 */
-	void setOriginalMetadataPopulated(boolean populate);
-
-	/**
-	 * Returns true if we should save proprietary metadata
-	 * in the MetadataStore.
-	 */
-	boolean isOriginalMetadataPopulated();
-
 	/** Specifies whether or not to force grouping in multi-file formats. */
 	void setGroupFiles(boolean group);
 
 	/** Returns true if we should group files in multi-file formats.*/
 	boolean isGroupFiles();
-
-	/** Returns true if this format's metadata is completely parsed. */
-	boolean isMetadataComplete();
 
 	/**
 	 * Returns an int indicating that we cannot, must, or might group the files
@@ -341,85 +211,24 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
 	int[] getZCTCoords(int index);
 
 	/**
-	 * Obtains the specified metadata field's value for the current file.
-	 * @param field the name associated with the metadata field
-	 * @return the value, or null if the field doesn't exist
+	 * Sets the default metadata for this reader.
+	 * @param meta a metadata implementation.
 	 */
-	Object getMetadataValue(String field);
+	void setMetadata(M meta);
 
 	/**
-	 * Obtains the specified metadata field's value for the current series
-	 * in the current file.
-	 * @param field the name associated with the metadata field
-	 * @return the value, or null if the field doesn't exist
-	 */
-	Object getSeriesMetadataValue(String field);
-
-	/**
-	 * Obtains the hashtable containing the metadata field/value pairs from
-	 * the current file.
-	 * @return the hashtable containing all non-series-specific metadata
-	 * from the file
-	 */
-	Hashtable<String, Object> getGlobalMetadata();
-
-	/**
-	 * Obtains the hashtable containing metadata field/value pairs from the
-	 * current series in the current file.
-	 */
-	Hashtable<String, Object> getSeriesMetadata();
-
-	/** Obtains the core metadata values for the current file. */
-	CoreMetadata[] getCoreMetadata();
-
-	/**
-	 * Specifies whether ugly metadata (entries with unprintable characters,
-	 * and extremely large entries) should be discarded from the metadata table.
-	 */
-	void setMetadataFiltered(boolean filter);
-
-	/**
-	 * Returns true if ugly metadata (entries with unprintable characters,
-	 * and extremely large entries) are discarded from the metadata table.
-	 */
-	boolean isMetadataFiltered();
-
-	/**
-	 * Sets the default metadata store for this reader.
-	 * @param store a metadata store implementation.
-	 */
-	void setMetadataStore(MetadataStore store);
-
-	/**
-	 * Retrieves the current metadata store for this reader. You can be
+	 * Retrieves the current metadata for this reader. You can be
 	 * assured that this method will <b>never</b> return a <code>null</code>
-	 * metadata store.
-	 * @return A metadata store implementation.
+	 * metadata.
+	 * @return A metadata implementation.
 	 */
-	MetadataStore getMetadataStore();
-
-	/**
-	 * Retrieves the current metadata store's root object. It is guaranteed that
-	 * all file parsing has been performed by the reader prior to retrieval.
-	 * Requests for a full populated root object should be made using this method.
-	 * @return Current metadata store's root object fully populated.
-	 */
-	Object getMetadataStoreRoot();
+	M getMetadata();
 
 	/**
 	 * Retrieves all underlying readers.
 	 * Returns null if there are no underlying readers.
 	 */
-	IFormatReader[] getUnderlyingReaders();
-
-	/** Returns true if this is a single-file format. */
-	boolean isSingleFile(String id) throws FormatException, IOException;
-
-	/** Returns a list of scientific domains in which this format is used. */
-	String[] getPossibleDomains(String id) throws FormatException, IOException;
-
-	/** Returns true if this format supports multi-file datasets. */
-	boolean hasCompanionFiles();
+	Reader<Metadata>[] getUnderlyingReaders();
 
 	/** Returns the optimal sub-image width for use with openBytes. */
 	int getOptimalTileWidth();
@@ -441,13 +250,5 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
 	 */
 	boolean isMetadataCollected();
 
-	/**
-	 * Returns a hashtable containing the union of all of the field/value pairs
-	 * in getGlobalMetadata() and getSeriesMetadata(). The series name is
-	 * prepended to fields in the getSeriesMetadata() hashtable.
-	 *
-	 * @deprecated Use #getGlobalMetadata() or #getSeriesMetadata() instead.
-	 */
-	Hashtable<String, Object> getMetadata();
 	
 }

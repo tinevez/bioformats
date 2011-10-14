@@ -18,4 +18,34 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
 	 *   specific to the file type discovered here.
 	 */
 	M parse(String fileName);
+	
+	/**
+	 * Specifies whether or not to save proprietary metadata
+	 * in the Metadata.
+	 */
+	void setOriginalMetadataPopulated(boolean populate);
+
+	/**
+	 * Returns true if we should save proprietary metadata
+	 * in the Metadata.
+	 */
+	boolean isOriginalMetadataPopulated();
+	
+	/**
+	 * Specifies whether ugly metadata (entries with unprintable characters,
+	 * and extremely large entries) should be discarded from the metadata table.
+	 */
+	void setMetadataFiltered(boolean filter);
+
+	/**
+	 * Returns true if ugly metadata (entries with unprintable characters,
+	 * and extremely large entries) are discarded from the metadata table.
+	 */
+	boolean isMetadataFiltered();
+	
+	/** Specifies whether or not to normalize float data. */
+	void setNormalized(boolean normalize);
+
+	/** Returns true if we should normalize float data. */
+	boolean isNormalized();
 }
