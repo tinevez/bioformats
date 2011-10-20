@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import scifio.io.RandomAccessInputStream;
+
 import loci.formats.FileInfo;
 import loci.formats.FormatException;
 import loci.formats.FormatTools;
@@ -223,6 +225,19 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
 	 * @return A metadata implementation.
 	 */
 	M getMetadata();
+	
+	/**
+	 * Sets the default input stream for this reader.
+	 * 
+	 * @param stream a RandomAccessInputStream for the source being read
+	 */
+	void setStream(RandomAccessInputStream stream);
+	
+	/**
+	 * Retrieves the current input stream for this reader.
+	 * @return A RandomAccessInputStream
+	 */
+	RandomAccessInputStream getStream();
 
 	/**
 	 * Retrieves all underlying readers.
@@ -236,19 +251,10 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
 	/** Returns the optimal sub-image height for use with openBytes. */
 	int getOptimalTileHeight();
 
-	// -- Deprecated methods --
+	//TODO remove these
+	/** Specifies whether or not to normalize float data. */
+	void setNormalized(boolean normalize);
 
-	/**
-	 * Specifies whether or not to collect metadata.
-	 * @deprecated Use {@link #setMetadataOptions(MetadataOptions)} instead.
-	 */
-	void setMetadataCollected(boolean collect);
-
-	/**
-	 * Returns true if we should collect metadata.
-	 * @deprecated Use {@link #getMetadataOptions()} instead.
-	 */
-	boolean isMetadataCollected();
-
-	
+	/** Returns true if we should normalize float data. */
+	boolean isNormalized();
 }
