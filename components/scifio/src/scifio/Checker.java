@@ -2,7 +2,8 @@ package scifio;
 
 import java.io.IOException;
 
-import loci.common.RandomAccessInputStream;
+import scifio.io.RandomAccessInputStream;
+
 
 /**
  * Interface for all SciFIO Checker objects.
@@ -11,7 +12,7 @@ import loci.common.RandomAccessInputStream;
  * <dd><a href="">Trac</a>,
  * <a href="">Gitweb</a></dd></dl>
  */
-public interface Checker<M extends Metadata> extends MetadataHandler<M>, FormatHandler {
+public interface Checker<M extends Metadata> extends MetadataHandler<M>, FormatHandler, Comparable<Checker<?>> {
 
 	// -- Checker API methods --
 	
@@ -24,11 +25,14 @@ public interface Checker<M extends Metadata> extends MetadataHandler<M>, FormatH
 	 *   tests and directory listings) may be performed.  If false, file system
 	 *   access is not allowed.
 	 */
-	boolean supportsFormat(String name, boolean open);
+	boolean isFormat(String name, boolean open);
 
 	/** Checks if the given block is a valid header for this file format. */
-	boolean supportsFormat(byte[] block);
+	boolean isFormat(byte[] block);
 
 	/** Checks if the given stream is a valid stream for this file format. */
-	boolean supportsFormat(RandomAccessInputStream stream) throws IOException;
+	boolean isFormat(RandomAccessInputStream stream) throws IOException;
+	
+	/** Returns the priority of this checker.  Used for comparison to other checkers */
+	Double getPriority();
 }
