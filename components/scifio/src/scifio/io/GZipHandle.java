@@ -1,5 +1,5 @@
 //
-// BZip2Handle.java
+// GZipHandle.java
 //
 
 /*
@@ -21,39 +21,40 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package loci.common;
+package scifio.io;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.zip.GZIPInputStream;
 
 /**
- * StreamHandle implementation for reading from BZip2-compressed files
- * or byte arrays.  Instances of BZip2Handle are read-only.
+ * StreamHandle implementation for reading from gzip-compressed files
+ * or byte arrays.  Instances of GZipHandle are read-only.
  *
  * <dl><dt><b>Source code:</b></dt>
- * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/common/src/loci/common/BZip2Handle.java">Trac</a>,
- * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/common/src/loci/common/BZip2Handle.java;hb=HEAD">Gitweb</a></dd></dl>
+ * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/common/src/loci/common/GZipHandle.java">Trac</a>,
+ * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/common/src/loci/common/GZipHandle.java;hb=HEAD">Gitweb</a></dd></dl>
  *
  * @see StreamHandle
  *
  * @author Melissa Linkert melissa at glencoesoftware.com
  */
-public class BZip2Handle extends StreamHandle {
+public class GZipHandle extends StreamHandle {
 
   // -- Constructor --
 
   /**
-   * Construct a new BZip2Handle corresponding to the given file.
+   * Construct a new GZipHandle for the given file.
    *
-   * @throws HandleException if the given file is not a BZip2 file.
+   * @throws HandleException if the given file name is not a GZip file.
    */
-  public BZip2Handle(String file) throws IOException {
+  public GZipHandle(String file) throws IOException {
     super();
     this.file = file;
-    if (!isBZip2File(file)) {
-      throw new HandleException(file + " is not a BZip2 file.");
+    if (!isGZipFile(file)) {
+      throw new HandleException(file + " is not a gzip file.");
     }
 
     resetStream();
@@ -68,30 +69,27 @@ public class BZip2Handle extends StreamHandle {
     resetStream();
   }
 
-  // -- BZip2Handle API methods --
+  // -- GZipHandle API methods --
 
-  /** Returns true if the given filename is a BZip2 file. */
-  public static boolean isBZip2File(String file) throws IOException {
-    if (!file.toLowerCase().endsWith(".bz2")) return false;
+  /** Returns true if the given filename is a gzip file. */
+  public static boolean isGZipFile(String file) throws IOException {
+    if (!file.toLowerCase().endsWith(".gz")) return false;
 
     FileInputStream s = new FileInputStream(file);
     byte[] b = new byte[2];
     s.read(b);
     s.close();
-    return new String(b).equals("BZ");
+    return DataTools.bytesToInt(b, true) == GZIPInputStream.GZIP_MAGIC;
   }
 
   // -- StreamHandle API methods --
 
   /* @see StreamHandle#resetStream() */
   protected void resetStream() throws IOException {
+    if (stream != null) stream.close();
     BufferedInputStream bis = new BufferedInputStream(
       new FileInputStream(file), RandomAccessInputStream.MAX_OVERHEAD);
-    int skipped = 0;
-    while (skipped < 2) {
-      skipped += bis.skip(2 - skipped);
-    }
-    stream = new DataInputStream(new CBZip2InputStream(bis));
+    stream = new DataInputStream(new GZIPInputStream(bis));
   }
 
 }
