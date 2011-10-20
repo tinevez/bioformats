@@ -31,14 +31,7 @@ public interface Metadata {
 	/** Gets whether or not the channels in an image are interleaved. */
 	boolean isInterleaved();
 
-	/**
-	 * Checks if the image planes in the file have more than one channel per
-	 * {@link #openBytes} call.
-	 * This method returns true if and only if {@link #getRGBChannelCount()}
-	 * returns a value greater than 1.
-	 */
-	boolean isRGB();
-	
+
 	/** Gets the size of the dimension specified by dim */
 	int getSize(String dim);
 
@@ -144,4 +137,14 @@ public interface Metadata {
 	 * @deprecated Use #getGlobalMetadata() or #getSeriesMetadata() instead.
 	 */
 	Hashtable<String, Object> getMetadata();
+	
+	/**
+	 * Checks if the image planes in the file have more than one channel per
+	 * {@link #openBytes} call.
+	 * This method returns true if and only if {@link #getRGBChannelCount()}
+	 * returns a value greater than 1.
+	 * 
+	 * @deprecated
+	 */
+	boolean isRGB();
 }
