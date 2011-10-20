@@ -1,5 +1,10 @@
 package scifio;
 
+import java.io.File;
+import java.io.IOException;
+
+import scifio.io.RandomAccessInputStream;
+
 /**
  * Interface for all SciFIO Parsers.
  *
@@ -12,12 +17,33 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
 	// -- Parser API methods --
 	
 	/**
-	 * Returns the most specific Metadata object possible, for the provided file.
+	 * Wraps the file corresponding to the given name in a File handle and returns parse(RandomAccessInputStream).
 	 * 
 	 * @param fileName Path to an image file to be parsed.  Parsers are typically
 	 *   specific to the file type discovered here.
+	 * @return most specific metadata for this type
+	 * @throws IOException 
 	 */
-	M parse(String fileName);
+	M parse(String fileName) throws IOException;
+	
+	/**
+	 * Wraps the file in a File handle and returns parse(RandomAccessInputStream).
+	 * 
+	 * @param file Path to an image file to be parsed.  Parsers are typically
+	 *   specific to the file type discovered here.
+	 * @return most specific metadata for this type
+	 * @throws IOException 
+	 */
+	M parse(File file) throws IOException;
+	
+	/**
+	 * Returns the most specific Metadata object possible, for the provided RandomAccessInputStream.
+	 * 
+	 * @param stream random access handle to the file to be parsed.
+	 * @return most specific metadata for this type   
+	 * @throws IOException 
+	 */
+	M parse(RandomAccessInputStream stream) throws IOException;
 	
 	/**
 	 * Specifies whether or not to save proprietary metadata
@@ -42,10 +68,4 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
 	 * and extremely large entries) are discarded from the metadata table.
 	 */
 	boolean isMetadataFiltered();
-	
-	/** Specifies whether or not to normalize float data. */
-	void setNormalized(boolean normalize);
-
-	/** Returns true if we should normalize float data. */
-	boolean isNormalized();
 }
