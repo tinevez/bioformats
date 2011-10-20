@@ -9,7 +9,7 @@ package scifio;
  */
 public interface MetadataHandler<M extends Metadata> {
 	
-	// MetadataHandler API methods
+	// -- MetadataHandler API --
 	
 	/** Returns the Metadata type this component takes as input */
 	Class<M> getMetadataType();
