@@ -1,5 +1,5 @@
 //
-// StatusListener.java
+// ReflectException.java
 //
 
 /*
@@ -21,20 +21,22 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package loci.common;
-
-import java.util.EventListener;
+package ome.scifio.common;
 
 /**
- * A listener for status updates.
+ * ReflectException is the exception thrown when something
+ * goes wrong performing a reflected operation with ReflectedUniverse.
  *
  * <dl><dt><b>Source code:</b></dt>
- * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/common/src/loci/common/StatusListener.java">Trac</a>,
- * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/common/src/loci/common/StatusListener.java;hb=HEAD">Gitweb</a></dd></dl>
+ * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/common/src/loci/common/ReflectException.java">Trac</a>,
+ * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/common/src/loci/common/ReflectException.java;hb=HEAD">Gitweb</a></dd></dl>
  */
-public interface StatusListener extends EventListener {
+public class ReflectException extends Exception {
 
-  /** Called when status is updated. */
-  void statusUpdated(StatusEvent e);
+  public ReflectException() { super(); }
+  public ReflectException(String s) { super(s); }
+  public ReflectException(String s, Throwable cause) { super(s, cause); }
+  public ReflectException(Throwable cause) { super(cause); }
 
 }
+

@@ -1,5 +1,5 @@
 //
-// CodedEnum.java
+// EnumException.java
 //
 
 /*
@@ -20,22 +20,23 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-package loci.common.enumeration;
+
+package ome.scifio.enumeration;
 
 /**
- * Enumeration which is coded.
- *
  * <dl><dt><b>Source code:</b></dt>
- * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/common/src/loci/common/enumeration/CodedEnum.java">Trac</a>,
- * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/common/src/loci/common/enumeration/CodedEnum.java;hb=HEAD">Gitweb</a></dd></dl>
+ * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/common/src/loci/common/enumeration/EnumException.java">Trac</a>,
+ * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/common/src/loci/common/enumeration/EnumException.java;hb=HEAD">Gitweb</a></dd></dl>
+ *
+ * @author callan
  */
-public interface CodedEnum {
+public class EnumException extends RuntimeException {
 
-  /**
-   * Retrieves the integer "code" for this enumeration. It is expected that the
-   * code be unique across the enumerated type.
-   * @return See above.
-   */
-  public int getCode();
+  private static final long serialVersionUID = -4969429871517178079L;
+
+  public EnumException() { super(); }
+  public EnumException(String s) { super(s); }
+  public EnumException(String s, Throwable cause) { super(s, cause); }
+  public EnumException(Throwable cause) { super(cause); }
 
 }

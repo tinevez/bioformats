@@ -1,5 +1,5 @@
 //
-// IniTable.java
+// StatusListener.java
 //
 
 /*
@@ -21,24 +21,20 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package loci.common;
+package ome.scifio.common;
 
-import java.util.HashMap;
+import java.util.EventListener;
 
 /**
- * A data structure containing a parsed list of INI key/value tables.
+ * A listener for status updates.
  *
  * <dl><dt><b>Source code:</b></dt>
- * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/common/src/loci/common/IniTable.java">Trac</a>,
- * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/common/src/loci/common/IniTable.java;hb=HEAD">Gitweb</a></dd></dl>
- *
- * @author Curtis Rueden ctrueden at wisc.edu
+ * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/common/src/loci/common/StatusListener.java">Trac</a>,
+ * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/common/src/loci/common/StatusListener.java;hb=HEAD">Gitweb</a></dd></dl>
  */
-public class IniTable extends HashMap<String, String> {
+public interface StatusListener extends EventListener {
 
-  // -- Constants --
-
-  /** Key to use for storing header value (in brackets). */
-  public static final String HEADER_KEY = "header";
+  /** Called when status is updated. */
+  void statusUpdated(StatusEvent e);
 
 }

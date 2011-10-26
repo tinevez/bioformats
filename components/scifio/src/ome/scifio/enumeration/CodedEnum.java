@@ -1,5 +1,5 @@
 //
-// ReflectException.java
+// CodedEnum.java
 //
 
 /*
@@ -20,23 +20,22 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
-
-package loci.common;
+package ome.scifio.enumeration;
 
 /**
- * ReflectException is the exception thrown when something
- * goes wrong performing a reflected operation with ReflectedUniverse.
+ * Enumeration which is coded.
  *
  * <dl><dt><b>Source code:</b></dt>
- * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/common/src/loci/common/ReflectException.java">Trac</a>,
- * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/common/src/loci/common/ReflectException.java;hb=HEAD">Gitweb</a></dd></dl>
+ * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/common/src/loci/common/enumeration/CodedEnum.java">Trac</a>,
+ * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/common/src/loci/common/enumeration/CodedEnum.java;hb=HEAD">Gitweb</a></dd></dl>
  */
-public class ReflectException extends Exception {
+public interface CodedEnum {
 
-  public ReflectException() { super(); }
-  public ReflectException(String s) { super(s); }
-  public ReflectException(String s, Throwable cause) { super(s, cause); }
-  public ReflectException(Throwable cause) { super(cause); }
+  /**
+   * Retrieves the integer "code" for this enumeration. It is expected that the
+   * code be unique across the enumerated type.
+   * @return See above.
+   */
+  public int getCode();
 
 }
-

@@ -1,5 +1,5 @@
 //
-// OMENotesService.java
+// IniTable.java
 //
 
 /*
@@ -21,19 +21,24 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package loci.common.services;
+package ome.scifio.common;
+
+import java.util.HashMap;
 
 /**
+ * A data structure containing a parsed list of INI key/value tables.
+ *
  * <dl><dt><b>Source code:</b></dt>
- * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/common/src/loci/common/services/OMENotesService.java">Trac</a>,
- * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/common/src/loci/common/services/OMENotesService.java;hb=HEAD">Gitweb</a></dd></dl>
+ * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/common/src/loci/common/IniTable.java">Trac</a>,
+ * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/common/src/loci/common/IniTable.java;hb=HEAD">Gitweb</a></dd></dl>
+ *
+ * @author Curtis Rueden ctrueden at wisc.edu
  */
-public interface OMENotesService extends Service {
+public class IniTable extends HashMap<String, String> {
 
-  /**
-   * Creates a new OME Notes instance.
-   * @param filename Path to the file to create a Notes instance for.
-   */
-  public void newNotes(String filename);
+  // -- Constants --
+
+  /** Key to use for storing header value (in brackets). */
+  public static final String HEADER_KEY = "header";
 
 }
