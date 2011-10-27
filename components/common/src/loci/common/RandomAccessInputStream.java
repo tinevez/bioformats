@@ -21,7 +21,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package ome.scifio.io;
+package loci.common;
 
 import java.io.DataInput;
 import java.io.IOException;
@@ -29,8 +29,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-
-import ome.scifio.common.Location;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

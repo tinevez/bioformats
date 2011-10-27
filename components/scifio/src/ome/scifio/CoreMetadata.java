@@ -41,19 +41,7 @@ public class CoreMetadata extends AbstractMetadata {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public void setOriginalMetadataPopulated(boolean populate) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean isOriginalMetadataPopulated() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
+	
 	@Override
 	public Hashtable<String, Object> getMetadata() {
 		// TODO Auto-generated method stub

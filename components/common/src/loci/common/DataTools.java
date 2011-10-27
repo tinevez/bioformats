@@ -21,12 +21,10 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package ome.scifio.common;
+package loci.common;
 
 import java.io.File;
 import java.io.IOException;
-
-import ome.scifio.io.RandomAccessInputStream;
 
 /**
  * A utility class with convenience methods for

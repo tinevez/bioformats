@@ -21,7 +21,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package ome.scifio.common;
+package loci.common;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,13 +32,6 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
-
-import ome.scifio.io.BZip2Handle;
-import ome.scifio.io.GZipHandle;
-import ome.scifio.io.IRandomAccess;
-import ome.scifio.io.NIOFileHandle;
-import ome.scifio.io.URLHandle;
-import ome.scifio.io.ZipHandle;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

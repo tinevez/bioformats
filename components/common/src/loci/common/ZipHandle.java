@@ -21,7 +21,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package ome.scifio.io;
+package loci.common;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
@@ -31,8 +31,6 @@ import java.io.IOException;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import ome.scifio.common.Location;
 
 /**
  * StreamHandle implementation for reading from Zip-compressed files

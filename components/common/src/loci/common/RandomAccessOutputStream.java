@@ -21,15 +21,13 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package ome.scifio.io;
+package loci.common;
 
 import java.io.DataOutput;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-
-import ome.scifio.common.Location;
 
 /**
  * RandomAccessOutputStream provides methods for writing to files and

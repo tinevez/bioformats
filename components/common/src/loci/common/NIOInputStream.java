@@ -1,5 +1,5 @@
 //
-// RandomAccessInputStream.java
+// NIOInputStream.java
 //
 
 /*
@@ -21,42 +21,32 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package ome.scifio.io;
+package loci.common;
 
 import java.io.DataInput;
+import java.io.DataInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-
-import ome.scifio.common.Location;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.nio.channels.Channel;
 
 /**
+ * NIOInputStream provides methods for "intelligent" reading of files
+ * and byte arrays.
  *
  * <dl><dt><b>Source code:</b></dt>
- * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/common/src/loci/common/RandomAccessInputStream.java">Trac</a>,
- * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/common/src/loci/common/RandomAccessInputStream.java;hb=HEAD">Gitweb</a></dd></dl>
+ * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/common/src/loci/common/NIOInputStream.java">Trac</a>,
+ * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/common/src/loci/common/NIOInputStream.java;hb=HEAD">Gitweb</a></dd></dl>
  *
- * @author Melissa Linkert melissa at glencoesoftware.com
- * @author Curtis Rueden ctrueden at wisc.edu
  */
-public class RandomAccessInputStream extends InputStream implements DataInput {
+public class NIOInputStream extends InputStream implements DataInput {
 
   // -- Constants --
 
-  /** Maximum size of the buffer used by the DataInputStream. */
-  protected static final int MAX_OVERHEAD = 1048576;
-
-  /** Logger for this class. */
-  private static final Logger LOGGER =
-    LoggerFactory.getLogger(RandomAccessInputStream.class);
-
   /**
    * Block size to use when searching through the stream.
+   * This value should not exceed MAX_OVERHEAD!
    */
   protected static final int DEFAULT_BLOCK_SIZE = 256 * 1024; // 256 KB
 
@@ -68,88 +58,90 @@ public class RandomAccessInputStream extends InputStream implements DataInput {
   protected IRandomAccess raf;
 
   /** The file name. */
-  protected String file;
+  protected String filename;
 
-  protected long length = -1;
+  /** The file. */
+  protected File file;
+
+  /** The file channel backed by the random access file. */
+  protected Channel channel;
+
+  /** Endianness of the stream. */
+  protected boolean isLittleEndian;
 
   // -- Constructors --
 
-  /**
-   * Constructs a hybrid RandomAccessFile/DataInputStream
-   * around the given file.
-   */
-  public RandomAccessInputStream(String file) throws IOException {
-    this(Location.getHandle(file));
-    this.file = file;
+  /** Constructs an NIOInputStream around the given file. */
+  public NIOInputStream(String filename) throws IOException {
+    this.filename = filename;
+    file = new File(filename);
+    raf = new FileHandle(file, "r");
   }
 
   /** Constructs a random access stream around the given handle. */
-  public RandomAccessInputStream(IRandomAccess handle) throws IOException {
-    if (LOGGER.isTraceEnabled()) {
-      LOGGER.trace("RandomAccessInputStream {} OPEN", hashCode());
-    }
+  public NIOInputStream(IRandomAccess handle) {
     raf = handle;
-    raf.setOrder(ByteOrder.BIG_ENDIAN);
-    seek(0);
-    length = -1;
   }
 
   /** Constructs a random access stream around the given byte array. */
-  public RandomAccessInputStream(byte[] array) throws IOException {
+  public NIOInputStream(byte[] array) {
     this(new ByteArrayHandle(array));
   }
 
-  // -- RandomAccessInputStream API methods --
+  // -- NIOInputStream API methods --
+
+  /** Returns the underlying InputStream. */
+  public DataInputStream getInputStream() {
+    // FIXME: To be implemented.
+    return null;
+  }
+
+  /**
+   * Sets the number of bytes by which to extend the stream.  This only applies
+   * to InputStream API methods.
+   */
+  public void setExtend(int extend) {
+    // FIXME: WTF? To be implemented?
+  }
 
   /** Seeks to the given offset within the stream. */
   public void seek(long pos) throws IOException {
     raf.seek(pos);
   }
 
-  /** Gets the number of bytes in the file. */
-  public long length() throws IOException {
-    return length < 0 ? raf.length() : length;
+  /** Alias for readByte(). */
+  public int read() throws IOException {
+    return raf.readUnsignedByte();
   }
 
-  /**
-   * Sets the length of the stream.
-   * The new length must be less than the real length of the stream.
-   * This allows us to work with a truncated view of a file, without modifying
-   * the file itself.
-   *
-   * Passing in a negative value will reset the length to the stream's real length.
-   */
-  public void setLength(long newLength) throws IOException {
-    if (newLength < length()) {
-      this.length = newLength;
-    }
+  /** Gets the number of bytes in the file. */
+  public long length() throws IOException {
+    return raf.length();
   }
 
   /** Gets the current (absolute) file pointer. */
-  public long getFilePointer() throws IOException {
-    return raf.getFilePointer();
+  public long getFilePointer() {
+    // FIXME: Change interface?
+    try {
+      return raf.getFilePointer();
+    } catch (IOException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   /** Closes the streams. */
   public void close() throws IOException {
-    if (LOGGER.isTraceEnabled()) {
-      LOGGER.trace("RandomAccessInputStream {} CLOSE", hashCode());
-    }
-    if (Location.getMappedFile(file) != null) return;
-    if (raf != null) raf.close();
-    raf = null;
+    // FIXME: To be implemented.
   }
 
   /** Sets the endianness of the stream. */
-  public void order(boolean little) {
-    if (raf != null) {
-      raf.setOrder(little ? ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN);
-    }
+  public void order(boolean isLittleEndian) {
+    this.isLittleEndian = isLittleEndian;
   }
 
   /** Gets the endianness of the stream. */
   public boolean isLittleEndian() {
-    return raf.getOrder() == ByteOrder.LITTLE_ENDIAN;
+    return isLittleEndian;
   }
 
   /**
@@ -159,6 +151,7 @@ public class RandomAccessInputStream extends InputStream implements DataInput {
    */
   public String readString(String lastChars) throws IOException {
     if (lastChars.length() == 1) return findString(lastChars);
+
     String[] terminators = new String[lastChars.length()];
     for (int i=0; i<terminators.length; i++) {
       terminators[i] = lastChars.substring(i, i + 1);
@@ -253,7 +246,9 @@ public class RandomAccessInputStream extends InputStream implements DataInput {
     InputStreamReader in = new InputStreamReader(this);
     char[] buf = new char[blockSize];
     long loc = 0;
-    while (loc < maxLen && getFilePointer() < length() - 1) {
+    while (loc < maxLen) {
+      long pos = startPos + loc;
+
       // if we're not saving the string, drop any old, unnecessary output
       if (!saveString) {
         int outLen = out.length();
@@ -267,7 +262,9 @@ public class RandomAccessInputStream extends InputStream implements DataInput {
       }
 
       // read block from stream
-      int r = in.read(buf, 0, blockSize);
+      int num = blockSize;
+      if (pos + blockSize > inputLen) num = (int) (inputLen - pos);
+      int r = in.read(buf, 0, num);
       if (r <= 0) throw new IOException("Cannot read from stream: " + r);
 
       // append block to output
@@ -275,10 +272,10 @@ public class RandomAccessInputStream extends InputStream implements DataInput {
 
       // check output, returning smallest possible string
       int min = Integer.MAX_VALUE, tagLen = 0;
-      for (String t : terminators) {
-        int len = t.length();
+      for (int t=0; t<terminators.length; t++) {
+        int len = terminators[t].length();
         int start = (int) (loc - bytesDropped - len);
-        int value = out.indexOf(t, start < 0 ? 0 : start);
+        int value = out.indexOf(terminators[t], start < 0 ? 0 : start);
         if (value >= 0 && value < min) {
           match = true;
           min = value;
@@ -303,7 +300,7 @@ public class RandomAccessInputStream extends InputStream implements DataInput {
 
     // no match
     if (tooLong) throw new IOException("Maximum search length reached.");
-    return saveString ? out.toString() : null;
+    return null;
   }
 
   // -- DataInput API methods --
@@ -340,20 +337,16 @@ public class RandomAccessInputStream extends InputStream implements DataInput {
 
   /** Read the next line of text from the input stream. */
   public String readLine() throws IOException {
-    String line = findString("\n");
-    return line.length() == 0 ? null : line;
+    return findString("\n");
   }
 
   /** Read a string of arbitrary length, terminated by a null char. */
   public String readCString() throws IOException {
-    String line = findString("\0");
-    return line.length() == 0 ? null : line;
+    return findString("\0");
   }
 
-  /** Read a string of up to length n. */
+  /** Read a string of length n. */
   public String readString(int n) throws IOException {
-    int avail = available();
-    if (n > avail) n = avail;
     byte[] b = new byte[n];
     readFully(b);
     return new String(b);
@@ -381,7 +374,7 @@ public class RandomAccessInputStream extends InputStream implements DataInput {
 
   /** Read a string that has been encoded using a modified UTF-8 format. */
   public String readUTF() throws IOException {
-    return raf.readUTF();
+    return null;  // not implemented yet...we don't really need this
   }
 
   /** Skip n bytes within the stream. */
@@ -391,35 +384,19 @@ public class RandomAccessInputStream extends InputStream implements DataInput {
 
   /** Read bytes from the stream into the given array. */
   public int read(byte[] array) throws IOException {
-    int rtn = raf.read(array);
-    if (rtn == 0 && raf.getFilePointer() >= raf.length() - 1) rtn = -1;
-    return rtn;
+    return read(array, 0, array.length);
   }
 
   /**
    * Read n bytes from the stream into the given array at the specified offset.
    */
   public int read(byte[] array, int offset, int n) throws IOException {
-    int rtn = raf.read(array, offset, n);
-    if (rtn == 0 && raf.getFilePointer() >= raf.length() - 1) rtn = -1;
-    return rtn;
-  }
-
-  /** Read bytes from the stream into the given buffer. */
-  public int read(ByteBuffer buf) throws IOException {
-    return raf.read(buf);
-  }
-
-  /**
-   * Read n bytes from the stream into the given buffer at the specified offset.
-   */
-  public int read(ByteBuffer buf, int offset, int n) throws IOException {
-    return raf.read(buf, offset, n);
+    return raf.read(array, offset, n);
   }
 
   /** Read bytes from the stream into the given array. */
   public void readFully(byte[] array) throws IOException {
-    raf.readFully(array);
+    readFully(array, 0, array.length);
   }
 
   /**
@@ -431,22 +408,21 @@ public class RandomAccessInputStream extends InputStream implements DataInput {
 
   // -- InputStream API methods --
 
-  public int read() throws IOException {
-    int b = readByte();
-    if (b == -1 && (getFilePointer() >= length())) return 0;
-    return b;
-  }
-
   public int available() throws IOException {
-    long remain = length() - getFilePointer();
-    if (remain > Integer.MAX_VALUE) remain = Integer.MAX_VALUE;
-    return (int) remain;
+    // FIXME: Need to implement this in sub-classes of IRandomAccess.
+    return 0;
   }
 
-  public void mark(int readLimit) { }
+  public void mark(int readLimit) {
+    // XXX: No-op
+  }
 
-  public boolean markSupported() { return false; }
+  public boolean markSupported() {
+    return false;
+  }
 
-  public void reset() throws IOException { }
+  public void reset() throws IOException {
+    raf.seek(0);
+  }
 
 }
