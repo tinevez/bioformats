@@ -65,7 +65,6 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
 	      block.offset = in.getFilePointer();
 	      blocks.add(block);
 
-	      //TODO core == metadata
 	      if (type.equals("acTL")) {
 	        // APNG-specific chunk
 	        metadata[0].imageCount = in.readInt();
@@ -90,7 +89,6 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
 
 	    if (metadata[0].imageCount == 0) metadata[0].imageCount = 1;
 	    metadata[0].sizeZ = 1;
-	    //TODO fix
 	    metadata[0].sizeT = getImageCount();
 
 	    metadata[0].dimensionOrder = "XYCTZ";
