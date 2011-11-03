@@ -13,7 +13,7 @@ import loci.formats.codec.CodecOptions;
  * <dd><a href="">Trac</a>,
  * <a href="">Gitweb</a></dd></dl>
  */
-public interface Writer<M extends Metadata> extends MetadataHandler<M>, FormatHandler {
+public interface Writer<M extends Metadata> extends MetadataHandler<M> {
 
 	// -- Writer API methods --
 	/**
@@ -123,7 +123,7 @@ public interface Writer<M extends Metadata> extends MetadataHandler<M>, FormatHa
 
 	/** Sets the current compression type. */
 	void setCompression(String compress) throws FormatException;
-
+	
 	/**
 	 * Sets the codec options.
 	 * @param options The options to set.

@@ -26,7 +26,7 @@ package loci.formats;
 import java.io.IOException;
 import java.util.Hashtable;
 
-import loci.common.RandomAccessInputStream;
+import ome.scifio.io.RandomAccessInputStream;
 import loci.formats.meta.MetadataStore;
 
 /**

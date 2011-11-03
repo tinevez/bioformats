@@ -24,7 +24,7 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
 	 * @return most specific metadata for this type
 	 * @throws IOException 
 	 */
-	M parse(String fileName) throws IOException;
+	M[] parse(String fileName) throws IOException, FormatException;
 	
 	/**
 	 * Wraps the file in a File handle and returns parse(RandomAccessInputStream).
@@ -34,7 +34,7 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
 	 * @return most specific metadata for this type
 	 * @throws IOException 
 	 */
-	M parse(File file) throws IOException;
+	M[] parse(File file) throws IOException, FormatException;
 	
 	/**
 	 * Returns the most specific Metadata object possible, for the provided RandomAccessInputStream.
@@ -43,7 +43,7 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
 	 * @return most specific metadata for this type   
 	 * @throws IOException 
 	 */
-	M parse(RandomAccessInputStream stream) throws IOException;
+	M[] parse(RandomAccessInputStream stream) throws IOException, FormatException;
 	
 	/**
 	 * Specifies whether or not to save proprietary metadata
@@ -68,4 +68,11 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
 	 * and extremely large entries) are discarded from the metadata table.
 	 */
 	boolean isMetadataFiltered();
+	
+	/**
+	 * Closes the currently open file. If the flag is set, this is all that
+	 * happens; if unset, it is equivalent to calling
+	 * {@link IFormatHandler#close()}.
+	 */
+	void close(boolean fileOnly) throws IOException;
 }

@@ -130,12 +130,7 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
 	 */
 	byte[] openThumbBytes(int no) throws FormatException, IOException;
 
-	/**
-	 * Closes the currently open file. If the flag is set, this is all that
-	 * happens; if unset, it is equivalent to calling
-	 * {@link IFormatHandler#close()}.
-	 */
-	void close(boolean fileOnly) throws IOException;
+
 
 	/** Gets the number of series in this file. */
 	int getSeriesCount();
@@ -211,7 +206,7 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
 	 * to the given rasterized index value.
 	 */
 	int[] getZCTCoords(int index);
-
+	
 	/**
 	 * Sets the default metadata for this reader.
 	 * @param meta a metadata implementation.
@@ -257,4 +252,10 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
 
 	/** Returns true if we should normalize float data. */
 	boolean isNormalized();
+	
+	/** Sets the Metadata[] for this Reader */
+	public void setMetadataArray(M[] meta);
+	
+	/** Gets the Metadata[] for this Reader */
+	public M[] getMetadataArray();
 }

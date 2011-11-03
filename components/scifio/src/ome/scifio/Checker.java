@@ -12,7 +12,7 @@ import ome.scifio.io.RandomAccessInputStream;
  * <dd><a href="">Trac</a>,
  * <a href="">Gitweb</a></dd></dl>
  */
-public interface Checker<M extends Metadata> extends MetadataHandler<M>, FormatHandler, Comparable<Checker<?>> {
+public interface Checker<M extends Metadata> extends MetadataHandler<M>, Comparable<Checker<?>> {
 
 	// -- Checker API methods --
 	

@@ -10,9 +10,6 @@ package ome.scifio;
 public interface FormatHandler {
 
 	// -- FormatHandler API --
-	//TODO: move these to readers/writers, see what's common
-	/** Checks if the given file is a valid instance of this file format. */
-	boolean supportsFormat(String name);
 
 	/** Gets the name of this file format. */
 	String getFormat();

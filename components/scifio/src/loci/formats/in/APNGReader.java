@@ -35,8 +35,11 @@ import java.util.zip.CRC32;
 
 import javax.imageio.ImageIO;
 
+import ome.scifio.in.apng.APNGChecker;
+import ome.scifio.in.apng.APNGParser;
+
 import loci.common.DataTools;
-import loci.common.RandomAccessInputStream;
+import ome.scifio.io.RandomAccessInputStream;
 import loci.formats.FormatException;
 import loci.formats.FormatTools;
 import loci.formats.MetadataTools;
@@ -63,7 +66,6 @@ public class APNGReader extends BIFormatReader {
 
   // -- Fields --
 
-  private Vector<PNGBlock> blocks;
   private Vector<int[]> frameCoordinates;
 
   private byte[][] lut;
@@ -76,6 +78,10 @@ public class APNGReader extends BIFormatReader {
   /** Constructs a new APNGReader. */
   public APNGReader() {
     super("Animated PNG", "png");
+	checker = new APNGChecker();
+	parser = new APNGParser();
+	
+	// TODO
     domains = new String[] {FormatTools.GRAPHICS_DOMAIN};
     suffixNecessary = false;
   }
@@ -83,20 +89,9 @@ public class APNGReader extends BIFormatReader {
   // -- IFormatReader API methods --
 
   /* @see loci.formats.IFormatReader#isThisType(RandomAccessInputStream) */
+  @Deprecated
   public boolean isThisType(RandomAccessInputStream stream) throws IOException {
-    final int blockLen = 8;
-    if (!FormatTools.validStream(stream, blockLen, false)) return false;
-
-    byte[] signature = new byte[blockLen];
-    stream.read(signature);
-
-    if (signature[0] != (byte) 0x89 || signature[1] != 0x50 ||
-      signature[2] != 0x4e || signature[3] != 0x47 || signature[4] != 0x0d ||
-      signature[5] != 0x0a || signature[6] != 0x1a || signature[7] != 0x0a)
-    {
-      return false;
-    }
-    return true;
+    return checker.isFormat(stream);
   }
 
   /* @see loci.formats.IFormatReader#get8BitLookupTable() */
@@ -135,6 +130,7 @@ public class APNGReader extends BIFormatReader {
 
     int[] coords = frameCoordinates.get(no);
 
+    /* TODO lost computeCRC method?
     for (PNGBlock block : blocks) {
       if (!block.type.equals("IDAT") && !block.type.equals("fdAT") &&
         !block.type.equals("acTL") && !block.type.equals("fcTL") &&
@@ -175,6 +171,7 @@ public class APNGReader extends BIFormatReader {
           b = null;
         }
       }
+      
     }
 
     RandomAccessInputStream s =
@@ -185,17 +182,19 @@ public class APNGReader extends BIFormatReader {
 
     lastImage = null;
     openPlane(0, 0, 0, getSizeX(), getSizeY());
-
+	
     // paste current image onto first image
 
     WritableRaster firstRaster = lastImage.getRaster();
     WritableRaster currentRaster = b.getRaster();
-
+	
     firstRaster.setDataElements(coords[0], coords[1], currentRaster);
     lastImage =
       new BufferedImage(lastImage.getColorModel(), firstRaster, false, null);
     lastImageIndex = no;
     return lastImage;
+    */
+    return null;
   }
 
   /* @see loci.formats.IFormatReader#close(boolean) */
@@ -204,7 +203,7 @@ public class APNGReader extends BIFormatReader {
     if (!fileOnly) {
       lut = null;
       frameCoordinates = null;
-      blocks = null;
+      //blocks = null;
       lastImage = null;
       lastImageIndex = -1;
     }
@@ -213,109 +212,9 @@ public class APNGReader extends BIFormatReader {
   // -- Internal FormatReader methods --
 
   /* @see loci.formats.FormatReader#initFile(String) */
+  @Deprecated
   protected void initFile(String id) throws FormatException, IOException {
     super.initFile(id);
-    in = new RandomAccessInputStream(id);
-
-    // check that this is a valid PNG file
-    byte[] signature = new byte[8];
-    in.read(signature);
-
-    if (signature[0] != (byte) 0x89 || signature[1] != 0x50 ||
-      signature[2] != 0x4e || signature[3] != 0x47 || signature[4] != 0x0d ||
-      signature[5] != 0x0a || signature[6] != 0x1a || signature[7] != 0x0a)
-    {
-      throw new FormatException("Invalid PNG signature.");
-    }
-
-    // read data chunks - each chunk consists of the following:
-    // 1) 32 bit length
-    // 2) 4 char type
-    // 3) 'length' bytes of data
-    // 4) 32 bit CRC
-
-    blocks = new Vector<PNGBlock>();
-    frameCoordinates = new Vector<int[]>();
-
-    while (in.getFilePointer() < in.length()) {
-      int length = in.readInt();
-      String type = in.readString(4);
-
-      PNGBlock block = new PNGBlock();
-      block.length = length;
-      block.type = type;
-      block.offset = in.getFilePointer();
-      blocks.add(block);
-
-      if (type.equals("acTL")) {
-        // APNG-specific chunk
-        core[0].imageCount = in.readInt();
-        int loop = in.readInt();
-        addGlobalMeta("Loop count", loop);
-      }
-      else if (type.equals("fcTL")) {
-        in.skipBytes(4);
-        int w = in.readInt();
-        int h = in.readInt();
-        int x = in.readInt();
-        int y = in.readInt();
-        frameCoordinates.add(new int[] {x, y, w, h});
-        in.skipBytes(length - 20);
-      }
-      else in.skipBytes(length);
-
-      if (in.getFilePointer() < in.length() - 4) {
-        in.skipBytes(4); // skip the CRC
-      }
-    }
-
-    if (core[0].imageCount == 0) core[0].imageCount = 1;
-    core[0].sizeZ = 1;
-    core[0].sizeT = getImageCount();
-
-    core[0].dimensionOrder = "XYCTZ";
-    core[0].interleaved = false;
-
-    RandomAccessInputStream ras = new RandomAccessInputStream(currentId);
-    DataInputStream dis = new DataInputStream(ras);
-    BufferedImage img = ImageIO.read(dis);
-    dis.close();
-
-    core[0].sizeX = img.getWidth();
-    core[0].sizeY = img.getHeight();
-    core[0].rgb = img.getRaster().getNumBands() > 1;
-    core[0].sizeC = img.getRaster().getNumBands();
-    core[0].pixelType = AWTImageTools.getPixelType(img);
-    core[0].indexed = img.getColorModel() instanceof IndexColorModel;
-    core[0].falseColor = false;
-
-    if (isIndexed()) {
-      lut = new byte[3][256];
-      IndexColorModel model = (IndexColorModel) img.getColorModel();
-      model.getReds(lut[0]);
-      model.getGreens(lut[1]);
-      model.getBlues(lut[2]);
-    }
-
-    MetadataStore store = makeFilterMetadata();
-    MetadataTools.populatePixels(store, this);
-    MetadataTools.setDefaultCreationDate(store, id, 0);
-  }
-
-  // -- Helper methods --
-
-  private long computeCRC(byte[] buf, int len) {
-    CRC32 crc = new CRC32();
-    crc.update(buf, 0, len);
-    return crc.getValue();
-  }
-
-  // -- Helper class --
-
-  class PNGBlock {
-    public long offset;
-    public int length;
-    public String type;
   }
 
 }

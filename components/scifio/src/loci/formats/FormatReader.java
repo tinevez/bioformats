@@ -31,7 +31,13 @@ import java.util.Vector;
 
 import loci.common.DataTools;
 import loci.common.Location;
-import loci.common.RandomAccessInputStream;
+import ome.scifio.AbstractMetadata;
+import ome.scifio.Checker;
+import ome.scifio.Metadata;
+import ome.scifio.Parser;
+import ome.scifio.Reader;
+import ome.scifio.Translator;
+import ome.scifio.io.RandomAccessInputStream;
 import loci.common.services.DependencyException;
 import loci.common.services.ServiceFactory;
 import loci.formats.in.DefaultMetadataOptions;
@@ -115,6 +121,17 @@ public abstract class FormatReader extends FormatHandler
   protected static final int THUMBNAIL_DIMENSION = 128;
 
   // -- Fields --
+  /** Scifio Checker deferred to. */
+  protected Checker checker;
+  
+  /** Scifio Parser deferred to. */
+  protected Parser parser;
+  
+  /** Scifio Translator deferred to. */
+  protected Translator translator;
+  
+  /** Scifio Reader deferred to. */
+  protected Reader reader;
 
   /** Current file. */
   protected RandomAccessInputStream in;
@@ -193,27 +210,10 @@ public abstract class FormatReader extends FormatHandler
    * @throws FormatException if a parsing error occurs processing the file.
    * @throws IOException if an I/O error occurs processing the file
    */
+  @Deprecated
   protected void initFile(String id) throws FormatException, IOException {
     LOGGER.debug("{}.initFile({})", this.getClass().getName(), id);
-    if (currentId != null) {
-      String[] s = getUsedFiles();
-      for (int i=0; i<s.length; i++) {
-        if (id.equals(s[i])) return;
-      }
-    }
-
-    series = 0;
-    close();
-    currentId = id;
-    metadata = new Hashtable<String, Object>();
-
-    core = new CoreMetadata[1];
-    core[0] = new CoreMetadata();
-    core[0].orderCertain = true;
-
-    // reinitialize the MetadataStore
-    // NB: critical for metadata conversion to work properly!
-    getMetadataStore().createRoot();
+    reader.setMetadataArray(parser.parse(id));
   }
 
   /** Returns true if the given file name is in the used files list. */
@@ -229,7 +229,7 @@ public abstract class FormatReader extends FormatHandler
 
   /** Adds an entry to the specified Hashtable. */
   protected void addMeta(String key, Object value,
-    Hashtable<String, Object> meta)
+		  Hashtable<String, Object> meta)
   {
     if (key == null || value == null || !isMetadataCollected()) {
       return;
@@ -495,50 +495,19 @@ public abstract class FormatReader extends FormatHandler
    * @param open If true, and the file extension is insufficient to determine
    *   the file type, the (existing) file is opened for further analysis.
    */
+  @Deprecated
   public boolean isThisType(String name, boolean open) {
-    // if file extension ID is insufficient and we can't open the file, give up
-    if (!suffixSufficient && !open) return false;
-
-    if (suffixNecessary || suffixSufficient) {
-      // it's worth checking the file extension
-      boolean suffixMatch = super.isThisType(name);
-
-      // if suffix match is required but it doesn't match, failure
-      if (suffixNecessary && !suffixMatch) return false;
-
-      // if suffix matches and that's all we need, green light it
-      if (suffixMatch && suffixSufficient) return true;
-    }
-
-    // suffix matching was inconclusive; we need to analyze the file contents
-    if (!open) return false; // not allowed to open any files
-    try {
-      RandomAccessInputStream stream = new RandomAccessInputStream(name);
-      boolean isThisType = isThisType(stream);
-      stream.close();
-      return isThisType;
-    }
-    catch (IOException exc) {
-      LOGGER.debug("", exc);
-      return false;
-    }
+    return checker.isFormat(name, open);
   }
 
   /* @see IFormatReader#isThisType(byte[]) */
+  @Deprecated
   public boolean isThisType(byte[] block) {
-    try {
-      RandomAccessInputStream stream = new RandomAccessInputStream(block);
-      boolean isThisType = isThisType(stream);
-      stream.close();
-      return isThisType;
-    }
-    catch (IOException e) {
-      LOGGER.debug("", e);
-    }
-    return false;
+    return checker.isFormat(block);
   }
 
   /* @see IFormatReader#isThisType(RandomAccessInputStream) */
+  @Deprecated
   public boolean isThisType(RandomAccessInputStream stream) throws IOException {
     return false;
   }
