@@ -80,6 +80,7 @@ public class APNGReader extends BIFormatReader {
     super("Animated PNG", "png");
 	checker = new APNGChecker();
 	parser = new APNGParser();
+	reader = new ome.scifio.in.apng.APNGReader((APNGParser)parser);
 	
 	// TODO
     domains = new String[] {FormatTools.GRAPHICS_DOMAIN};
