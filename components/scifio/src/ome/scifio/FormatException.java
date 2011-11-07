@@ -33,10 +33,20 @@ package ome.scifio;
  */
 public class FormatException extends Exception {
 
-  public FormatException() { super(); }
-  public FormatException(String s) { super(s); }
-  public FormatException(String s, Throwable cause) { super(s, cause); }
-  public FormatException(Throwable cause) { super(cause); }
+  public FormatException() {
+    super();
+  }
+
+  public FormatException(String s) {
+    super(s);
+  }
+
+  public FormatException(String s, Throwable cause) {
+    super(s, cause);
+  }
+
+  public FormatException(Throwable cause) {
+    super(cause);
+  }
 
 }
-

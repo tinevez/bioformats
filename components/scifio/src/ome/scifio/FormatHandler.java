@@ -9,11 +9,11 @@ package ome.scifio;
  */
 public interface FormatHandler {
 
-	// -- FormatHandler API --
+  // -- FormatHandler API --
 
-	/** Gets the name of this file format. */
-	String getFormat();
+  /** Gets the name of this file format. */
+  String getFormat();
 
-	/** Gets the default file suffixes for this file format. */
-	String[] getSuffixes();
+  /** Gets the default file suffixes for this file format. */
+  String[] getSuffixes();
 }

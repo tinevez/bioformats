@@ -26,7 +26,6 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
 
 	private Vector<APNGBlock> blocks;
 	private byte[][] lut;
-
 	private Vector<int[]> frameCoordinates;
 
 	// -- Constructor --
@@ -164,6 +163,7 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
 	}
 	
 	// -- APNGParser Methods --
+	
 	public Vector<APNGBlock> getBlocks() {
 		return blocks;
 	}

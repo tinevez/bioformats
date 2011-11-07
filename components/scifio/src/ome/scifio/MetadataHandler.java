@@ -8,9 +8,9 @@ package ome.scifio;
  * <a href="">Gitweb</a></dd></dl>
  */
 public interface MetadataHandler<M extends Metadata> {
-	
-	// -- MetadataHandler API --
-	
-	/** Returns the Metadata type this component takes as input */
-	Class<M> getMetadataType();
+
+  // -- MetadataHandler API --
+
+  /** Returns the Metadata type this component takes as input */
+  Class<M> getMetadataType();
 }

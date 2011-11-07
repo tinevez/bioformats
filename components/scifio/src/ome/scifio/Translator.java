@@ -10,13 +10,13 @@ package ome.scifio;
  */
 public interface Translator<M extends Metadata> extends MetadataHandler<M> {
 
-	// -- Translator API methods --
-	
-	/**
-	 * Converts a type I Metadata object to a new type of Metadata
-	 * 
-	 * @param metaIn Metadata object of the Input type
-	 * @return a new Metadtata object
-	 */
-	Metadata translate(M metaIn);
+  // -- Translator API methods --
+
+  /**
+   * Converts a type I Metadata object to a new type of Metadata
+   * 
+   * @param metaIn Metadata object of the Input type
+   * @return a new Metadtata object
+   */
+  Metadata translate(M metaIn);
 }
