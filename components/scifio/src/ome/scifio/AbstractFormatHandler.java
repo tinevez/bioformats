@@ -1,5 +1,10 @@
 package ome.scifio;
 
+/**
+ * Abstract superclass of all SCIFIO components that are children of
+ * ome.scifio.FormatHandler.
+ *
+ */
 public abstract class AbstractFormatHandler implements FormatHandler {
 
 	// -- Fields --

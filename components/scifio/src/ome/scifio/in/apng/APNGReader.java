@@ -11,12 +11,22 @@ import ome.scifio.Metadata;
 import ome.scifio.Reader;
 import ome.scifio.io.RandomAccessInputStream;
 
+/**
+ * File format SCIFIO Reader for Animated Portable Network Graphics
+ * (APNG) images.
+ *
+ */
 public class APNGReader extends AbstractReader<APNGMetadata> {
 
+	// -- Constructor --
+	
+	/** Constructs a new APNGReader. */
 	public APNGReader(String format, String suffix) {
 		super(format, suffix);
 		// TODO Auto-generated constructor stub
 	}
+	
+	// -- Reader API Methods --
 
 	@Override
 	public byte[][] get8BitLookupTable() throws FormatException, IOException {

@@ -5,6 +5,12 @@ import java.util.Hashtable;
 
 import loci.formats.FormatException;
 
+/**
+ * Format-agnostic metadata representation, with no
+ * backing XML information (minimum information knowable
+ * by SCIFIO).
+ *
+ */
 public class CoreMetadata extends AbstractMetadata {
 
 	// -- Fields --

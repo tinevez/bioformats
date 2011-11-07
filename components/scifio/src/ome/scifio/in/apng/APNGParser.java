@@ -14,43 +14,55 @@ import ome.scifio.FormatException;
 import ome.scifio.io.RandomAccessInputStream;
 import ome.scifio.util.BufferedImageTools;
 
+
+/**
+ * File format SCIFIO Parser for Animated Portable Network Graphics
+ * (APNG) images.
+ *
+ */
 public class APNGParser extends AbstractParser<APNGMetadata> {
-	
-	  // -- Fields --
 
-	  private Vector<APNGBlock> blocks;
-	  private byte[][] lut;
+	// -- Fields --
 
-	  private Vector<int[]> frameCoordinates;
-	  
-	  public APNGParser() {
-		  metadata = new APNGMetadata[1];
-		  metadata[0] = new APNGMetadata();
-		  metadata[0].orderCertain = true;
-	  }
+	private Vector<APNGBlock> blocks;
+	private byte[][] lut;
+
+	private Vector<int[]> frameCoordinates;
+
+	// -- Constructor --
+
+	/** Constructs a new APNGParser. */
+	public APNGParser() {
+		metadata = new APNGMetadata[1];
+		metadata[0] = new APNGMetadata();
+		metadata[0].orderCertain = true;
+	}
+
+	// -- Parser API Methods --
 	
+	/* @see ome.scifio.AbstractParser#parse(RandomAccessInputStream stream) */
 	@Override
 	public APNGMetadata[] parse(RandomAccessInputStream stream)
-			throws IOException, FormatException {
+	throws IOException, FormatException {
 		super.parse(stream);
-	    in = stream;
+		in = stream;
 
-	    // check that this is a valid PNG file
-	    byte[] signature = new byte[8];
-	    in.read(signature);
+		// check that this is a valid PNG file
+		byte[] signature = new byte[8];
+		in.read(signature);
 
-	    if (signature[0] != (byte) 0x89 || signature[1] != 0x50 ||
-	      signature[2] != 0x4e || signature[3] != 0x47 || signature[4] != 0x0d ||
-	      signature[5] != 0x0a || signature[6] != 0x1a || signature[7] != 0x0a)
-	    {
-	      throw new FormatException("Invalid PNG signature.");
-	    }
+		if (signature[0] != (byte) 0x89 || signature[1] != 0x50 ||
+				signature[2] != 0x4e || signature[3] != 0x47 || signature[4] != 0x0d ||
+				signature[5] != 0x0a || signature[6] != 0x1a || signature[7] != 0x0a)
+		{
+			throw new FormatException("Invalid PNG signature.");
+		}
 
-	    // read data chunks - each chunk consists of the following:
-	    // 1) 32 bit length
-	    // 2) 4 char type
-	    // 3) 'length' bytes of data
-	    // 4) 32 bit CRC
+		// read data chunks - each chunk consists of the following:
+		// 1) 32 bit length
+		// 2) 4 char type
+		// 3) 'length' bytes of data
+		// 4) 32 bit CRC
 
 	    blocks = new Vector<APNGBlock>();
 	    frameCoordinates = new Vector<int[]>();
@@ -117,7 +129,6 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
 	      model.getBlues(lut[2]);
 	    }
 	    
-	    //TODO create actual Metadata object
 	    return metadata;
 	}
 

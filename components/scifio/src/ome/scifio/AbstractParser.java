@@ -8,6 +8,10 @@ import java.util.Vector;
 import ome.scifio.io.RandomAccessInputStream;
 import ome.scifio.util.FormatTools;
 
+/**
+ * Abstract superclass of all SCIFIO Parser components.
+ *
+ */
 public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
 
 	// -- Fields --
@@ -36,7 +40,7 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
 		return parse(new RandomAccessInputStream(fileName));
 	}
 
-	/* @see Parser#parse(String fileName) */
+	/* @see Parser#parse(RandomAccessInputStream stream) */
 	public M[] parse(RandomAccessInputStream stream) throws IOException, FormatException {
 		if (currentId != null) {
 			String[] s = getUsedFiles();

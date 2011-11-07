@@ -5,6 +5,10 @@ import java.io.IOException;
 
 import ome.scifio.io.RandomAccessInputStream;
 
+/**
+ * Abstract superclass of all SCIFIO checker components. 
+ *
+ */
 public abstract class AbstractChecker<M extends Metadata> extends AbstractFormatHandler implements Checker<M> {
 
 	// -- Fields --
@@ -29,11 +33,13 @@ public abstract class AbstractChecker<M extends Metadata> extends AbstractFormat
 
 	// -- Constructors --
 
+	/** Constructs a checker with the given name and default suffix */
 	public AbstractChecker(String format, String suffix) {
 		super(format, suffix);
 		// TODO Auto-generated constructor stub
 	}
 
+	/** Constructs a checker with the given name and default suffixes */
 	public AbstractChecker(String format, String[] suffixes) {
 		super(format, suffixes);
 	}

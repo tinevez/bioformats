@@ -1,11 +1,15 @@
 package ome.scifio.in.apng;
 
 import java.io.IOException;
-
 import ome.scifio.AbstractChecker;
 import ome.scifio.io.RandomAccessInputStream;
 import ome.scifio.io.StreamTools;
 
+/**
+ * File format SCIFIO Checker for Animated Portable Network Graphics
+ * (APNG) images.
+ *
+ */
 public class APNGChecker extends AbstractChecker<APNGMetadata>{
 
 	// -- Fields --

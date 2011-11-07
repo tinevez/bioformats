@@ -7,6 +7,11 @@ import loci.formats.FormatException;
 import ome.scifio.AbstractMetadata;
 import ome.scifio.CoreMetadata;
 
+/**
+ * File format SCIFIO Metadata for Animated Portable Network Graphics
+ * (APNG) images.
+ *
+ */
 public class APNGMetadata extends CoreMetadata {
 
 	/**
