@@ -130,7 +130,8 @@ public class APNGReader extends BIFormatReader {
 
     int[] coords = frameCoordinates.get(no);
 
-    /* TODO lost computeCRC method?
+    // TODO lost computeCRC method?
+    /*
     for (PNGBlock block : blocks) {
       if (!block.type.equals("IDAT") && !block.type.equals("fdAT") &&
         !block.type.equals("acTL") && !block.type.equals("fcTL") &&
@@ -193,7 +194,7 @@ public class APNGReader extends BIFormatReader {
       new BufferedImage(lastImage.getColorModel(), firstRaster, false, null);
     lastImageIndex = no;
     return lastImage;
-    */
+    */ 
     return null;
   }
 
@@ -216,5 +217,12 @@ public class APNGReader extends BIFormatReader {
   protected void initFile(String id) throws FormatException, IOException {
     super.initFile(id);
   }
-
+  
+  // -- Helper Methods --
+  
+  private long computeCRC(byte[] buf, int len) {
+	  CRC32 crc = new CRC32();
+	  crc.update(buf, 0, len);
+	  return crc.getValue();
+	  }
 }
