@@ -131,30 +131,6 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
 	    return metadata;
 	}
 
-	@Override
-	public void setOriginalMetadataPopulated(boolean populate) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean isOriginalMetadataPopulated() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void setMetadataFiltered(boolean filter) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean isMetadataFiltered() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
 	// -- MetadataHandler API Methods --
 
 	/* @see MetadataHandler#getMetadataTypes() */

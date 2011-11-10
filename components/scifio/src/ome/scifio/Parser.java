@@ -2,6 +2,9 @@ package ome.scifio;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Hashtable;
+
+import loci.formats.IFormatHandler;
 
 import ome.scifio.io.RandomAccessInputStream;
 
@@ -46,6 +49,19 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
   M[] parse(RandomAccessInputStream stream) throws IOException, FormatException;
 
   /**
+   * Closes the currently open file. If the flag is set, this is all that
+   * happens; if unset, it is equivalent to calling
+   * {@link IFormatHandler#close()}.
+   */
+  void close(boolean fileOnly) throws IOException;
+  
+  /** Gets the number of series in this file. */
+  int getSeriesCount();
+
+  /** Activates the specified series. */
+  void setSeries(int no);
+  
+  /**
    * Specifies whether or not to save proprietary metadata
    * in the Metadata.
    */
@@ -57,6 +73,16 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
    */
   boolean isOriginalMetadataPopulated();
 
+  /** Returns an array of filenames needed to open this dataset. */
+  String[] getUsedFiles();
+
+  /**
+   * Returns an array of filenames needed to open this dataset.
+   * If the 'noPixels' flag is set, then only files that do not contain
+   * pixel data will be returned.
+   */
+  String[] getUsedFiles(boolean noPixels);
+  
   /**
    * Specifies whether ugly metadata (entries with unprintable characters,
    * and extremely large entries) should be discarded from the metadata table.
@@ -68,11 +94,22 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
    * and extremely large entries) are discarded from the metadata table.
    */
   boolean isMetadataFiltered();
-
+  
   /**
-   * Closes the currently open file. If the flag is set, this is all that
-   * happens; if unset, it is equivalent to calling
-   * {@link IFormatHandler#close()}.
+   * Gets whether the image planes are indexed color.
+   * This value has no impact on {@link #getSizeC()},
+   * {@link #getEffectiveSizeC()} or {@link #getRGBChannelCount()}.
    */
-  void close(boolean fileOnly) throws IOException;
+  boolean isIndexed();
+  
+  /** Determines the number of image planes in the current file. */
+  int getImageCount();
+  
+  /**
+   * Obtains the hashtable containing the metadata field/value pairs from
+   * the current file.
+   * @return the hashtable containing all non-series-specific metadata
+   * from the file
+   */
+  public Hashtable<String, Object> getGlobalMetadata();
 }

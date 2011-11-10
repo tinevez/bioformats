@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import ome.scifio.common.DataTools;
 import ome.scifio.io.RandomAccessInputStream;
 import ome.scifio.util.FormatTools;
 
@@ -15,14 +16,26 @@ import ome.scifio.util.FormatTools;
 public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
 
   // -- Fields --
+  /** Current file. */
   protected RandomAccessInputStream in;
+  
+  /** Core metadata values. */
   protected M[] metadata;
 
   /** Hashtable containing metadata key/value pairs. */
   protected Hashtable<String, Object> globalMeta;
 
+  /** Name of current file. */
   protected String currentId;
+  
+  /** The number of the current series. */
   private int series;
+  
+  /** Whether or not to filter out invalid metadata. */
+  protected boolean filterMetadata;
+  
+  /** Whether or not to save proprietary metadata in the MetadataStore. */
+  protected boolean saveOriginalMetadata = false;
 
   // -- Constructors --
 
@@ -56,12 +69,12 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
     return metadata;
   }
 
-  /* @see IFormatReader#getUsedFiles() */
+  /* @see Parser#getUsedFiles() */
   public String[] getUsedFiles() {
     return getUsedFiles(false);
   }
 
-  /* @see IFormatReader#getUsedFiles() */
+  /* @see Parser#getUsedFiles() */
   public String[] getUsedFiles(boolean noPixels) {
     int oldSeries = getSeries();
     Vector<String> files = new Vector<String>();
@@ -80,7 +93,7 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
     return files.toArray(new String[files.size()]);
   }
 
-  /* @see IFormatReader#close(boolean) */
+  /* @see Parser#close(boolean) */
   public void close(boolean fileOnly) throws IOException {
     if (in != null) in.close();
     if (!fileOnly) {
@@ -89,24 +102,24 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
     }
   }
 
-  /* @see IFormatHandler#close() */
+  /* @see Parser#close() */
   public void close() throws IOException {
     close(false);
   }
 
-  /* @see IFormatReader#getSeriesCount() */
+  /* @see Parser#getSeriesCount() */
   public int getSeriesCount() {
     FormatTools.assertId(currentId, true, 1);
     return metadata.length;
   }
 
-  /* @see IFormatReader#isIndexed() */
+  /* @see Parser#isIndexed() */
   public boolean isIndexed() {
     FormatTools.assertId(currentId, true, 1);
     return metadata[series].isIndexed();
   }
 
-  /* @see IFormatReader#setSeries(int) */
+  /* @see Parser#setSeries(int) */
   public void setSeries(int no) {
     if (no < 0 || no >= getSeriesCount()) {
       throw new IllegalArgumentException("Invalid series: " + no);
@@ -114,18 +127,18 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
     series = no;
   }
 
-  /* @see IFormatReader#getImageCount() */
+  /* @see Parser#getImageCount() */
   public int getImageCount() {
     FormatTools.assertId(currentId, true, 1);
     return metadata[series].getImageCount();
   }
 
-  /* @see IFormatReader#getSeriesUsedFiles(boolean) */
+  /* @see Parser#getSeriesUsedFiles(boolean) */
   public String[] getSeriesUsedFiles(boolean noPixels) {
     return noPixels ? null : new String[] {currentId};
   }
 
-  /* @see IFormatReader#getSeries() */
+  /* @see Parser#getSeries() */
   public int getSeries() {
     return series;
   }
@@ -197,9 +210,10 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
     // string value, if passed in value is a string
     String val = string ? String.valueOf(value) : null;
 
-    /* TODO
     if (filterMetadata ||
-      (saveOriginalMetadata && (getMetadataStore() instanceof OMEXMLMetadata)))
+      (saveOriginalMetadata 
+        /* TODO: check if this Parser's metadata is OMEXML metadata &&
+         *  (getMetadataStore() instanceof OMEXMLMetadata)*/))
     {
       // filter out complex data types
       if (!simple) return;
@@ -231,12 +245,34 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
 
       if (string) value = val;
     }
-    */
 
     meta.put(key, val == null ? value : val);
   }
+  
+  /* @see Parser#setMetadataFiltered(boolean) */
+  public void setMetadataFiltered(boolean filter) {
+    FormatTools.assertId(currentId, false, 1);
+    filterMetadata = filter;
+  }
+  
+  /* @see Parser#isMetadataFiltered() */
+  public boolean isMetadataFiltered() {
+    return filterMetadata;
+  }
+  
+  /* @see Parser#setOriginalMetadataPopulated(boolean) */
+  public void setOriginalMetadataPopulated(boolean populate) {
+    FormatTools.assertId(currentId, false, 1);
+    saveOriginalMetadata = populate;    
+  }
 
-  /* @see IFormatReader#getGlobalMetadata() */
+  /* @see Parser#isOriginalMetadataPopulated() */
+  public boolean isOriginalMetadataPopulated() {
+    return saveOriginalMetadata;
+  }
+
+
+  /* @see Parser#getGlobalMetadata() */
   public Hashtable<String, Object> getGlobalMetadata() {
     FormatTools.assertId(currentId, true, 1);
     return globalMeta;
