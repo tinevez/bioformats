@@ -33,20 +33,22 @@ package ome.scifio;
  */
 public class FormatException extends Exception {
 
-  public FormatException() {
-    super();
-  }
+	private static final long serialVersionUID = 1L;
 
-  public FormatException(String s) {
-    super(s);
-  }
+	public FormatException() {
+		super();
+	}
 
-  public FormatException(String s, Throwable cause) {
-    super(s, cause);
-  }
+	public FormatException(String s) {
+		super(s);
+	}
 
-  public FormatException(Throwable cause) {
-    super(cause);
-  }
+	public FormatException(String s, Throwable cause) {
+		super(s, cause);
+	}
+
+	public FormatException(Throwable cause) {
+		super(cause);
+	}
 
 }
