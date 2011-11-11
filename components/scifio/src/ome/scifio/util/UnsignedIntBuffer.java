@@ -1,6 +1,5 @@
 package ome.scifio.util;
 
-
 import java.awt.image.DataBuffer;
 
 /**
@@ -57,7 +56,7 @@ public class UnsignedIntBuffer extends DataBuffer {
 
   /* @see java.awt.image.DataBuffer#getElemFloat(int, int) */
   public float getElemFloat(int bank, int i) {
-    return (float) (getElem(bank, i) & 0xffffffffL);
+    return (getElem(bank, i) & 0xffffffffL);
   }
 
   /* @see java.awt.image.DataBuffer#getElemDouble(int) */
@@ -67,7 +66,7 @@ public class UnsignedIntBuffer extends DataBuffer {
 
   /* @see java.awt.image.DataBuffer#getElemDouble(int, int) */
   public double getElemDouble(int bank, int i) {
-    return (double) (getElem(bank, i) & 0xffffffffL);
+    return (getElem(bank, i) & 0xffffffffL);
   }
 
   /* @see java.awt.image.DataBuffer#setElem(int, int) */

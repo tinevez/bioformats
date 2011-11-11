@@ -35,16 +35,22 @@ import java.io.IOException;
  */
 public class HandleException extends IOException {
 
-  public HandleException() { super(); }
-  public HandleException(String s) { super(s); }
+  public HandleException() {
+    super();
+  }
+
+  public HandleException(String s) {
+    super(s);
+  }
+
   public HandleException(String s, Throwable cause) {
     super(s);
     initCause(cause);
   }
+
   public HandleException(Throwable cause) {
     super();
     initCause(cause);
   }
 
 }
-

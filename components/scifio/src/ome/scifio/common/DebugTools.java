@@ -40,7 +40,8 @@ public final class DebugTools {
 
   // -- Constructor --
 
-  private DebugTools() { }
+  private DebugTools() {
+  }
 
   // -- DebugTools methods --
 

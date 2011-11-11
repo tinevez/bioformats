@@ -68,7 +68,7 @@ public class Location {
       protected HashMap<String, Object> initialValue() {
         return new HashMap<String, Object>();
       }
-  };
+    };
 
   private static volatile boolean cacheListings = false;
 
@@ -76,13 +76,15 @@ public class Location {
   private static volatile long cacheNanos = 60L * 60L * 1000L * 1000L * 1000L;
 
   protected class ListingsResult {
-    public final String [] listing;
+    public final String[] listing;
     public final long time;
-    ListingsResult(String [] listing, long time) {
+
+    ListingsResult(String[] listing, long time) {
       this.listing = listing;
       this.time = time;
     }
   }
+
   private static ConcurrentHashMap<String, ListingsResult> fileListings =
     new ConcurrentHashMap<String, ListingsResult>();
 
@@ -160,7 +162,7 @@ public class Location {
    * seconds.
    */
   public static void setCacheDirectoryTimeout(double sec) {
-    cacheNanos = (long)(sec * 1000. * 1000. * 1000.);
+    cacheNanos = (long) (sec * 1000. * 1000. * 1000.);
   }
 
   /**
@@ -242,7 +244,9 @@ public class Location {
   }
 
   /** Return the id mapping. */
-  public static HashMap<String, Object> getIdMap() { return idMap.get(); }
+  public static HashMap<String, Object> getIdMap() {
+    return idMap.get();
+  }
 
   /**
    * Set the id mapping using the given HashMap.
@@ -303,7 +307,7 @@ public class Location {
    */
   public String[] list(boolean noHiddenFiles) {
     String key = getAbsolutePath() + Boolean.toString(noHiddenFiles);
-    String [] result = null;
+    String[] result = null;
     if (cacheListings) {
       cleanStaleCacheEntries();
       ListingsResult listingsResult = fileListings.get(key);
@@ -351,8 +355,8 @@ public class Location {
       String[] f = file.list();
       if (f == null) return null;
       for (String name : f) {
-        if (!noHiddenFiles || !(name.startsWith(".") ||
-          new Location(file.getAbsolutePath(), name).isHidden()))
+        if (!noHiddenFiles ||
+          !(name.startsWith(".") || new Location(file.getAbsolutePath(), name).isHidden()))
         {
           files.add(name);
         }
@@ -622,7 +626,7 @@ public class Location {
     String[] s = list();
     if (s == null) return null;
     Location[] f = new Location[s.length];
-    for (int i=0; i<f.length; i++) {
+    for (int i = 0; i < f.length; i++) {
       f[i] = new Location(getAbsolutePath(), s[i]);
       f[i] = f[i].getAbsoluteFile();
     }

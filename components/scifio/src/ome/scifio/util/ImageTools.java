@@ -25,7 +25,6 @@ package ome.scifio.util;
 
 import ome.scifio.common.DataTools;
 
-
 /**
  * A utility class with convenience methods for manipulating images
  * in primitive array form.
@@ -43,7 +42,8 @@ public final class ImageTools {
 
   // -- Constructor --
 
-  private ImageTools() { }
+  private ImageTools() {
+  }
 
   // -- Image conversion --
 
@@ -70,7 +70,7 @@ public final class ImageTools {
   {
     int[] pix = make24Bits(pixels, w, h, interleaved, min, max);
     byte[][] rtn = new byte[3][pix.length];
-    for (int i=0; i<pix.length; i++) {
+    for (int i = 0; i < pix.length; i++) {
       byte r = (byte) ((pix[i] >> 16) & 0xff);
       rtn[1][i] = (byte) ((pix[i] >> 8) & 0xff);
       byte b = (byte) (pix[i] & 0xff);
@@ -120,7 +120,7 @@ public final class ImageTools {
 
       short[] s = (short[]) pixels;
       b = new byte[s.length];
-      for (int i=0; i<s.length; i++) {
+      for (int i = 0; i < s.length; i++) {
         b[i] = (byte) (Math.abs(s[i] * mult) - min.doubleValue());
       }
     }
@@ -131,7 +131,7 @@ public final class ImageTools {
 
       int[] s = (int[]) pixels;
       b = new byte[s.length];
-      for (int i=0; i<s.length; i++) {
+      for (int i = 0; i < s.length; i++) {
         b[i] = (byte) (Math.abs(s[i] * mult) - min.doubleValue());
       }
     }
@@ -142,7 +142,7 @@ public final class ImageTools {
 
       float[] s = (float[]) pixels;
       b = new byte[s.length];
-      for (int i=0; i<s.length; i++) {
+      for (int i = 0; i < s.length; i++) {
         b[i] = (byte) (s[i] * mult - min.doubleValue());
       }
     }
@@ -153,21 +153,21 @@ public final class ImageTools {
 
       double[] s = (double[]) pixels;
       b = new byte[s.length];
-      for (int i=0; i<s.length; i++) {
+      for (int i = 0; i < s.length; i++) {
         b[i] = (byte) (s[i] * mult - min.doubleValue());
       }
     }
 
     int c = b.length / rtn.length;
 
-    for (int i=0; i<rtn.length; i++) {
+    for (int i = 0; i < rtn.length; i++) {
       byte[] a = new byte[4];
       int maxC = Math.min(c, a.length);
-      for (int j=maxC-1; j>=0; j--) {
+      for (int j = maxC - 1; j >= 0; j--) {
         a[j] = b[interleaved ? i * c + j : i + j * w * h];
       }
       if (c == 1) {
-        for (int j=1; j<a.length; j++) {
+        for (int j = 1; j < a.length; j++) {
           a[j] = a[0];
         }
       }
@@ -191,8 +191,8 @@ public final class ImageTools {
   public static byte[] splitChannels(byte[] array, int index, int c, int bytes,
     boolean reverse, boolean interleaved)
   {
-    return splitChannels(array, null, index, c, bytes, reverse, interleaved,
-      array.length / c);
+    return splitChannels(
+      array, null, index, c, bytes, reverse, interleaved, array.length / c);
   }
 
   /**
@@ -206,8 +206,8 @@ public final class ImageTools {
    * the value of 'rtn.length', but specifying it separately allows 'rtn' to
    * be larger than the size of a single channel.
    */
-  public static byte[] splitChannels(byte[] array, byte[] rtn, int index, int c,
-    int bytes, boolean reverse, boolean interleaved, int channelLength)
+  public static byte[] splitChannels(byte[] array, byte[] rtn, int index,
+    int c, int bytes, boolean reverse, boolean interleaved, int channelLength)
   {
     if (c == 1) return array;
     if (rtn == null) {
@@ -221,9 +221,9 @@ public final class ImageTools {
     }
     else {
       int next = 0;
-      for (int i=0; i<array.length; i+=c*bytes) {
-        for (int k=0; k<bytes; k++) {
-          if (next < rtn.length) rtn[next] = array[i + index*bytes + k];
+      for (int i = 0; i < array.length; i += c * bytes) {
+        for (int k = 0; k < bytes; k++) {
+          if (next < rtn.length) rtn[next] = array[i + index * bytes + k];
           next++;
         }
       }
@@ -249,15 +249,15 @@ public final class ImageTools {
     if (interleaved) {
       int len = oldWidth < width ? oldWidth : width;
       if (h == oldHeight) {
-        for (int y=0; y<h*c; y++) {
+        for (int y = 0; y < h * c; y++) {
           int oldIndex = oldWidth * y;
           int index = width * y;
           System.arraycopy(b, oldIndex, padded, index, len);
         }
       }
       else {
-        for (int ch=0; ch<c; ch++) {
-          for (int y=0; y<h; y++) {
+        for (int ch = 0; ch < c; ch++) {
+          for (int y = 0; y < h; y++) {
             int oldIndex = oldWidth * ch * oldHeight + oldWidth * y;
             int index = width * ch * height + width * y;
             System.arraycopy(b, oldIndex, padded, index, len);
@@ -267,7 +267,7 @@ public final class ImageTools {
     }
     else {
       int len = oldWidth < width ? oldWidth * c : width * c;
-      for (int oy=0, y=0; oy<oldHeight; oy++, y++) {
+      for (int oy = 0, y = 0; oy < oldHeight; oy++, y++) {
         int oldIndex = oldWidth * c * y;
         int index = width * c * (y + hClip) + c * wClip;
         System.arraycopy(b, oldIndex, padded, index, len);
@@ -294,15 +294,15 @@ public final class ImageTools {
     if (interleaved) {
       int len = oldWidth < width ? oldWidth : width;
       if (h == oldHeight) {
-        for (int y=0; y<h*c; y++) {
+        for (int y = 0; y < h * c; y++) {
           int oldIndex = oldWidth * y;
           int index = width * y;
           System.arraycopy(b, oldIndex, padded, index, len);
         }
       }
       else {
-        for (int ch=0; ch<c; ch++) {
-          for (int y=0; y<h; y++) {
+        for (int ch = 0; ch < c; ch++) {
+          for (int y = 0; y < h; y++) {
             int oldIndex = oldWidth * ch * oldHeight + oldWidth * y;
             int index = width * ch * height + width * y;
             System.arraycopy(b, oldIndex, padded, index, len);
@@ -312,7 +312,7 @@ public final class ImageTools {
     }
     else {
       int len = oldWidth < width ? oldWidth * c : width * c;
-      for (int oy=0, y=0; oy<oldHeight; oy++, y++) {
+      for (int oy = 0, y = 0; oy < oldHeight; oy++, y++) {
         int oldIndex = oldWidth * c * y;
         int index = width * c * (y + hClip) + c * wClip;
         System.arraycopy(b, oldIndex, padded, index, len);
@@ -339,15 +339,15 @@ public final class ImageTools {
     if (interleaved) {
       int len = oldWidth < width ? oldWidth : width;
       if (h == oldHeight) {
-        for (int y=0; y<h*c; y++) {
+        for (int y = 0; y < h * c; y++) {
           int oldIndex = oldWidth * y;
           int index = width * y;
           System.arraycopy(b, oldIndex, padded, index, len);
         }
       }
       else {
-        for (int ch=0; ch<c; ch++) {
-          for (int y=0; y<h; y++) {
+        for (int ch = 0; ch < c; ch++) {
+          for (int y = 0; y < h; y++) {
             int oldIndex = oldWidth * ch * oldHeight + oldWidth * y;
             int index = width * ch * height + width * y;
             System.arraycopy(b, oldIndex, padded, index, len);
@@ -357,7 +357,7 @@ public final class ImageTools {
     }
     else {
       int len = oldWidth < width ? oldWidth * c : width * c;
-      for (int oy=0, y=0; oy<oldHeight; oy++, y++) {
+      for (int oy = 0, y = 0; oy < oldHeight; oy++, y++) {
         int oldIndex = oldWidth * c * y;
         int index = width * c * (y + hClip) + c * wClip;
         System.arraycopy(b, oldIndex, padded, index, len);
@@ -384,15 +384,15 @@ public final class ImageTools {
     if (interleaved) {
       int len = oldWidth < width ? oldWidth : width;
       if (h == oldHeight) {
-        for (int y=0; y<h*c; y++) {
+        for (int y = 0; y < h * c; y++) {
           int oldIndex = oldWidth * y;
           int index = width * y;
           System.arraycopy(b, oldIndex, padded, index, len);
         }
       }
       else {
-        for (int ch=0; ch<c; ch++) {
-          for (int y=0; y<h; y++) {
+        for (int ch = 0; ch < c; ch++) {
+          for (int y = 0; y < h; y++) {
             int oldIndex = oldWidth * ch * oldHeight + oldWidth * y;
             int index = width * ch * height + width * y;
             System.arraycopy(b, oldIndex, padded, index, len);
@@ -402,7 +402,7 @@ public final class ImageTools {
     }
     else {
       int len = oldWidth < width ? oldWidth * c : width * c;
-      for (int oy=0, y=0; oy<oldHeight; oy++, y++) {
+      for (int oy = 0, y = 0; oy < oldHeight; oy++, y++) {
         int oldIndex = oldWidth * c * y;
         int index = width * c * (y + hClip) + c * wClip;
         System.arraycopy(b, oldIndex, padded, index, len);
@@ -429,15 +429,15 @@ public final class ImageTools {
     if (interleaved) {
       int len = oldWidth < width ? oldWidth : width;
       if (h == oldHeight) {
-        for (int y=0; y<h*c; y++) {
+        for (int y = 0; y < h * c; y++) {
           int oldIndex = oldWidth * y;
           int index = width * y;
           System.arraycopy(b, oldIndex, padded, index, len);
         }
       }
       else {
-        for (int ch=0; ch<c; ch++) {
-          for (int y=0; y<h; y++) {
+        for (int ch = 0; ch < c; ch++) {
+          for (int y = 0; y < h; y++) {
             int oldIndex = oldWidth * ch * oldHeight + oldWidth * y;
             int index = width * ch * height + width * y;
             System.arraycopy(b, oldIndex, padded, index, len);
@@ -447,7 +447,7 @@ public final class ImageTools {
     }
     else {
       int len = oldWidth < width ? oldWidth * c : width * c;
-      for (int oy=0, y=0; oy<oldHeight; oy++, y++) {
+      for (int oy = 0, y = 0; oy < oldHeight; oy++, y++) {
         int oldIndex = oldWidth * c * y;
         int index = width * c * (y + hClip) + c * wClip;
         System.arraycopy(b, oldIndex, padded, index, len);
@@ -468,7 +468,7 @@ public final class ImageTools {
 
     byte[] out = new byte[b.length / bpp];
 
-    for (int i=0; i<b.length; i+=bpp) {
+    for (int i = 0; i < b.length; i += bpp) {
       int s = DataTools.bytesToInt(b, i, bpp, little);
 
       if (s >= max) s = 255;
@@ -492,20 +492,20 @@ public final class ImageTools {
     int min = Integer.MAX_VALUE;
 
     if (bits <= 8) {
-      for (int j=0; j<plane.length; j++) {
+      for (int j = 0; j < plane.length; j++) {
         if (plane[j] < min) min = plane[j];
         if (plane[j] > max) max = plane[j];
       }
     }
     else if (bits == 16) {
-      for (int j=0; j<plane.length; j+=2) {
+      for (int j = 0; j < plane.length; j += 2) {
         short s = DataTools.bytesToShort(plane, j, 2, littleEndian);
         if (s < min) min = s;
         if (s > max) max = s;
       }
     }
     else if (bits == 32) {
-      for (int j=0; j<plane.length; j+=4) {
+      for (int j = 0; j < plane.length; j += 4) {
         int s = DataTools.bytesToInt(plane, j, 4, littleEndian);
         if (s < min) min = s;
         if (s > max) max = s;
@@ -522,18 +522,23 @@ public final class ImageTools {
     int originalHeight, int x, int y, int w, int h, int bpp, int channels,
     boolean interleaved)
   {
-    for (int yy=y; yy<y + h; yy++) {
-      for (int xx=x; xx<x + w; xx++) {
-        for (int cc=0; cc<channels; cc++) {
+    for (int yy = y; yy < y + h; yy++) {
+      for (int xx = x; xx < x + w; xx++) {
+        for (int cc = 0; cc < channels; cc++) {
           int oldNdx = -1, newNdx = -1;
           if (interleaved) {
-            oldNdx = yy*originalWidth*bpp*channels + xx*bpp*channels + cc*bpp;
-            newNdx = (yy - y)*w*bpp*channels + (xx - x)*bpp*channels + cc*bpp;
+            oldNdx =
+              yy * originalWidth * bpp * channels + xx * bpp * channels + cc *
+                bpp;
+            newNdx =
+              (yy - y) * w * bpp * channels + (xx - x) * bpp * channels + cc *
+                bpp;
           }
           else {
             oldNdx =
-              bpp*(cc*originalWidth*originalHeight + yy*originalWidth + xx);
-            newNdx = bpp*(cc*w*h + (yy - y)*w + (xx - x));
+              bpp *
+                (cc * originalWidth * originalHeight + yy * originalWidth + xx);
+            newNdx = bpp * (cc * w * h + (yy - y) * w + (xx - x));
           }
           System.arraycopy(src, oldNdx, dest, newNdx, bpp);
         }
@@ -548,8 +553,8 @@ public final class ImageTools {
   public static byte[][] indexedToRGB(byte[][] lut, byte[] b) {
     byte[][] rtn = new byte[lut.length][b.length];
 
-    for (int i=0; i<b.length; i++) {
-      for (int j=0; j<lut.length; j++) {
+    for (int i = 0; i < b.length; i++) {
+      for (int j = 0; j < lut.length; j++) {
         rtn[j][i] = lut[j][b[i] & 0xff];
       }
     }
@@ -559,9 +564,9 @@ public final class ImageTools {
   /** Converts a LUT and an array of indices into an array of RGB tuples. */
   public static short[][] indexedToRGB(short[][] lut, byte[] b, boolean le) {
     short[][] rtn = new short[lut.length][b.length / 2];
-    for (int i=0; i<b.length/2; i++) {
-      for (int j=0; j<lut.length; j++) {
-        int index = DataTools.bytesToInt(b, i*2, 2, le);
+    for (int i = 0; i < b.length / 2; i++) {
+      for (int j = 0; j < lut.length; j++) {
+        int index = DataTools.bytesToInt(b, i * 2, 2, le);
         rtn[j][i] = lut[j][index];
       }
     }
@@ -572,7 +577,7 @@ public final class ImageTools {
     int width, int height, boolean littleEndian)
   {
     if (width == 1 && height == 1) {
-      for (int i=0; i<buf.length; i++) {
+      for (int i = 0; i < buf.length; i++) {
         buf[i] = (byte) s[0];
       }
       return buf;
@@ -581,8 +586,8 @@ public final class ImageTools {
 
     int plane = width * height;
 
-    for (int row=0; row<height; row++) {
-      for (int col=0; col<width; col++) {
+    for (int row = 0; row < height; row++) {
+      for (int col = 0; col < width; col++) {
         //boolean evenRow = (row % 2) == 0;
         boolean evenCol = (col % 2) == 0;
 
@@ -607,18 +612,18 @@ public final class ImageTools {
             sum += s[plane + row * width + col - 1];
             ncomps++;
           }
-          if (col < width- 1) {
-            sum += s[plane + row*width + col + 1];
+          if (col < width - 1) {
+            sum += s[plane + row * width + col + 1];
             ncomps++;
           }
 
           short v = (short) (sum / ncomps);
-          DataTools.unpackBytes(v, buf,
-            row*width*6 + col*6 + 2, 2, littleEndian);
+          DataTools.unpackBytes(
+            v, buf, row * width * 6 + col * 6 + 2, 2, littleEndian);
         }
         else {
-          DataTools.unpackBytes(s[plane + row*width + col],
-            buf, row*width*6 + col*6 + 2, 2, littleEndian);
+          DataTools.unpackBytes(s[plane + row * width + col], buf, row * width *
+            6 + col * 6 + 2, 2, littleEndian);
         }
 
         if (needRed) {
@@ -628,21 +633,21 @@ public final class ImageTools {
             // four corners
             if (row > 0) {
               if (col > 0) {
-                sum += s[(row-1)*width + col - 1];
+                sum += s[(row - 1) * width + col - 1];
                 ncomps++;
               }
               if (col < width - 1) {
-                sum += s[(row-1)*width + col + 1];
+                sum += s[(row - 1) * width + col + 1];
                 ncomps++;
               }
             }
             if (row < height - 1) {
               if (col > 0) {
-                sum += s[(row+1)*width + col - 1];
+                sum += s[(row + 1) * width + col - 1];
                 ncomps++;
               }
               if (col < width - 1) {
-                sum += s[(row+1)*width + col + 1];
+                sum += s[(row + 1) * width + col + 1];
                 ncomps++;
               }
             }
@@ -652,32 +657,33 @@ public final class ImageTools {
           {
             // horizontal
             if (col > 0) {
-              sum += s[row*width + col - 1];
+              sum += s[row * width + col - 1];
               ncomps++;
             }
             if (col < width - 1) {
-              sum += s[row*width + col + 1];
+              sum += s[row * width + col + 1];
               ncomps++;
             }
           }
           else {
             // vertical
             if (row > 0) {
-              sum += s[(row - 1)*width + col];
+              sum += s[(row - 1) * width + col];
               ncomps++;
             }
             if (row < height - 1) {
-              sum += s[(row+1)*width + col];
+              sum += s[(row + 1) * width + col];
               ncomps++;
             }
           }
 
           short v = (short) (sum / ncomps);
-          DataTools.unpackBytes(v, buf, row*width*6 + col*6, 2, littleEndian);
+          DataTools.unpackBytes(
+            v, buf, row * width * 6 + col * 6, 2, littleEndian);
         }
         else {
-          DataTools.unpackBytes(s[row*width + col],
-            buf, row*width*6 + col*6, 2, littleEndian);
+          DataTools.unpackBytes(s[row * width + col], buf, row * width * 6 +
+            col * 6, 2, littleEndian);
         }
 
         if (needBlue) {
@@ -687,21 +693,21 @@ public final class ImageTools {
             // four corners
             if (row > 0) {
               if (col > 0) {
-                sum += s[(2*height + row - 1)*width + col - 1];
+                sum += s[(2 * height + row - 1) * width + col - 1];
                 ncomps++;
               }
               if (col < width - 1) {
-                sum += s[(2*height + row-1)*width + col + 1];
+                sum += s[(2 * height + row - 1) * width + col + 1];
                 ncomps++;
               }
             }
             if (row < height - 1) {
               if (col > 0) {
-                sum += s[(2*height + row+1)*width + col - 1];
+                sum += s[(2 * height + row + 1) * width + col - 1];
                 ncomps++;
               }
               if (col < width - 1) {
-                sum += s[(2*height + row+1)*width + col + 1];
+                sum += s[(2 * height + row + 1) * width + col + 1];
                 ncomps++;
               }
             }
@@ -711,33 +717,33 @@ public final class ImageTools {
           {
             // horizontal
             if (col > 0) {
-              sum += s[(2*height + row)*width + col - 1];
+              sum += s[(2 * height + row) * width + col - 1];
               ncomps++;
             }
             if (col < width - 1) {
-              sum += s[(2*height + row)*width + col + 1];
+              sum += s[(2 * height + row) * width + col + 1];
               ncomps++;
             }
           }
           else {
             // vertical
             if (row > 0) {
-              sum += s[(2*height + row - 1)*width + col];
+              sum += s[(2 * height + row - 1) * width + col];
               ncomps++;
             }
             if (row < height - 1) {
-              sum += s[(2*height + row+1)*width + col];
+              sum += s[(2 * height + row + 1) * width + col];
               ncomps++;
             }
           }
 
           short v = (short) (sum / ncomps);
-          DataTools.unpackBytes(v, buf,
-            row*width*6 + col*6 + 4, 2, littleEndian);
+          DataTools.unpackBytes(
+            v, buf, row * width * 6 + col * 6 + 4, 2, littleEndian);
         }
         else {
-          DataTools.unpackBytes(s[2*plane + row*width + col],
-            buf, row*width*6 + col*6 + 4, 2, littleEndian);
+          DataTools.unpackBytes(s[2 * plane + row * width + col], buf, row *
+            width * 6 + col * 6 + 4, 2, littleEndian);
         }
       }
     }
@@ -748,8 +754,8 @@ public final class ImageTools {
   public static void bgrToRgb(byte[] buf, boolean interleaved, int bpp, int c) {
     if (c < 3) return;
     if (interleaved) {
-      for (int i=0; i<buf.length; i+=bpp*c) {
-        for (int b=0; b<bpp; b++) {
+      for (int i = 0; i < buf.length; i += bpp * c) {
+        for (int b = 0; b < bpp; b++) {
           byte tmp = buf[i + b];
           buf[i + b] = buf[i + bpp * 2];
           buf[i + bpp * 2] = tmp;

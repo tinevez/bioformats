@@ -66,7 +66,9 @@ public class ReflectedUniverse {
   // -- Constructors --
 
   /** Constructs a new reflected universe. */
-  public ReflectedUniverse() { this((ClassLoader) null); }
+  public ReflectedUniverse() {
+    this((ClassLoader) null);
+  }
 
   /**
    * Constructs a new reflected universe, with the given URLs
@@ -97,8 +99,7 @@ public class ReflectedUniverse {
       (c == long.class && o instanceof Long) ||
       (c == float.class && o instanceof Float) ||
       (c == double.class && o instanceof Double) ||
-      (c == boolean.class && o instanceof Boolean) ||
-      (c == char.class && o instanceof Character));
+      (c == boolean.class && o instanceof Boolean) || (c == char.class && o instanceof Character));
   }
 
   // -- ReflectedUniverse API methods --
@@ -192,7 +193,7 @@ public class ReflectedUniverse {
     StringTokenizer st = new StringTokenizer(arglist, "(,)");
     int len = st.countTokens();
     Object[] args = new Object[len];
-    for (int i=0; i<len; i++) {
+    for (int i = 0; i < len; i++) {
       String arg = st.nextToken().trim();
       args[i] = getVar(arg);
     }
@@ -217,12 +218,12 @@ public class ReflectedUniverse {
       // force search through all public constructors necessary.
       Constructor<?> constructor = null;
       Constructor<?>[] c = cl.getConstructors();
-      for (int i=0; i<c.length; i++) {
+      for (int i = 0; i < c.length; i++) {
         if (force) c[i].setAccessible(true);
         Class<?>[] params = c[i].getParameterTypes();
         if (params.length == args.length) {
           boolean match = true;
-          for (int j=0; j<params.length; j++) {
+          for (int j = 0; j < params.length; j++) {
             if (!isInstance(params[j], args[j])) {
               match = false;
               break;
@@ -236,7 +237,7 @@ public class ReflectedUniverse {
       }
       if (constructor == null) {
         StringBuffer sb = new StringBuffer(command);
-        for (int i=0; i<args.length; i++) {
+        for (int i = 0; i < args.length; i++) {
           sb.append(i == 0 ? "(" : ", ");
           sb.append(args[i].getClass().getName());
         }
@@ -246,10 +247,18 @@ public class ReflectedUniverse {
 
       // invoke constructor
       Exception exc = null;
-      try { result = constructor.newInstance(args); }
-      catch (InstantiationException e) { exc = e; }
-      catch (IllegalAccessException e) { exc = e; }
-      catch (InvocationTargetException e) { exc = e; }
+      try {
+        result = constructor.newInstance(args);
+      }
+      catch (InstantiationException e) {
+        exc = e;
+      }
+      catch (IllegalAccessException e) {
+        exc = e;
+      }
+      catch (InvocationTargetException e) {
+        exc = e;
+      }
       if (exc != null) {
         LOGGER.debug("Cannot instantiate object", exc);
         throw new ReflectException("Cannot instantiate object", exc);
@@ -265,8 +274,8 @@ public class ReflectedUniverse {
       if (var == null) {
         throw new ReflectException("No such variable: " + varName);
       }
-      Class<?> varClass = var instanceof Class<?> ?
-        (Class<?>) var : var.getClass();
+      Class<?> varClass =
+        var instanceof Class<?> ? (Class<?>) var : var.getClass();
 
       // Search for a method that matches the arguments. Unfortunately,
       // calling varClass.getMethod(methodName, argClasses) does not work,
@@ -275,13 +284,13 @@ public class ReflectedUniverse {
       // brute force search through all public methods necessary.
       Method method = null;
       Method[] m = varClass.getMethods();
-      for (int i=0; i<m.length; i++) {
+      for (int i = 0; i < m.length; i++) {
         if (force) m[i].setAccessible(true);
         if (methodName.equals(m[i].getName())) {
           Class<?>[] params = m[i].getParameterTypes();
           if (params.length == args.length) {
             boolean match = true;
-            for (int j=0; j<params.length; j++) {
+            for (int j = 0; j < params.length; j++) {
               if (!isInstance(params[j], args[j])) {
                 match = false;
                 break;
@@ -300,9 +309,15 @@ public class ReflectedUniverse {
 
       // invoke method
       Exception exc = null;
-      try { result = method.invoke(var, args); }
-      catch (IllegalAccessException e) { exc = e; }
-      catch (InvocationTargetException e) { exc = e; }
+      try {
+        result = method.invoke(var, args);
+      }
+      catch (IllegalAccessException e) {
+        exc = e;
+      }
+      catch (InvocationTargetException e) {
+        exc = e;
+      }
       if (exc != null) {
         LOGGER.debug("Cannot execute method: {}", methodName, exc);
         throw new ReflectException("Cannot execute method: " + methodName, exc);
@@ -406,8 +421,8 @@ public class ReflectedUniverse {
       if (var == null) {
         throw new ReflectException("No such class: " + className);
       }
-      Class<?> varClass = var instanceof Class<?> ?
-        (Class<?>) var : var.getClass();
+      Class<?> varClass =
+        var instanceof Class<?> ? (Class<?>) var : var.getClass();
       String fieldName = varName.substring(dot + 1).trim();
       Field field;
       try {
@@ -419,7 +434,9 @@ public class ReflectedUniverse {
         throw new ReflectException("No such field: " + varName, exc);
       }
       Object fieldVal;
-      try { fieldVal = field.get(var); }
+      try {
+        fieldVal = field.get(var);
+      }
       catch (IllegalAccessException exc) {
         LOGGER.debug("Cannot get field value: {}", varName, exc);
         throw new ReflectException("Cannot get field value: " + varName, exc);
@@ -432,10 +449,14 @@ public class ReflectedUniverse {
   }
 
   /** Sets whether access modifiers (protected, private, etc.) are ignored. */
-  public void setAccessibilityIgnored(boolean ignore) { force = ignore; }
+  public void setAccessibilityIgnored(boolean ignore) {
+    force = ignore;
+  }
 
   /** Gets whether access modifiers (protected, private, etc.) are ignored. */
-  public boolean isAccessibilityIgnored() { return force; }
+  public boolean isAccessibilityIgnored() {
+    return force;
+  }
 
   // -- Main method --
 
@@ -444,8 +465,8 @@ public class ReflectedUniverse {
    */
   public static void main(String[] args) throws IOException {
     ReflectedUniverse r = new ReflectedUniverse();
-    System.out.println("Reflected universe test environment. " +
-      "Type commands, or press ^D to quit.");
+    System.out.println("Reflected universe test environment. "
+      + "Type commands, or press ^D to quit.");
     if (args.length > 0) {
       r.setAccessibilityIgnored(true);
       System.out.println("Ignoring accessibility modifiers.");
@@ -455,7 +476,9 @@ public class ReflectedUniverse {
       System.out.print("> ");
       String line = in.readLine();
       if (line == null) break;
-      try { r.exec(line); }
+      try {
+        r.exec(line);
+      }
       catch (ReflectException exc) {
         LOGGER.debug("Could not execute '{}'", line, exc);
       }

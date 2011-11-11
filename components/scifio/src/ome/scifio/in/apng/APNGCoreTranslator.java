@@ -8,20 +8,20 @@ import ome.scifio.Metadata;
  * (APNG) images to the Core SCIFIO image type.
  *
  */
-public class APNGCoreTranslator extends AbstractTranslator<APNGMetadata>{
+public class APNGCoreTranslator extends AbstractTranslator<APNGMetadata> {
 
-	// -- Translator API Methods --
-	
-	@Override
-	public Metadata translate(APNGMetadata metaIn) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+  // -- Translator API Methods --
 
-	// -- MetadataHandler API Methods --
+  @Override
+  public Metadata translate(APNGMetadata metaIn) {
+    // TODO Auto-generated method stub
+    return null;
+  }
 
-	/* @see MetadataHandler#getMetadataTypes() */
-	public Class<APNGMetadata> getMetadataType() {
-		return APNGMetadata.class;
-	}
+  // -- MetadataHandler API Methods --
+
+  /* @see MetadataHandler#getMetadataTypes() */
+  public Class<APNGMetadata> getMetadataType() {
+    return APNGMetadata.class;
+  }
 }

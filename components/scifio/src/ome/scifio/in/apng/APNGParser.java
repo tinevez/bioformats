@@ -8,12 +8,10 @@ import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
-
 import ome.scifio.AbstractParser;
 import ome.scifio.FormatException;
 import ome.scifio.io.RandomAccessInputStream;
 import ome.scifio.util.BufferedImageTools;
-
 
 /**
  * File format SCIFIO Parser for Animated Portable Network Graphics
@@ -22,133 +20,134 @@ import ome.scifio.util.BufferedImageTools;
  */
 public class APNGParser extends AbstractParser<APNGMetadata> {
 
-	// -- Fields --
+  // -- Fields --
 
-	private Vector<APNGBlock> blocks;
-	private byte[][] lut;
-	private Vector<int[]> frameCoordinates;
+  private Vector<APNGBlock> blocks;
+  private byte[][] lut;
+  private Vector<int[]> frameCoordinates;
 
-	// -- Constructor --
+  // -- Constructor --
 
-	/** Constructs a new APNGParser. */
-	public APNGParser() {
-		metadata = new APNGMetadata[1];
-		metadata[0] = new APNGMetadata();
-		metadata[0].orderCertain = true;
-	}
+  /** Constructs a new APNGParser. */
+  public APNGParser() {
+    metadata = new APNGMetadata[1];
+    metadata[0] = new APNGMetadata();
+    metadata[0].orderCertain = true;
+  }
 
-	// -- Parser API Methods --
-	
-	/* @see ome.scifio.AbstractParser#parse(RandomAccessInputStream stream) */
-	@Override
-	public APNGMetadata[] parse(RandomAccessInputStream stream)
-	throws IOException, FormatException {
-		super.parse(stream);
-		in = stream;
+  // -- Parser API Methods --
 
-		// check that this is a valid PNG file
-		byte[] signature = new byte[8];
-		in.read(signature);
+  /* @see ome.scifio.AbstractParser#parse(RandomAccessInputStream stream) */
+  @Override
+  public APNGMetadata[] parse(RandomAccessInputStream stream)
+    throws IOException, FormatException
+  {
+    super.parse(stream);
+    in = stream;
 
-		if (signature[0] != (byte) 0x89 || signature[1] != 0x50 ||
-				signature[2] != 0x4e || signature[3] != 0x47 || signature[4] != 0x0d ||
-				signature[5] != 0x0a || signature[6] != 0x1a || signature[7] != 0x0a)
-		{
-			throw new FormatException("Invalid PNG signature.");
-		}
+    // check that this is a valid PNG file
+    byte[] signature = new byte[8];
+    in.read(signature);
 
-		// read data chunks - each chunk consists of the following:
-		// 1) 32 bit length
-		// 2) 4 char type
-		// 3) 'length' bytes of data
-		// 4) 32 bit CRC
+    if (signature[0] != (byte) 0x89 || signature[1] != 0x50 ||
+      signature[2] != 0x4e || signature[3] != 0x47 || signature[4] != 0x0d ||
+      signature[5] != 0x0a || signature[6] != 0x1a || signature[7] != 0x0a)
+    {
+      throw new FormatException("Invalid PNG signature.");
+    }
 
-	    blocks = new Vector<APNGBlock>();
-	    frameCoordinates = new Vector<int[]>();
+    // read data chunks - each chunk consists of the following:
+    // 1) 32 bit length
+    // 2) 4 char type
+    // 3) 'length' bytes of data
+    // 4) 32 bit CRC
 
-	    while (in.getFilePointer() < in.length()) {
-	      int length = in.readInt();
-	      String type = in.readString(4);
+    blocks = new Vector<APNGBlock>();
+    frameCoordinates = new Vector<int[]>();
 
-	      APNGBlock block = new APNGBlock();
-	      block.length = length;
-	      block.type = type;
-	      block.offset = in.getFilePointer();
-	      blocks.add(block);
+    while (in.getFilePointer() < in.length()) {
+      int length = in.readInt();
+      String type = in.readString(4);
 
-	      if (type.equals("acTL")) {
-	        // APNG-specific chunk
-	        metadata[0].imageCount = in.readInt();
-	        int loop = in.readInt();
-	        addGlobalMeta("Loop count", loop);
-	      }
-	      else if (type.equals("fcTL")) {
-	        in.skipBytes(4);
-	        int w = in.readInt();
-	        int h = in.readInt();
-	        int x = in.readInt();
-	        int y = in.readInt();
-	        frameCoordinates.add(new int[] {x, y, w, h});
-	        in.skipBytes(length - 20);
-	      }
-	      else in.skipBytes(length);
+      APNGBlock block = new APNGBlock();
+      block.length = length;
+      block.type = type;
+      block.offset = in.getFilePointer();
+      blocks.add(block);
 
-	      if (in.getFilePointer() < in.length() - 4) {
-	        in.skipBytes(4); // skip the CRC
-	      }
-	    }
+      if (type.equals("acTL")) {
+        // APNG-specific chunk
+        metadata[0].imageCount = in.readInt();
+        int loop = in.readInt();
+        addGlobalMeta("Loop count", loop);
+      }
+      else if (type.equals("fcTL")) {
+        in.skipBytes(4);
+        int w = in.readInt();
+        int h = in.readInt();
+        int x = in.readInt();
+        int y = in.readInt();
+        frameCoordinates.add(new int[] {x, y, w, h});
+        in.skipBytes(length - 20);
+      }
+      else in.skipBytes(length);
 
-	    if (metadata[0].imageCount == 0) metadata[0].imageCount = 1;
-	    metadata[0].sizeZ = 1;
-	    metadata[0].sizeT = getImageCount();
+      if (in.getFilePointer() < in.length() - 4) {
+        in.skipBytes(4); // skip the CRC
+      }
+    }
 
-	    metadata[0].dimensionOrder = "XYCTZ";
-	    metadata[0].interleaved = false;
+    if (metadata[0].imageCount == 0) metadata[0].imageCount = 1;
+    metadata[0].sizeZ = 1;
+    metadata[0].sizeT = getImageCount();
 
-	    //RandomAccessInputStream ras = new RandomAccessInputStream(currentId);
-	    //DataInputStream dis = new DataInputStream(ras);
-	    in.seek(0);
-	    DataInputStream dis = new DataInputStream(in);
-	    BufferedImage img = ImageIO.read(dis);
-	    dis.close();
+    metadata[0].dimensionOrder = "XYCTZ";
+    metadata[0].interleaved = false;
 
-	    metadata[0].sizeX = img.getWidth();
-	    metadata[0].sizeY = img.getHeight();
-	    metadata[0].rgb = img.getRaster().getNumBands() > 1;
-	    metadata[0].sizeC = img.getRaster().getNumBands();
-	    metadata[0].pixelType = BufferedImageTools.getPixelType(img);
-	    metadata[0].indexed = img.getColorModel() instanceof IndexColorModel;
-	    metadata[0].falseColor = false;
-	    
-	    if (isIndexed()) {
-	      lut = new byte[3][256];
-	      IndexColorModel model = (IndexColorModel) img.getColorModel();
-	      model.getReds(lut[0]);
-	      model.getGreens(lut[1]);
-	      model.getBlues(lut[2]);
-	    }
-	    
-	    return metadata;
-	}
+    //RandomAccessInputStream ras = new RandomAccessInputStream(currentId);
+    //DataInputStream dis = new DataInputStream(ras);
+    in.seek(0);
+    DataInputStream dis = new DataInputStream(in);
+    BufferedImage img = ImageIO.read(dis);
+    dis.close();
 
-	// -- MetadataHandler API Methods --
+    metadata[0].sizeX = img.getWidth();
+    metadata[0].sizeY = img.getHeight();
+    metadata[0].rgb = img.getRaster().getNumBands() > 1;
+    metadata[0].sizeC = img.getRaster().getNumBands();
+    metadata[0].pixelType = BufferedImageTools.getPixelType(img);
+    metadata[0].indexed = img.getColorModel() instanceof IndexColorModel;
+    metadata[0].falseColor = false;
 
-	/* @see MetadataHandler#getMetadataTypes() */
-	public Class<APNGMetadata> getMetadataType() {
-		return APNGMetadata.class;
-	}
-	
-	// -- APNGParser Methods --
-	
-	public Vector<APNGBlock> getBlocks() {
-		return blocks;
-	}
-	
-	public byte[][] getLut() {
-		return lut;
-	}
-	
-	public Vector<int[]> getFrameCoordinates() {
-		return frameCoordinates;
-	}
+    if (isIndexed()) {
+      lut = new byte[3][256];
+      IndexColorModel model = (IndexColorModel) img.getColorModel();
+      model.getReds(lut[0]);
+      model.getGreens(lut[1]);
+      model.getBlues(lut[2]);
+    }
+
+    return metadata;
+  }
+
+  // -- MetadataHandler API Methods --
+
+  /* @see MetadataHandler#getMetadataTypes() */
+  public Class<APNGMetadata> getMetadataType() {
+    return APNGMetadata.class;
+  }
+
+  // -- APNGParser Methods --
+
+  public Vector<APNGBlock> getBlocks() {
+    return blocks;
+  }
+
+  public byte[][] getLut() {
+    return lut;
+  }
+
+  public Vector<int[]> getFrameCoordinates() {
+    return frameCoordinates;
+  }
 }

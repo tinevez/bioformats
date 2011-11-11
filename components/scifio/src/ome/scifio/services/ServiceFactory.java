@@ -52,14 +52,12 @@ public class ServiceFactory {
   private static final String DEFAULT_PROPERTIES_FILE = "services.properties";
 
   /** Constructor cache. */
-  private static Map<Class<? extends Service>, Constructor<? extends Service>>
-    constructorCache =
-      new HashMap<Class<? extends Service>, Constructor<? extends Service>>();
+  private static Map<Class<? extends Service>, Constructor<? extends Service>> constructorCache =
+    new HashMap<Class<? extends Service>, Constructor<? extends Service>>();
 
   /** Set of available services. */
-  private Map<Class<? extends Service>, Class<? extends Service>>
-    services =
-      new HashMap<Class<? extends Service>, Class<? extends Service>>();
+  private Map<Class<? extends Service>, Class<? extends Service>> services =
+    new HashMap<Class<? extends Service>, Class<? extends Service>>();
 
   /** Default service factory. */
   private static ServiceFactory defaultFactory;
@@ -93,7 +91,8 @@ public class ServiceFactory {
     try {
       properties.load(stream);
       LOGGER.debug("Loaded properties from: {}", path);
-    } catch (Throwable t) {
+    }
+    catch (Throwable t) {
       throw new DependencyException(t);
     }
     finally {
@@ -112,16 +111,17 @@ public class ServiceFactory {
       Class<? extends Service> implementationClass = null;
       ClassLoader loader = this.getClass().getClassLoader();
       try {
-        interfaceClass = (Class<? extends Service>)
-          Class.forName(interfaceName, false, loader);
+        interfaceClass =
+          (Class<? extends Service>) Class.forName(interfaceName, false, loader);
       }
       catch (Throwable t) {
         LOGGER.debug("CLASSPATH missing interface: {}", interfaceName, t);
         continue;
       }
       try {
-        implementationClass = (Class<? extends Service>)
-          Class.forName(implementationName, false, loader);
+        implementationClass =
+          (Class<? extends Service>) Class.forName(
+            implementationName, false, loader);
       }
       catch (Throwable t) {
         LOGGER.debug(
@@ -129,8 +129,9 @@ public class ServiceFactory {
           implementationName, t);
       }
       services.put(interfaceClass, implementationClass);
-      LOGGER.debug("Added interface {} and implementation {}",
-        interfaceClass, implementationClass);
+      LOGGER.debug(
+        "Added interface {} and implementation {}", interfaceClass,
+        implementationClass);
     }
   }
 
@@ -147,8 +148,8 @@ public class ServiceFactory {
     Class<T> impl = (Class<T>) services.get(type);
     if (impl == null && services.containsKey(type)) {
       throw new DependencyException(
-          "Unable to instantiate service. Missing implementation or " +
-          "implementation dependency", type);
+        "Unable to instantiate service. Missing implementation or "
+          + "implementation dependency", type);
     }
     if (impl == null) {
       throw new DependencyException("Unknown service type: " + type);
@@ -156,7 +157,8 @@ public class ServiceFactory {
     Constructor<T> constructor = getConstructor(impl);
     try {
       return constructor.newInstance();
-    } catch (Throwable t) {
+    }
+    catch (Throwable t) {
       throw new DependencyException("Unable to instantiate service", type, t);
     }
   }
@@ -173,8 +175,7 @@ public class ServiceFactory {
     throws DependencyException
   {
     synchronized (constructorCache) {
-      Constructor<? extends Service> constructor =
-        constructorCache.get(klass);
+      Constructor<? extends Service> constructor = constructorCache.get(klass);
       if (constructor == null) {
         try {
           Class<T> concreteClass = (Class<T>) Class.forName(klass.getName());
@@ -183,7 +184,7 @@ public class ServiceFactory {
         }
         catch (Throwable t) {
           throw new DependencyException(
-              "Unable to retrieve constructor", klass, t);
+            "Unable to retrieve constructor", klass, t);
         }
       }
       return (Constructor<T>) constructor;

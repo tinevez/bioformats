@@ -10,26 +10,28 @@ import ome.scifio.Metadata;
 
 public class MetadataSerializer<M extends Metadata> {
 
-	private Class<M> type;
-	// Constructor
-	
-	private MetadataSerializer(Class<M> type) {
-		this.type = type;
-	}
+  private Class<M> type;
 
-	public M load(InputStream is) throws IOException, ClassNotFoundException {
-		final ObjectInputStream ois = new ObjectInputStream(is);
-		final Object o = ois.readObject();
-		if (type.isInstance(o)) {
-			@SuppressWarnings("unchecked")
-			final M m = (M) o;
-			return m;
-		}
-		throw new IllegalArgumentException("Invalid object from stream: " + o.getClass().getName());
-	}
-	
-	public void save(OutputStream os, M meta) throws IOException {
-		final ObjectOutputStream oos = new ObjectOutputStream(os);
-		oos.writeObject(meta);
-	}
+  // Constructor
+
+  private MetadataSerializer(Class<M> type) {
+    this.type = type;
+  }
+
+  public M load(InputStream is) throws IOException, ClassNotFoundException {
+    final ObjectInputStream ois = new ObjectInputStream(is);
+    final Object o = ois.readObject();
+    if (type.isInstance(o)) {
+      @SuppressWarnings("unchecked")
+      final M m = (M) o;
+      return m;
+    }
+    throw new IllegalArgumentException("Invalid object from stream: " +
+      o.getClass().getName());
+  }
+
+  public void save(OutputStream os, M meta) throws IOException {
+    final ObjectOutputStream oos = new ObjectOutputStream(os);
+    oos.writeObject(meta);
+  }
 }

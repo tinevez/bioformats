@@ -89,8 +89,9 @@ public class GZipHandle extends StreamHandle {
   /* @see StreamHandle#resetStream() */
   protected void resetStream() throws IOException {
     if (stream != null) stream.close();
-    BufferedInputStream bis = new BufferedInputStream(
-      new FileInputStream(file), RandomAccessInputStream.MAX_OVERHEAD);
+    BufferedInputStream bis =
+      new BufferedInputStream(
+        new FileInputStream(file), RandomAccessInputStream.MAX_OVERHEAD);
     stream = new DataInputStream(new GZIPInputStream(bis));
   }
 

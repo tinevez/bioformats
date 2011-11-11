@@ -26,9 +26,7 @@ package ome.scifio.io;
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -106,7 +104,8 @@ public class ZipHandle extends StreamHandle {
     this.file = file;
     in = new RandomAccessInputStream(getHandle(file));
     zip = new ZipInputStream(in);
-    while (!entry.getName().equals(zip.getNextEntry().getName()));
+    while (!entry.getName().equals(zip.getNextEntry().getName()))
+      ;
     entryCount = 1;
     this.entry = entry;
     resetStream();
@@ -169,10 +168,12 @@ public class ZipHandle extends StreamHandle {
     if (zip != null) zip.close();
     zip = new ZipInputStream(in);
     if (entry != null) {
-      while (!entry.getName().equals(zip.getNextEntry().getName()));
+      while (!entry.getName().equals(zip.getNextEntry().getName()))
+        ;
     }
-    stream = new DataInputStream(new BufferedInputStream(
-      zip, RandomAccessInputStream.MAX_OVERHEAD * 10));
+    stream =
+      new DataInputStream(new BufferedInputStream(
+        zip, RandomAccessInputStream.MAX_OVERHEAD * 10));
     stream.mark(RandomAccessInputStream.MAX_OVERHEAD * 10);
   }
 
@@ -188,8 +189,8 @@ public class ZipHandle extends StreamHandle {
   }
 
   private static IRandomAccess getHandle(String file) throws IOException {
-    return file.startsWith("http://") ?
-      new URLHandle(file) : new NIOFileHandle(file, "r");
+    return file.startsWith("http://") ? new URLHandle(file)
+      : new NIOFileHandle(file, "r");
   }
 
 }

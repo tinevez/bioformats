@@ -238,29 +238,29 @@ public class CoreMetadata extends AbstractMetadata {
     return this.rgb;
   }
 
-@Override
-public int getSizeX() {
-	return this.sizeX;
-}
+  @Override
+  public int getSizeX() {
+    return this.sizeX;
+  }
 
-@Override
-public int getSizeY() {
-	return this.sizeY;
-}
+  @Override
+  public int getSizeY() {
+    return this.sizeY;
+  }
 
-@Override
-public int getSizeZ() {
-	return this.sizeZ;
-}
+  @Override
+  public int getSizeZ() {
+    return this.sizeZ;
+  }
 
-@Override
-public int getSizeC() {
-	return this.sizeC;
-}
+  @Override
+  public int getSizeC() {
+    return this.sizeC;
+  }
 
-@Override
-public int getSizeT() {
-	return this.sizeT;
-}
+  @Override
+  public int getSizeT() {
+    return this.sizeT;
+  }
 
 }

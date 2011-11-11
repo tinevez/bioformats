@@ -41,9 +41,13 @@ public class ValidationErrorHandler implements ErrorHandler {
 
   private int errors = 0;
 
-  public boolean ok() { return errors == 0; }
+  public boolean ok() {
+    return errors == 0;
+  }
 
-  public int getErrorCount() { return errors; }
+  public int getErrorCount() {
+    return errors;
+  }
 
   public void error(SAXParseException e) {
     XMLTools.LOGGER.error(e.getMessage());

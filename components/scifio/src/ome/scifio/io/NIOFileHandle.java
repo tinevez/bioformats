@@ -95,7 +95,8 @@ public class NIOFileHandle extends AbstractNIOHandle {
    * optionally to write to, the file specified by the File argument.
    */
   public NIOFileHandle(File file, String mode, int bufferSize)
-    throws IOException {
+    throws IOException
+  {
     this.bufferSize = bufferSize;
     validateMode(mode);
     if (mode.equals("rw")) {
@@ -113,8 +114,8 @@ public class NIOFileHandle extends AbstractNIOHandle {
    * optionally to write to, the file specified by the File argument.
    */
   public NIOFileHandle(File file, String mode) throws IOException {
-    this(file, mode,
-      mode.equals("rw") ? defaultRWBufferSize : defaultBufferSize);
+    this(file, mode, mode.equals("rw") ? defaultRWBufferSize
+      : defaultBufferSize);
   }
 
   /**
@@ -150,13 +151,19 @@ public class NIOFileHandle extends AbstractNIOHandle {
   // -- FileHandle and Channel API methods --
 
   /** Gets the random access file object backing this FileHandle. */
-  public RandomAccessFile getRandomAccessFile() { return raf; }
+  public RandomAccessFile getRandomAccessFile() {
+    return raf;
+  }
 
   /** Gets the FileChannel from this FileHandle. */
-  public FileChannel getFileChannel() { return channel; }
+  public FileChannel getFileChannel() {
+    return channel;
+  }
 
   /** Gets the current buffer size. */
-  public int getBufferSize() { return bufferSize; }
+  public int getBufferSize() {
+    return bufferSize;
+  }
 
   // -- AbstractNIOHandle API methods --
 
@@ -221,7 +228,7 @@ public class NIOFileHandle extends AbstractNIOHandle {
     buffer(position + readLength, 0);
     // Return value of NIO channel's is -1 when zero bytes are read at the end
     // of the file.
-    return readLength == -1? 0 : readLength;
+    return readLength == -1 ? 0 : readLength;
   }
 
   /* @see IRandomAccess.seek(long) */
@@ -243,7 +250,8 @@ public class NIOFileHandle extends AbstractNIOHandle {
     position += 1;
     try {
       return buffer.get();
-    } catch (BufferUnderflowException e) {
+    }
+    catch (BufferUnderflowException e) {
       EOFException eof = new EOFException(EOF_ERROR_MSG);
       eof.initCause(e);
       throw eof;
@@ -256,7 +264,8 @@ public class NIOFileHandle extends AbstractNIOHandle {
     position += 2;
     try {
       return buffer.getChar();
-    } catch (BufferUnderflowException e) {
+    }
+    catch (BufferUnderflowException e) {
       EOFException eof = new EOFException(EOF_ERROR_MSG);
       eof.initCause(e);
       throw eof;
@@ -269,7 +278,8 @@ public class NIOFileHandle extends AbstractNIOHandle {
     position += 8;
     try {
       return buffer.getDouble();
-    } catch (BufferUnderflowException e) {
+    }
+    catch (BufferUnderflowException e) {
       EOFException eof = new EOFException(EOF_ERROR_MSG);
       eof.initCause(e);
       throw eof;
@@ -282,7 +292,8 @@ public class NIOFileHandle extends AbstractNIOHandle {
     position += 4;
     try {
       return buffer.getFloat();
-    } catch (BufferUnderflowException e) {
+    }
+    catch (BufferUnderflowException e) {
       EOFException eof = new EOFException(EOF_ERROR_MSG);
       eof.initCause(e);
       throw eof;
@@ -305,7 +316,8 @@ public class NIOFileHandle extends AbstractNIOHandle {
     position += 4;
     try {
       return buffer.getInt();
-    } catch (BufferUnderflowException e) {
+    }
+    catch (BufferUnderflowException e) {
       EOFException eof = new EOFException(EOF_ERROR_MSG);
       eof.initCause(e);
       throw eof;
@@ -326,7 +338,8 @@ public class NIOFileHandle extends AbstractNIOHandle {
     position += 8;
     try {
       return buffer.getLong();
-    } catch (BufferUnderflowException e) {
+    }
+    catch (BufferUnderflowException e) {
       EOFException eof = new EOFException(EOF_ERROR_MSG);
       eof.initCause(e);
       throw eof;
@@ -339,7 +352,8 @@ public class NIOFileHandle extends AbstractNIOHandle {
     position += 2;
     try {
       return buffer.getShort();
-    } catch (BufferUnderflowException e) {
+    }
+    catch (BufferUnderflowException e) {
       EOFException eof = new EOFException(EOF_ERROR_MSG);
       eof.initCause(e);
       throw eof;

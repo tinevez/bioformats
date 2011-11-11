@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 package ome.scifio.util;
 
+import java.awt.Transparency;
 import java.awt.image.ColorModel;
 import java.awt.image.ComponentColorModel;
 import java.awt.image.ComponentSampleModel;
@@ -55,17 +56,20 @@ public class SignedColorModel extends ColorModel {
   public SignedColorModel(int pixelBits, int dataType, int nChannels)
     throws IOException
   {
-    super(pixelBits, makeBitArray(nChannels, pixelBits),
+    super(
+      pixelBits, makeBitArray(nChannels, pixelBits),
       AWTImageTools.makeColorSpace(nChannels), nChannels == 4, false,
-      ColorModel.TRANSLUCENT, dataType);
+      Transparency.TRANSLUCENT, dataType);
 
     int type = dataType;
     if (type == DataBuffer.TYPE_SHORT) {
       type = DataBuffer.TYPE_USHORT;
     }
 
-    helper = new ComponentColorModel(AWTImageTools.makeColorSpace(nChannels),
-      nChannels == 4, false, ColorModel.TRANSLUCENT, type);
+    helper =
+      new ComponentColorModel(
+        AWTImageTools.makeColorSpace(nChannels), nChannels == 4, false,
+        Transparency.TRANSLUCENT, type);
 
     this.pixelBits = pixelBits;
     this.nChannels = nChannels;
@@ -92,10 +96,12 @@ public class SignedColorModel extends ColorModel {
   public WritableRaster createCompatibleWritableRaster(int w, int h) {
     if (pixelBits == 16) {
       int[] bandOffsets = new int[nChannels];
-      for (int i=0; i<nChannels; i++) bandOffsets[i] = i;
+      for (int i = 0; i < nChannels; i++)
+        bandOffsets[i] = i;
 
-      SampleModel m = new ComponentSampleModel(DataBuffer.TYPE_SHORT, w, h,
-        nChannels, w * nChannels, bandOffsets);
+      SampleModel m =
+        new ComponentSampleModel(DataBuffer.TYPE_SHORT, w, h, nChannels, w *
+          nChannels, bandOffsets);
       DataBuffer db = new DataBufferShort(w * h, nChannels);
       return Raster.createWritableRaster(m, db, null);
     }
@@ -225,7 +231,7 @@ public class SignedColorModel extends ColorModel {
 
   private static int[] makeBitArray(int nChannels, int nBits) {
     int[] bits = new int[nChannels];
-    for (int i=0; i<bits.length; i++) {
+    for (int i = 0; i < bits.length; i++) {
       bits[i] = nBits;
     }
     return bits;

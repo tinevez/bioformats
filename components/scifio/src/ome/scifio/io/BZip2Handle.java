@@ -85,8 +85,9 @@ public class BZip2Handle extends StreamHandle {
 
   /* @see StreamHandle#resetStream() */
   protected void resetStream() throws IOException {
-    BufferedInputStream bis = new BufferedInputStream(
-      new FileInputStream(file), RandomAccessInputStream.MAX_OVERHEAD);
+    BufferedInputStream bis =
+      new BufferedInputStream(
+        new FileInputStream(file), RandomAccessInputStream.MAX_OVERHEAD);
     int skipped = 0;
     while (skipped < 2) {
       skipped += bis.skip(2 - skipped);

@@ -89,59 +89,41 @@ public class CBZip2InputStream extends InputStream {
   private static final int MAX_SELECTORS = (2 + (900000 / G_SIZE));
 
   private static final int[] R_NUMS = {
-    619, 720, 127, 481, 931, 816, 813, 233, 566, 247,
-    985, 724, 205, 454, 863, 491, 741, 242, 949, 214,
-    733, 859, 335, 708, 621, 574, 73, 654, 730, 472,
-    419, 436, 278, 496, 867, 210, 399, 680, 480, 51,
-    878, 465, 811, 169, 869, 675, 611, 697, 867, 561,
-    862, 687, 507, 283, 482, 129, 807, 591, 733, 623,
-    150, 238, 59, 379, 684, 877, 625, 169, 643, 105,
-    170, 607, 520, 932, 727, 476, 693, 425, 174, 647,
-    73, 122, 335, 530, 442, 853, 695, 249, 445, 515,
-    909, 545, 703, 919, 874, 474, 882, 500, 594, 612,
-    641, 801, 220, 162, 819, 984, 589, 513, 495, 799,
-    161, 604, 958, 533, 221, 400, 386, 867, 600, 782,
-    382, 596, 414, 171, 516, 375, 682, 485, 911, 276,
-    98, 553, 163, 354, 666, 933, 424, 341, 533, 870,
-    227, 730, 475, 186, 263, 647, 537, 686, 600, 224,
-    469, 68, 770, 919, 190, 373, 294, 822, 808, 206,
-    184, 943, 795, 384, 383, 461, 404, 758, 839, 887,
-    715, 67, 618, 276, 204, 918, 873, 777, 604, 560,
-    951, 160, 578, 722, 79, 804, 96, 409, 713, 940,
-    652, 934, 970, 447, 318, 353, 859, 672, 112, 785,
-    645, 863, 803, 350, 139, 93, 354, 99, 820, 908,
-    609, 772, 154, 274, 580, 184, 79, 626, 630, 742,
-    653, 282, 762, 623, 680, 81, 927, 626, 789, 125,
-    411, 521, 938, 300, 821, 78, 343, 175, 128, 250,
-    170, 774, 972, 275, 999, 639, 495, 78, 352, 126,
-    857, 956, 358, 619, 580, 124, 737, 594, 701, 612,
-    669, 112, 134, 694, 363, 992, 809, 743, 168, 974,
-    944, 375, 748, 52, 600, 747, 642, 182, 862, 81,
-    344, 805, 988, 739, 511, 655, 814, 334, 249, 515,
-    897, 955, 664, 981, 649, 113, 974, 459, 893, 228,
-    433, 837, 553, 268, 926, 240, 102, 654, 459, 51,
-    686, 754, 806, 760, 493, 403, 415, 394, 687, 700,
-    946, 670, 656, 610, 738, 392, 760, 799, 887, 653,
-    978, 321, 576, 617, 626, 502, 894, 679, 243, 440,
-    680, 879, 194, 572, 640, 724, 926, 56, 204, 700,
-    707, 151, 457, 449, 797, 195, 791, 558, 945, 679,
-    297, 59, 87, 824, 713, 663, 412, 693, 342, 606,
-    134, 108, 571, 364, 631, 212, 174, 643, 304, 329,
-    343, 97, 430, 751, 497, 314, 983, 374, 822, 928,
-    140, 206, 73, 263, 980, 736, 876, 478, 430, 305,
-    170, 514, 364, 692, 829, 82, 855, 953, 676, 246,
-    369, 970, 294, 750, 807, 827, 150, 790, 288, 923,
-    804, 378, 215, 828, 592, 281, 565, 555, 710, 82,
-    896, 831, 547, 261, 524, 462, 293, 465, 502, 56,
-    661, 821, 976, 991, 658, 869, 905, 758, 745, 193,
-    768, 550, 608, 933, 378, 286, 215, 979, 792, 961,
-    61, 688, 793, 644, 986, 403, 106, 366, 905, 644,
-    372, 567, 466, 434, 645, 210, 389, 550, 919, 135,
-    780, 773, 635, 389, 707, 100, 626, 958, 165, 504,
-    920, 176, 193, 713, 857, 265, 203, 50, 668, 108,
-    645, 990, 626, 197, 510, 357, 358, 850, 858, 364,
-    936, 638
-  };
+      619, 720, 127, 481, 931, 816, 813, 233, 566, 247, 985, 724, 205, 454,
+      863, 491, 741, 242, 949, 214, 733, 859, 335, 708, 621, 574, 73, 654, 730,
+      472, 419, 436, 278, 496, 867, 210, 399, 680, 480, 51, 878, 465, 811, 169,
+      869, 675, 611, 697, 867, 561, 862, 687, 507, 283, 482, 129, 807, 591,
+      733, 623, 150, 238, 59, 379, 684, 877, 625, 169, 643, 105, 170, 607, 520,
+      932, 727, 476, 693, 425, 174, 647, 73, 122, 335, 530, 442, 853, 695, 249,
+      445, 515, 909, 545, 703, 919, 874, 474, 882, 500, 594, 612, 641, 801,
+      220, 162, 819, 984, 589, 513, 495, 799, 161, 604, 958, 533, 221, 400,
+      386, 867, 600, 782, 382, 596, 414, 171, 516, 375, 682, 485, 911, 276, 98,
+      553, 163, 354, 666, 933, 424, 341, 533, 870, 227, 730, 475, 186, 263,
+      647, 537, 686, 600, 224, 469, 68, 770, 919, 190, 373, 294, 822, 808, 206,
+      184, 943, 795, 384, 383, 461, 404, 758, 839, 887, 715, 67, 618, 276, 204,
+      918, 873, 777, 604, 560, 951, 160, 578, 722, 79, 804, 96, 409, 713, 940,
+      652, 934, 970, 447, 318, 353, 859, 672, 112, 785, 645, 863, 803, 350,
+      139, 93, 354, 99, 820, 908, 609, 772, 154, 274, 580, 184, 79, 626, 630,
+      742, 653, 282, 762, 623, 680, 81, 927, 626, 789, 125, 411, 521, 938, 300,
+      821, 78, 343, 175, 128, 250, 170, 774, 972, 275, 999, 639, 495, 78, 352,
+      126, 857, 956, 358, 619, 580, 124, 737, 594, 701, 612, 669, 112, 134,
+      694, 363, 992, 809, 743, 168, 974, 944, 375, 748, 52, 600, 747, 642, 182,
+      862, 81, 344, 805, 988, 739, 511, 655, 814, 334, 249, 515, 897, 955, 664,
+      981, 649, 113, 974, 459, 893, 228, 433, 837, 553, 268, 926, 240, 102,
+      654, 459, 51, 686, 754, 806, 760, 493, 403, 415, 394, 687, 700, 946, 670,
+      656, 610, 738, 392, 760, 799, 887, 653, 978, 321, 576, 617, 626, 502,
+      894, 679, 243, 440, 680, 879, 194, 572, 640, 724, 926, 56, 204, 700, 707,
+      151, 457, 449, 797, 195, 791, 558, 945, 679, 297, 59, 87, 824, 713, 663,
+      412, 693, 342, 606, 134, 108, 571, 364, 631, 212, 174, 643, 304, 329,
+      343, 97, 430, 751, 497, 314, 983, 374, 822, 928, 140, 206, 73, 263, 980,
+      736, 876, 478, 430, 305, 170, 514, 364, 692, 829, 82, 855, 953, 676, 246,
+      369, 970, 294, 750, 807, 827, 150, 790, 288, 923, 804, 378, 215, 828,
+      592, 281, 565, 555, 710, 82, 896, 831, 547, 261, 524, 462, 293, 465, 502,
+      56, 661, 821, 976, 991, 658, 869, 905, 758, 745, 193, 768, 550, 608, 933,
+      378, 286, 215, 979, 792, 961, 61, 688, 793, 644, 986, 403, 106, 366, 905,
+      644, 372, 567, 466, 434, 645, 210, 389, 550, 919, 135, 780, 773, 635,
+      389, 707, 100, 626, 958, 165, 504, 920, 176, 193, 713, 857, 265, 203, 50,
+      668, 108, 645, 990, 626, 197, 510, 357, 358, 850, 858, 364, 936, 638};
 
   private static final Logger LOGGER =
     LoggerFactory.getLogger(CBZip2InputStream.class);
@@ -155,7 +137,7 @@ public class CBZip2InputStream extends InputStream {
   }
 
   private void makeMaps() {
-    final boolean[] inUse  = this.data.inUse;
+    final boolean[] inUse = this.data.inUse;
     final byte[] seqToUnseq = this.data.seqToUnseq;
 
     int nInUseShadow = 0;
@@ -170,12 +152,12 @@ public class CBZip2InputStream extends InputStream {
   /**
    * Index of the last char in the block, so the block size == last + 1.
    */
-  private int  last;
+  private int last;
 
   /**
    * Index in zptr[] of original string after sorting.
    */
-  private int  origPtr;
+  private int origPtr;
 
   /**
    * always: in the range 0 .. 9.
@@ -195,7 +177,7 @@ public class CBZip2InputStream extends InputStream {
 
   private int currentChar = -1;
 
-  private static final int EOF            = 0;
+  private static final int EOF = 0;
   private static final int START_BLOCK_STATE = 1;
   private static final int RAND_PART_A_STATE = 2;
   private static final int RAND_PART_B_STATE = 3;
@@ -264,8 +246,8 @@ public class CBZip2InputStream extends InputStream {
       throw new IndexOutOfBoundsException("len(" + len + ") < 0.");
     }
     if (offs + len > dest.length) {
-      throw new IndexOutOfBoundsException("offs(" + offs + ") + len(" +
-        len + ") > dest.length(" + dest.length + ").");
+      throw new IndexOutOfBoundsException("offs(" + offs + ") + len(" + len +
+        ") > dest.length(" + dest.length + ").");
     }
     if (this.in == null) throw new IOException("stream closed");
 
@@ -344,21 +326,17 @@ public class CBZip2InputStream extends InputStream {
     char magic4 = bsGetUByte();
     char magic5 = bsGetUByte();
 
-    if (magic0 == 0x17 &&
-      magic1 == 0x72 &&
-      magic2 == 0x45 &&
-      magic3 == 0x38 &&
-      magic4 == 0x50 &&
-      magic5 == 0x90)
+    if (magic0 == 0x17 && magic1 == 0x72 && magic2 == 0x45 && magic3 == 0x38 &&
+      magic4 == 0x50 && magic5 == 0x90)
     {
       complete(); // end of file
     }
     else if (magic0 != 0x31 || // '1'
-           magic1 != 0x41 || // ')'
-           magic2 != 0x59 || // 'Y'
-           magic3 != 0x26 || // '&'
-           magic4 != 0x53 || // 'S'
-           magic5 != 0x59) // 'Y'
+      magic1 != 0x41 || // ')'
+      magic2 != 0x59 || // 'Y'
+      magic3 != 0x26 || // '&'
+      magic4 != 0x53 || // 'S'
+      magic5 != 0x59) // 'Y'
     {
       this.currentState = EOF;
       throw new IOException("bad block header");
@@ -436,8 +414,7 @@ public class CBZip2InputStream extends InputStream {
 
         bsBuffShadow = (bsBuffShadow << 8) | thech;
         bsLiveShadow += 8;
-      }
-      while (bsLiveShadow < n);
+      } while (bsLiveShadow < n);
 
       this.bsBuff = bsBuffShadow;
     }
@@ -459,9 +436,9 @@ public class CBZip2InputStream extends InputStream {
   }
 
   /** Called by createHuffmanDecodingTables() exclusively. */
-  private static void hbCreateDecodeTables(final int[] limit,
-    final int[] base, final int[] perm, final char[] length,
-    final int minLen, final int maxLen, final int alphaSize)
+  private static void hbCreateDecodeTables(final int[] limit, final int[] base,
+    final int[] perm, final char[] length, final int minLen, final int maxLen,
+    final int alphaSize)
   {
     for (int i = minLen, pp = 0; i <= maxLen; i++) {
       for (int j = 0; j < alphaSize; j++) {
@@ -497,11 +474,11 @@ public class CBZip2InputStream extends InputStream {
   }
 
   private void recvDecodingTables() throws IOException {
-    final Data dataShadow    = this.data;
-    final boolean[] inUse    = dataShadow.inUse;
-    final byte[] pos       = dataShadow.recvDecodingTablesPos;
-    final byte[] selector    = dataShadow.selector;
-    final byte[] selectorMtf  = dataShadow.selectorMtf;
+    final Data dataShadow = this.data;
+    final boolean[] inUse = dataShadow.inUse;
+    final byte[] pos = dataShadow.recvDecodingTablesPos;
+    final byte[] selector = dataShadow.selector;
+    final byte[] selectorMtf = dataShadow.selectorMtf;
 
     int inUse16 = 0;
 
@@ -512,7 +489,8 @@ public class CBZip2InputStream extends InputStream {
       }
     }
 
-    for (int i = 256; --i >= 0;) inUse[i] = false;
+    for (int i = 256; --i >= 0;)
+      inUse[i] = false;
 
     for (int i = 0; i < 16; i++) {
       if ((inUse16 & (1 << i)) != 0) {
@@ -532,12 +510,14 @@ public class CBZip2InputStream extends InputStream {
 
     for (int i = 0; i < nSelectors; i++) {
       int j = 0;
-      while (bsGetBit()) j++;
+      while (bsGetBit())
+        j++;
       selectorMtf[i] = (byte) j;
     }
 
     // Undo the MTF values for the selectors.
-    for (int v = nGroups; --v >= 0;) pos[v] = (byte) v;
+    for (int v = nGroups; --v >= 0;)
+      pos[v] = (byte) v;
 
     for (int i = 0; i < nSelectors; i++) {
       int v = selectorMtf[i] & 0xff;
@@ -551,14 +531,15 @@ public class CBZip2InputStream extends InputStream {
       selector[i] = tmp;
     }
 
-    final char[][] len  = dataShadow.tempCharArray2d;
+    final char[][] len = dataShadow.tempCharArray2d;
 
     // Now the coding tables
     for (int t = 0; t < nGroups; t++) {
       int curr = bsR(5);
       final char[] tLen = len[t];
       for (int i = 0; i < alphaSize; i++) {
-        while (bsGetBit()) curr += bsGetBit() ? -1 : 1;
+        while (bsGetBit())
+          curr += bsGetBit() ? -1 : 1;
         tLen[i] = (char) curr;
       }
     }
@@ -572,11 +553,11 @@ public class CBZip2InputStream extends InputStream {
     final int nGroups)
   {
     final Data dataShadow = this.data;
-    final char[][] len  = dataShadow.tempCharArray2d;
+    final char[][] len = dataShadow.tempCharArray2d;
     final int[] minLens = dataShadow.minLens;
     final int[][] limit = dataShadow.limit;
-    final int[][] base  = dataShadow.base;
-    final int[][] perm  = dataShadow.perm;
+    final int[][] base = dataShadow.base;
+    final int[][] perm = dataShadow.perm;
 
     for (int t = 0; t < nGroups; t++) {
       int minLen = 32;
@@ -587,8 +568,8 @@ public class CBZip2InputStream extends InputStream {
         if (lent > maxLen) maxLen = lent;
         if (lent < minLen) minLen = lent;
       }
-      hbCreateDecodeTables(limit[t], base[t], perm[t], len[t], minLen,
-        maxLen, alphaSize);
+      hbCreateDecodeTables(
+        limit[t], base[t], perm[t], len[t], minLen, maxLen, alphaSize);
       minLens[t] = minLen;
     }
   }
@@ -598,17 +579,17 @@ public class CBZip2InputStream extends InputStream {
     recvDecodingTables();
 
     final InputStream inShadow = this.in;
-    final Data dataShadow  = this.data;
-    final byte[] ll8      = dataShadow.ll8;
-    final int[] unzftab    = dataShadow.unzftab;
-    final byte[] selector  = dataShadow.selector;
+    final Data dataShadow = this.data;
+    final byte[] ll8 = dataShadow.ll8;
+    final int[] unzftab = dataShadow.unzftab;
+    final byte[] selector = dataShadow.selector;
     final byte[] seqToUnseq = dataShadow.seqToUnseq;
-    final char[] yy      = dataShadow.getAndMoveToFrontDecodeYY;
-    final int[] minLens    = dataShadow.minLens;
-    final int[][] limit    = dataShadow.limit;
-    final int[][] base    = dataShadow.base;
-    final int[][] perm    = dataShadow.perm;
-    final int limitLast    = this.blockSize100k * 100000;
+    final char[] yy = dataShadow.getAndMoveToFrontDecodeYY;
+    final int[] minLens = dataShadow.minLens;
+    final int[][] limit = dataShadow.limit;
+    final int[][] base = dataShadow.base;
+    final int[][] perm = dataShadow.perm;
+    final int limitLast = this.blockSize100k * 100000;
 
     // Setting up the unzftab entries here is not strictly
     // necessary, but it does save having to do it later
@@ -619,18 +600,18 @@ public class CBZip2InputStream extends InputStream {
       unzftab[i] = 0;
     }
 
-    int groupNo    = 0;
-    int groupPos   = G_SIZE - 1;
-    final int eob  = this.nInUse + 1;
-    int nextSym    = getAndMoveToFrontDecode0(0);
-    int bsBuffShadow    = this.bsBuff;
-    int bsLiveShadow    = this.bsLive;
-    int lastShadow      = -1;
-    int zt       = selector[groupNo] & 0xff;
-    int[] baseZT  = base[zt];
-    int[] limitZT  = limit[zt];
-    int[] permZT  = perm[zt];
-    int minLensZT  = minLens[zt];
+    int groupNo = 0;
+    int groupPos = G_SIZE - 1;
+    final int eob = this.nInUse + 1;
+    int nextSym = getAndMoveToFrontDecode0(0);
+    int bsBuffShadow = this.bsBuff;
+    int bsLiveShadow = this.bsLive;
+    int lastShadow = -1;
+    int zt = selector[groupNo] & 0xff;
+    int[] baseZT = base[zt];
+    int[] limitZT = limit[zt];
+    int[] permZT = perm[zt];
+    int minLensZT = minLens[zt];
 
     while (nextSym != eob) {
       if ((nextSym == RUNA) || (nextSym == RUNB)) {
@@ -642,12 +623,12 @@ public class CBZip2InputStream extends InputStream {
           else break;
 
           if (groupPos == 0) {
-            groupPos   = G_SIZE - 1;
-            zt       = selector[++groupNo] & 0xff;
-            baseZT    = base[zt];
-            limitZT   = limit[zt];
-            permZT    = perm[zt];
-            minLensZT  = minLens[zt];
+            groupPos = G_SIZE - 1;
+            zt = selector[++groupNo] & 0xff;
+            baseZT = base[zt];
+            limitZT = limit[zt];
+            permZT = perm[zt];
+            minLensZT = minLens[zt];
           }
           else groupPos--;
 
@@ -687,7 +668,8 @@ public class CBZip2InputStream extends InputStream {
         final byte ch = seqToUnseq[yy[0]];
         unzftab[ch & 0xff] += s + 1;
 
-        while (s-- >= 0) ll8[++lastShadow] = ch;
+        while (s-- >= 0)
+          ll8[++lastShadow] = ch;
 
         if (lastShadow >= limitLast) throw new IOException("block overrun");
       }
@@ -706,19 +688,20 @@ public class CBZip2InputStream extends InputStream {
          System.arraycopy for very small ranges to copy.
         */
         if (nextSym <= 16) {
-          for (int j = nextSym - 1; j > 0;) yy[j] = yy[--j];
+          for (int j = nextSym - 1; j > 0;)
+            yy[j] = yy[--j];
         }
         else System.arraycopy(yy, 0, yy, 1, nextSym - 1);
 
         yy[0] = tmp;
 
         if (groupPos == 0) {
-          groupPos   = G_SIZE - 1;
-          zt       = selector[++groupNo] & 0xff;
-          baseZT    = base[zt];
-          limitZT   = limit[zt];
-          permZT    = perm[zt];
-          minLensZT  = minLens[zt];
+          groupPos = G_SIZE - 1;
+          zt = selector[++groupNo] & 0xff;
+          baseZT = base[zt];
+          limitZT = limit[zt];
+          permZT = perm[zt];
+          minLensZT = minLens[zt];
         }
         else groupPos--;
 
@@ -761,13 +744,11 @@ public class CBZip2InputStream extends InputStream {
     this.bsBuff = bsBuffShadow;
   }
 
-  private int getAndMoveToFrontDecode0(final int groupNo)
-    throws IOException
-  {
-    final InputStream inShadow  = this.in;
-    final Data dataShadow  = this.data;
-    final int zt       = dataShadow.selector[groupNo] & 0xff;
-    final int[] limitZT  = dataShadow.limit[zt];
+  private int getAndMoveToFrontDecode0(final int groupNo) throws IOException {
+    final InputStream inShadow = this.in;
+    final Data dataShadow = this.data;
+    final int zt = dataShadow.selector[groupNo] & 0xff;
+    final int[] limitZT = dataShadow.limit[zt];
     int zn = dataShadow.minLens[zt];
     int zvec = bsR(zn);
     int bsLiveShadow = this.bsLive;
@@ -799,8 +780,8 @@ public class CBZip2InputStream extends InputStream {
     if (this.data == null) return;
 
     final int[] cftab = this.data.cftab;
-    final int[] tt   = this.data.initTT(this.last + 1);
-    final byte[] ll8  = this.data.ll8;
+    final int[] tt = this.data.initTT(this.last + 1);
+    final byte[] ll8 = this.data.ll8;
     cftab[0] = 0;
     System.arraycopy(this.data.unzftab, 0, cftab, 1, 256);
 
@@ -820,7 +801,7 @@ public class CBZip2InputStream extends InputStream {
     this.suTPos = tt[this.origPtr];
     this.suCount = 0;
     this.suI2 = 0;
-    this.suCh2 = 256;  /* not a char and not EOF */
+    this.suCh2 = 256; /* not a char and not EOF */
 
     if (this.blockRandomised) {
       this.suRNToGo = 0;
@@ -944,35 +925,36 @@ public class CBZip2InputStream extends InputStream {
 
   private static final class Data extends Object {
     // (with blockSize 900k)
-    final boolean[] inUse  = new boolean[256];                  //     256 byte
+    final boolean[] inUse = new boolean[256]; //     256 byte
 
-    final byte[] seqToUnseq  = new byte[256];                   //     256 byte
-    final byte[] selector    = new byte[MAX_SELECTORS];         //   18002 byte
-    final byte[] selectorMtf  = new byte[MAX_SELECTORS];        //   18002 byte
+    final byte[] seqToUnseq = new byte[256]; //     256 byte
+    final byte[] selector = new byte[MAX_SELECTORS]; //   18002 byte
+    final byte[] selectorMtf = new byte[MAX_SELECTORS]; //   18002 byte
 
     /**
      * Freq table collected to save a pass over the data during
      * decompression.
      */
-    final int[] unzftab = new int[256];                         //    1024 byte
+    final int[] unzftab = new int[256]; //    1024 byte
 
-    final int[][] limit = new int[N_GROUPS][MAX_ALPHA_SIZE];    //    6192 byte
-    final int[][] base  = new int[N_GROUPS][MAX_ALPHA_SIZE];    //    6192 byte
-    final int[][] perm  = new int[N_GROUPS][MAX_ALPHA_SIZE];    //    6192 byte
-    final int[] minLens = new int[N_GROUPS];                    //      24 byte
+    final int[][] limit = new int[N_GROUPS][MAX_ALPHA_SIZE]; //    6192 byte
+    final int[][] base = new int[N_GROUPS][MAX_ALPHA_SIZE]; //    6192 byte
+    final int[][] perm = new int[N_GROUPS][MAX_ALPHA_SIZE]; //    6192 byte
+    final int[] minLens = new int[N_GROUPS]; //      24 byte
 
-    final int[]    cftab    = new int[257];                     //    1028 byte
-    final char[]   getAndMoveToFrontDecodeYY = new char[256];   //     512 byte
+    final int[] cftab = new int[257]; //    1028 byte
+    final char[] getAndMoveToFrontDecodeYY = new char[256]; //     512 byte
 
     //                                                                3096 byte
-    final char[][]  tempCharArray2d  = new char[N_GROUPS][MAX_ALPHA_SIZE];
+    final char[][] tempCharArray2d = new char[N_GROUPS][MAX_ALPHA_SIZE];
 
-    final byte[] recvDecodingTablesPos = new byte[N_GROUPS];    //       6 byte
+    final byte[] recvDecodingTablesPos = new byte[N_GROUPS]; //       6 byte
     //---------------
     //   60798 byte
 
-    int[] tt;                                                   // 3600000 byte
-    byte[] ll8;                                                 //  900000 byte
+    int[] tt; // 3600000 byte
+    byte[] ll8; //  900000 byte
+
     //---------------
     //  4560782 byte
     //===============
@@ -1007,4 +989,3 @@ public class CBZip2InputStream extends InputStream {
   }
 
 }
-

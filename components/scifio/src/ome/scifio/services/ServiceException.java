@@ -33,8 +33,7 @@ package ome.scifio.services;
  *
  * @author Chris Allan <callan at blackcat dot ca>
  */
-public class ServiceException extends Exception
-{
+public class ServiceException extends Exception {
   /** Serial for this version. */
   private static final long serialVersionUID = 7402442944895106504L;
 
@@ -42,8 +41,7 @@ public class ServiceException extends Exception
    * Default constructor.
    * @param message Error message.
    */
-  public ServiceException(String message)
-  {
+  public ServiceException(String message) {
     super(message);
   }
 
@@ -52,8 +50,7 @@ public class ServiceException extends Exception
    * @param message Error message. 
    * @param cause Upstream exception.
    */
-  public ServiceException(String message, Throwable cause)
-  {
+  public ServiceException(String message, Throwable cause) {
     super(message, cause);
   }
 
@@ -61,8 +58,7 @@ public class ServiceException extends Exception
    * Default constructor.
    * @param cause Upstream exception.
    */
-  public ServiceException(Throwable cause)
-  {
+  public ServiceException(Throwable cause) {
     super(cause);
   }
 }

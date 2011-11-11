@@ -28,7 +28,6 @@ import java.util.StringTokenizer;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 
-
 /**
  * Used by validateXML to parse the XML block's schema path using SAX.
  *
@@ -44,20 +43,25 @@ import org.xml.sax.helpers.DefaultHandler;
 class ValidationSAXHandler extends DefaultHandler {
   private String schemaPath;
   private boolean first;
-  public String getSchemaPath() { return schemaPath; }
+
+  public String getSchemaPath() {
+    return schemaPath;
+  }
+
   public void startDocument() {
     schemaPath = null;
     first = true;
   }
-  public void startElement(String uri,
-    String localName, String qName, Attributes attributes)
+
+  public void startElement(String uri, String localName, String qName,
+    Attributes attributes)
   {
     if (!first) return;
     first = false;
 
     int len = attributes.getLength();
     String xmlns = null, xsiSchemaLocation = null;
-    for (int i=0; i<len; i++) {
+    for (int i = 0; i < len; i++) {
       String name = attributes.getQName(i);
       if (name.equals("xmlns")) xmlns = attributes.getValue(i);
       else if (name.equals("schemaLocation") ||

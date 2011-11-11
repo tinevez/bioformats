@@ -39,8 +39,8 @@ import ome.scifio.common.Location;
  * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/common/src/loci/common/RandomAccessOutputStream.java">Trac</a>,
  * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/common/src/loci/common/RandomAccessOutputStream.java;hb=HEAD">Gitweb</a></dd></dl>
  */
-public class RandomAccessOutputStream extends OutputStream implements DataOutput
-{
+public class RandomAccessOutputStream extends OutputStream
+  implements DataOutput {
   // -- Fields --
 
   private IRandomAccess outputFile;
@@ -88,8 +88,7 @@ public class RandomAccessOutputStream extends OutputStream implements DataOutput
 
   /** Sets the endianness of the stream. */
   public void order(boolean little) {
-    outputFile.setOrder(
-        little? ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN);
+    outputFile.setOrder(little ? ByteOrder.LITTLE_ENDIAN : ByteOrder.BIG_ENDIAN);
   }
 
   /** Gets the endianness of the stream. */
@@ -202,6 +201,7 @@ public class RandomAccessOutputStream extends OutputStream implements DataOutput
   }
 
   /* @see java.io.OutputStream#flush() */
-  public void flush() throws IOException { }
+  public void flush() throws IOException {
+  }
 
 }

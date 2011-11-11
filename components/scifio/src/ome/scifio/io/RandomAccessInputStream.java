@@ -160,7 +160,7 @@ public class RandomAccessInputStream extends InputStream implements DataInput {
   public String readString(String lastChars) throws IOException {
     if (lastChars.length() == 1) return findString(lastChars);
     String[] terminators = new String[lastChars.length()];
-    for (int i=0; i<terminators.length; i++) {
+    for (int i = 0; i < terminators.length; i++) {
       terminators[i] = lastChars.substring(i, i + 1);
     }
     return findString(terminators);
@@ -443,10 +443,14 @@ public class RandomAccessInputStream extends InputStream implements DataInput {
     return (int) remain;
   }
 
-  public void mark(int readLimit) { }
+  public void mark(int readLimit) {
+  }
 
-  public boolean markSupported() { return false; }
+  public boolean markSupported() {
+    return false;
+  }
 
-  public void reset() throws IOException { }
+  public void reset() throws IOException {
+  }
 
 }

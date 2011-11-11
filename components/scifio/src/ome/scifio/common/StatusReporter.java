@@ -35,7 +35,9 @@ package ome.scifio.common;
 public interface StatusReporter {
 
   void addStatusListener(StatusListener l);
+
   void removeStatusListener(StatusListener l);
+
   void notifyListeners(StatusEvent e);
 
 }

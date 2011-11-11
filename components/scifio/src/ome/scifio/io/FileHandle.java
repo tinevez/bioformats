@@ -70,7 +70,9 @@ public class FileHandle implements IRandomAccess {
   // -- FileHandle API methods --
 
   /** Gets the random access file object backing this FileHandle. */
-  public RandomAccessFile getRandomAccessFile() { return raf; }
+  public RandomAccessFile getRandomAccessFile() {
+    return raf;
+  }
 
   // -- IRandomAccess API methods --
 

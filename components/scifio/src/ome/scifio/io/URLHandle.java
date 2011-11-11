@@ -83,8 +83,9 @@ public class URLHandle extends StreamHandle {
   /* @see StreamHandle#resetStream() */
   protected void resetStream() throws IOException {
     conn = (new URL(url)).openConnection();
-    stream = new DataInputStream(new BufferedInputStream(
-      conn.getInputStream(), RandomAccessInputStream.MAX_OVERHEAD));
+    stream =
+      new DataInputStream(new BufferedInputStream(
+        conn.getInputStream(), RandomAccessInputStream.MAX_OVERHEAD));
     fp = 0;
     mark = 0;
     length = conn.getContentLength();

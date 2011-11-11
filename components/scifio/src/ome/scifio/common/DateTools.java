@@ -44,8 +44,8 @@ public final class DateTools {
   // -- Constants --
 
   /** Timestamp formats. */
-  public static final int UNIX = 0;  // January 1, 1970
-  public static final int COBOL = 1;  // January 1, 1601
+  public static final int UNIX = 0; // January 1, 1970
+  public static final int COBOL = 1; // January 1, 1601
   public static final int MICROSOFT = 2; // December 30, 1899
   public static final int ZVI = 3;
 
@@ -60,7 +60,8 @@ public final class DateTools {
 
   // -- Constructor --
 
-  private DateTools() { }
+  private DateTools() {
+  }
 
   // -- Date handling --
 
@@ -158,10 +159,9 @@ public final class DateTools {
    * @param formats The date's possible input formats.
    * @param lenient Whether or not to leniently parse the date.
    */
-  public static String formatDate(String date, String[] formats,
-    boolean lenient)
+  public static String formatDate(String date, String[] formats, boolean lenient)
   {
-    for (int i=0; i<formats.length; i++) {
+    for (int i = 0; i < formats.length; i++) {
       String result = formatDate(date, formats[i], lenient);
       if (result != null) return result;
     }

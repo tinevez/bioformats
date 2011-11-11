@@ -74,16 +74,24 @@ public class StatusEvent {
   // -- StatusEvent API methods --
 
   /** Gets progress value. Returns -1 if progress is unknown. */
-  public int getProgressValue() { return progress; }
+  public int getProgressValue() {
+    return progress;
+  }
 
   /** Gets progress maximum. Returns -1 if progress is unknown. */
-  public int getProgressMaximum() { return maximum; }
+  public int getProgressMaximum() {
+    return maximum;
+  }
 
   /** Gets status message. */
-  public String getStatusMessage() { return status; }
+  public String getStatusMessage() {
+    return status;
+  }
 
   /** Returns whether or not this is a warning event. */
-  public boolean isWarning() { return warning; }
+  public boolean isWarning() {
+    return warning;
+  }
 
   // -- Object API methods --
 

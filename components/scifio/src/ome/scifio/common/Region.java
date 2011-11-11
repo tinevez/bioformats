@@ -43,7 +43,8 @@ public class Region {
 
   // -- Constructor --
 
-  public Region() { }
+  public Region() {
+  }
 
   public Region(int x, int y, int width, int height) {
     this.x = x;
@@ -71,8 +72,8 @@ public class Region {
     rh += ry;
     tw += tx;
     th += ty;
-    boolean rtn = ((rw < rx || rw > tx) && (rh < ry || rh > ty) &&
-      (tw < tx || tw > rx) && (th < ty || th > ry));
+    boolean rtn =
+      ((rw < rx || rw > tx) && (rh < ry || rh > ty) && (tw < tx || tw > rx) && (th < ty || th > ry));
     return rtn;
   }
 

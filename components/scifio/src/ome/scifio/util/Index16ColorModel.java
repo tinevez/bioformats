@@ -58,7 +58,7 @@ public class Index16ColorModel extends ColorModel {
     this.littleEndian = littleEndian;
 
     if (table == null) throw new IOException("LUT cannot be null");
-    for (int i=0; i<table.length; i++) {
+    for (int i = 0; i < table.length; i++) {
       if (table[i].length < size) {
         throw new IOException("LUT " + i + " too small");
       }
@@ -116,8 +116,7 @@ public class Index16ColorModel extends ColorModel {
 
   /* @see java.awt.image.ColorModel#createCompatibleWritableRaster(int, int) */
   public WritableRaster createCompatibleWritableRaster(int w, int h) {
-    return Raster.createInterleavedRaster(DataBuffer.TYPE_USHORT,
-      w, h, 1, null);
+    return Raster.createInterleavedRaster(DataBuffer.TYPE_USHORT, w, h, 1, null);
   }
 
   /* @see java.awt.image.ColorModel#getAlpha(int) */

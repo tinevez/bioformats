@@ -41,8 +41,7 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 class MetadataHandler extends DefaultHandler {
   private String currentQName;
-  private Hashtable<String, String> metadata =
-    new Hashtable<String, String>();
+  private Hashtable<String, String> metadata = new Hashtable<String, String>();
 
   // -- MetadataHandler API methods --
 
@@ -61,9 +60,9 @@ class MetadataHandler extends DefaultHandler {
   {
     if (attributes.getLength() == 0) currentQName += " - " + qName;
     else currentQName = qName;
-    for (int i=0; i<attributes.getLength(); i++) {
-      metadata.put(qName + " - " + attributes.getQName(i),
-        attributes.getValue(i));
+    for (int i = 0; i < attributes.getLength(); i++) {
+      metadata.put(
+        qName + " - " + attributes.getQName(i), attributes.getValue(i));
     }
   }
 }

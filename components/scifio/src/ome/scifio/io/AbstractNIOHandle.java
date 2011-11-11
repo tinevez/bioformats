@@ -58,8 +58,8 @@ public abstract class AbstractNIOHandle implements IRandomAccess {
    */
   protected void validateMode(String mode) {
     if (!(mode.equals("r") || mode.equals("rw"))) {
-      throw new IllegalArgumentException(
-        String.format("%s mode not in supported modes ('r', 'rw')", mode));
+      throw new IllegalArgumentException(String.format(
+        "%s mode not in supported modes ('r', 'rw')", mode));
     }
   }
 

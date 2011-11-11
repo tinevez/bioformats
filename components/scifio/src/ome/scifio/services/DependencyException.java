@@ -33,11 +33,10 @@ package ome.scifio.services;
  *
  * @author Chris Allan <callan at blackcat dot ca>
  */
-public class DependencyException extends Exception
-{
+public class DependencyException extends Exception {
   /** Serial for this version. */
   private static final long serialVersionUID = -7836244849086491562L;
-  
+
   /** The class that was used in a failed instantiation. */
   private Class<? extends Service> failureClass;
 
@@ -45,8 +44,7 @@ public class DependencyException extends Exception
    * Default constructor.
    * @param message Error message.
    */
-  public DependencyException(String message)
-  {
+  public DependencyException(String message) {
     super(message);
   }
 
@@ -55,8 +53,7 @@ public class DependencyException extends Exception
    * @param message Error message. 
    * @param klass Failed instantiation class.
    */
-  public DependencyException(String message, Class<? extends Service> klass)
-  {
+  public DependencyException(String message, Class<? extends Service> klass) {
     super(message);
     this.failureClass = klass;
   }
@@ -68,7 +65,7 @@ public class DependencyException extends Exception
    * @param cause Upstream exception.
    */
   public DependencyException(String message, Class<? extends Service> klass,
-      Throwable cause)
+    Throwable cause)
   {
     super(message, cause);
     this.failureClass = klass;
@@ -78,8 +75,7 @@ public class DependencyException extends Exception
    * Default constructor.
    * @param cause Upstream exception.
    */
-  public DependencyException(Throwable cause)
-  {
+  public DependencyException(Throwable cause) {
     super(cause);
   }
 
@@ -87,16 +83,13 @@ public class DependencyException extends Exception
    * Returns the class that was used during a failed instantiation.
    * @return See above.
    */
-  public Class<? extends Service> getFailureClass()
-  {
+  public Class<? extends Service> getFailureClass() {
     return failureClass;
   }
 
   @Override
-  public String toString()
-  {
-    if (failureClass == null)
-    {
+  public String toString() {
+    if (failureClass == null) {
       return getMessage();
     }
     return getMessage() + " for " + failureClass;

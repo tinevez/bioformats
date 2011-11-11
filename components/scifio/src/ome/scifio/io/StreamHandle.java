@@ -278,12 +278,13 @@ public abstract class StreamHandle implements IRandomAccess {
   public int skipBytes(int n) throws IOException {
     int skipped = 0;
     try {
-      for (int i=0; i<n; i++) {
+      for (int i = 0; i < n; i++) {
         if (readUnsignedByte() != -1) skipped++;
         markManager();
       }
     }
-    catch (EOFException e) { }
+    catch (EOFException e) {
+    }
     return skipped;
   }
 

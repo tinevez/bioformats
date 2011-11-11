@@ -118,7 +118,8 @@ public class ByteArrayHandle extends AbstractNIOHandle {
   // -- IRandomAccess API methods --
 
   /* @see IRandomAccess.close() */
-  public void close() { }
+  public void close() {
+  }
 
   /* @see IRandomAccess.getFilePointer() */
   public long getFilePointer() {
@@ -399,7 +400,7 @@ public class ByteArrayHandle extends AbstractNIOHandle {
     int len = 2 * s.length();
     validateLength(len);
     char[] c = s.toCharArray();
-    for (int i=0; i<c.length; i++) {
+    for (int i = 0; i < c.length; i++) {
       writeChar(c[i]);
     }
   }

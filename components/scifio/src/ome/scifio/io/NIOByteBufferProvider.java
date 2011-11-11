@@ -27,8 +27,6 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileChannel.MapMode;
-import java.util.StringTokenizer;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -98,7 +96,8 @@ public class NIOByteBufferProvider {
    * the buffer.
    */
   public ByteBuffer allocate(long bufferStartPosition, int newSize)
-    throws IOException {
+    throws IOException
+  {
     if (useMappedByteBuffer) {
       return allocateMappedByteBuffer(bufferStartPosition, newSize);
     }
@@ -115,7 +114,8 @@ public class NIOByteBufferProvider {
    * the buffer.
    */
   protected ByteBuffer allocateDirect(long bufferStartPosition, int newSize)
-    throws IOException {
+    throws IOException
+  {
     ByteBuffer buffer = ByteBuffer.allocate(newSize);
     channel.read(buffer, bufferStartPosition);
     return buffer;
@@ -130,8 +130,9 @@ public class NIOByteBufferProvider {
    * @throws IOException If there is an issue mapping, aligning or allocating
    * the buffer.
    */
-  protected ByteBuffer allocateMappedByteBuffer(
-      long bufferStartPosition, int newSize) throws IOException {
+  protected ByteBuffer allocateMappedByteBuffer(long bufferStartPosition,
+    int newSize) throws IOException
+  {
     return channel.map(mapMode, bufferStartPosition, newSize);
   }
 }

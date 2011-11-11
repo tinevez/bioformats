@@ -54,13 +54,13 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
    * {@link IFormatHandler#close()}.
    */
   void close(boolean fileOnly) throws IOException;
-  
+
   /** Gets the number of series in this file. */
   int getSeriesCount();
 
   /** Activates the specified series. */
   void setSeries(int no);
-  
+
   /**
    * Specifies whether or not to save proprietary metadata
    * in the Metadata.
@@ -82,7 +82,7 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
    * pixel data will be returned.
    */
   String[] getUsedFiles(boolean noPixels);
-  
+
   /**
    * Specifies whether ugly metadata (entries with unprintable characters,
    * and extremely large entries) should be discarded from the metadata table.
@@ -94,17 +94,17 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
    * and extremely large entries) are discarded from the metadata table.
    */
   boolean isMetadataFiltered();
-  
+
   /**
    * Gets whether the image planes are indexed color.
    * This value has no impact on {@link #getSizeC()},
    * {@link #getEffectiveSizeC()} or {@link #getRGBChannelCount()}.
    */
   boolean isIndexed();
-  
+
   /** Determines the number of image planes in the current file. */
   int getImageCount();
-  
+
   /**
    * Obtains the hashtable containing the metadata field/value pairs from
    * the current file.
@@ -112,12 +112,12 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
    * from the file
    */
   public Hashtable<String, Object> getGlobalMetadata();
-  
+
   /**
    * Returns the current id for the file being parsed.
    * @return
    */
   public String getCurrentId();
-  
+
   public M[] getMetadataArray();
 }

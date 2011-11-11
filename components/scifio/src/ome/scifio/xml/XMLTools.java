@@ -96,16 +96,16 @@ public final class XMLTools {
   // -- Fields --
 
   private static ThreadLocal<HashMap<URL, Schema>> schemas =
-    new ThreadLocal<HashMap<URL, Schema>>()
-  {
-    protected HashMap<URL, Schema> initialValue() {
-      return new HashMap<URL, Schema>();
-    }
-  };
+    new ThreadLocal<HashMap<URL, Schema>>() {
+      protected HashMap<URL, Schema> initialValue() {
+        return new HashMap<URL, Schema>();
+      }
+    };
 
   // -- Constructor --
 
-  private XMLTools() { }
+  private XMLTools() {
+  }
 
   // -- XML to/from DOM --
 
@@ -117,7 +117,8 @@ public final class XMLTools {
     try {
       Document doc = parseDOM(is);
       return doc;
-    } finally {
+    }
+    finally {
       is.close();
     }
   }
@@ -131,7 +132,8 @@ public final class XMLTools {
     try {
       Document doc = parseDOM(is);
       return doc;
-    } finally {
+    }
+    finally {
       is.close();
     }
   }
@@ -167,9 +169,9 @@ public final class XMLTools {
   /** Remove invalid characters from an XML string. */
   public static String sanitizeXML(String s) {
     final char[] c = s.toCharArray();
-    for (int i=0; i<s.length(); i++) {
-      if (Character.isISOControl(c[i]) ||
-        !Character.isDefined(c[i]) || c[i] > '~')
+    for (int i = 0; i < s.length(); i++) {
+      if (Character.isISOControl(c[i]) || !Character.isDefined(c[i]) ||
+        c[i] > '~')
       {
         c[i] = ' ';
       }
@@ -201,8 +203,7 @@ public final class XMLTools {
    * Indents XML by the given spacing to be more readable, avoiding any
    * whitespace injection into CDATA if the preserveCData flag is set.
    */
-  public static String indentXML(String xml, int spacing,
-    boolean preserveCData)
+  public static String indentXML(String xml, int spacing, boolean preserveCData)
   {
     if (xml == null) return null; // garbage in, garbage out
     StringBuffer sb = new StringBuffer();
@@ -234,7 +235,8 @@ public final class XMLTools {
 
       if (noSpace == 0) {
         // apply indent
-        for (int j=0; j<indent; j++) sb.append(" ");
+        for (int j = 0; j < indent; j++)
+          sb.append(" ");
       }
 
       // output element contents
@@ -244,8 +246,7 @@ public final class XMLTools {
 
       if (noSpace == 0) {
         // adjust indent forwards
-        if (element &&
-          !token.startsWith("?") && // ?xml tag, probably
+        if (element && !token.startsWith("?") && // ?xml tag, probably
           !token.startsWith("/") && // end element
           !token.endsWith("/") && // standalone element
           !token.startsWith("!")) // comment
@@ -370,8 +371,7 @@ public final class XMLTools {
   /** Replaces NS:tag with NS_tag for undeclared namespaces */
   public static String avoidUndeclaredNamespaces(String xml) {
     int gt = xml.indexOf('>');
-    if (gt > 0 && xml.startsWith("<?xml "))
-      gt = xml.indexOf('>', gt + 1);
+    if (gt > 0 && xml.startsWith("<?xml ")) gt = xml.indexOf('>', gt + 1);
     if (gt > 0) {
       String firstTag = xml.substring(0, gt + 1).toLowerCase();
 
@@ -470,9 +470,15 @@ public final class XMLTools {
       InputStream is = new ByteArrayInputStream(xml.getBytes());
       saxParser.parse(is, saxHandler);
     }
-    catch (ParserConfigurationException exc) { exception = exc; }
-    catch (SAXException exc) { exception = exc; }
-    catch (IOException exc) { exception = exc; }
+    catch (ParserConfigurationException exc) {
+      exception = exc;
+    }
+    catch (SAXException exc) {
+      exception = exc;
+    }
+    catch (IOException exc) {
+      exception = exc;
+    }
     if (exception != null) {
       LOGGER.warn("Error parsing schema path from {}", label, exception);
       return false;
@@ -521,8 +527,12 @@ public final class XMLTools {
     try {
       validator.validate(source);
     }
-    catch (IOException exc) { exception = exc; }
-    catch (SAXException exc) { exception = exc; }
+    catch (IOException exc) {
+      exception = exc;
+    }
+    catch (SAXException exc) {
+      exception = exc;
+    }
     final int errors = errorHandler.getErrorCount();
     if (errors > 0) {
       LOGGER.info("Error validating document: {} errors found", errors);

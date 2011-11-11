@@ -124,7 +124,8 @@ public class NIOInputStream extends InputStream implements DataInput {
     // FIXME: Change interface?
     try {
       return raf.getFilePointer();
-    } catch (IOException e) {
+    }
+    catch (IOException e) {
       throw new RuntimeException(e);
     }
   }
@@ -153,7 +154,7 @@ public class NIOInputStream extends InputStream implements DataInput {
     if (lastChars.length() == 1) return findString(lastChars);
 
     String[] terminators = new String[lastChars.length()];
-    for (int i=0; i<terminators.length; i++) {
+    for (int i = 0; i < terminators.length; i++) {
       terminators[i] = lastChars.substring(i, i + 1);
     }
     return findString(terminators);
@@ -272,7 +273,7 @@ public class NIOInputStream extends InputStream implements DataInput {
 
       // check output, returning smallest possible string
       int min = Integer.MAX_VALUE, tagLen = 0;
-      for (int t=0; t<terminators.length; t++) {
+      for (int t = 0; t < terminators.length; t++) {
         int len = terminators[t].length();
         int start = (int) (loc - bytesDropped - len);
         int value = out.indexOf(terminators[t], start < 0 ? 0 : start);
@@ -374,7 +375,7 @@ public class NIOInputStream extends InputStream implements DataInput {
 
   /** Read a string that has been encoded using a modified UTF-8 format. */
   public String readUTF() throws IOException {
-    return null;  // not implemented yet...we don't really need this
+    return null; // not implemented yet...we don't really need this
   }
 
   /** Skip n bytes within the stream. */

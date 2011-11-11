@@ -78,7 +78,9 @@ public class TwoChannelColorSpace extends ColorSpace {
     return ColorSpace.TYPE_2CLR;
   }
 
-  public boolean isCS_sRGB() { return false; }
+  public boolean isCS_sRGB() {
+    return false;
+  }
 
   public float[] toCIEXYZ(float[] color) {
     ColorSpace rgb = ColorSpace.getInstance(ColorSpace.CS_sRGB);

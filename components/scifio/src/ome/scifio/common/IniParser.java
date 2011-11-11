@@ -69,9 +69,7 @@ public class IniParser {
   }
 
   /** Parses the INI-style configuration data from the given resource. */
-  public IniList parseINI(String path)
-    throws IOException
-  {
+  public IniList parseINI(String path) throws IOException {
     return parseINI(openTextResource(path));
   }
 
@@ -79,16 +77,12 @@ public class IniParser {
    * Parses the INI-style configuration data from the given resource,
    * using the given class to find the resource.
    */
-  public IniList parseINI(String path, Class<?> c)
-    throws IOException
-  {
+  public IniList parseINI(String path, Class<?> c) throws IOException {
     return parseINI(openTextResource(path, c));
   }
 
   /** Parses the INI-style configuration data from the given input stream. */
-  public IniList parseINI(BufferedReader in)
-    throws IOException
-  {
+  public IniList parseINI(BufferedReader in) throws IOException {
     IniList list = new IniList();
     IniTable attrs = null;
     String chapter = null;
@@ -151,8 +145,8 @@ public class IniParser {
 
   /** Opens a buffered reader for the given resource. */
   public static BufferedReader openTextResource(String path, Class<?> c) {
-    return new BufferedReader(new InputStreamReader(
-      c.getResourceAsStream(path)));
+    return new BufferedReader(
+      new InputStreamReader(c.getResourceAsStream(path)));
   }
 
   // -- Helper methods --

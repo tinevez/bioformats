@@ -33,10 +33,20 @@ package ome.scifio.common;
  */
 public class ReflectException extends Exception {
 
-  public ReflectException() { super(); }
-  public ReflectException(String s) { super(s); }
-  public ReflectException(String s, Throwable cause) { super(s, cause); }
-  public ReflectException(Throwable cause) { super(cause); }
+  public ReflectException() {
+    super();
+  }
+
+  public ReflectException(String s) {
+    super(s);
+  }
+
+  public ReflectException(String s, Throwable cause) {
+    super(s, cause);
+  }
+
+  public ReflectException(Throwable cause) {
+    super(cause);
+  }
 
 }
-

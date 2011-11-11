@@ -18,7 +18,7 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
   // -- Fields --
   /** Current file. */
   protected RandomAccessInputStream in;
-  
+
   /** Core metadata values. */
   protected M[] metadata;
 
@@ -27,13 +27,13 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
 
   /** Name of current file. */
   protected String currentId;
-  
+
   /** The number of the current series. */
   private int series;
-  
+
   /** Whether or not to filter out invalid metadata. */
   protected boolean filterMetadata;
-  
+
   /** Whether or not to save proprietary metadata in the MetadataStore. */
   protected boolean saveOriginalMetadata = false;
 
@@ -210,10 +210,9 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
     // string value, if passed in value is a string
     String val = string ? String.valueOf(value) : null;
 
-    if (filterMetadata ||
-      (saveOriginalMetadata 
-        /* TODO: check if this Parser's metadata is OMEXML metadata &&
-         *  (getMetadataStore() instanceof OMEXMLMetadata)*/))
+    if (filterMetadata || (saveOriginalMetadata
+    /* TODO: check if this Parser's metadata is OMEXML metadata &&
+     *  (getMetadataStore() instanceof OMEXMLMetadata)*/))
     {
       // filter out complex data types
       if (!simple) return;
@@ -231,10 +230,9 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
       if (!key.matches(".*[a-zA-Z].*")) return;
 
       // remove &lt;, &gt; and &amp; to prevent XML parsing errors
-      String[] invalidSequences = new String[] {
-        "&lt;", "&gt;", "&amp;", "<", ">", "&"
-      };
-      for (int i=0; i<invalidSequences.length; i++) {
+      String[] invalidSequences =
+        new String[] {"&lt;", "&gt;", "&amp;", "<", ">", "&"};
+      for (int i = 0; i < invalidSequences.length; i++) {
         key = key.replaceAll(invalidSequences[i], "");
         if (string) val = val.replaceAll(invalidSequences[i], "");
       }
@@ -248,22 +246,22 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
 
     meta.put(key, val == null ? value : val);
   }
-  
+
   /* @see Parser#setMetadataFiltered(boolean) */
   public void setMetadataFiltered(boolean filter) {
     FormatTools.assertId(currentId, false, 1);
     filterMetadata = filter;
   }
-  
+
   /* @see Parser#isMetadataFiltered() */
   public boolean isMetadataFiltered() {
     return filterMetadata;
   }
-  
+
   /* @see Parser#setOriginalMetadataPopulated(boolean) */
   public void setOriginalMetadataPopulated(boolean populate) {
     FormatTools.assertId(currentId, false, 1);
-    saveOriginalMetadata = populate;    
+    saveOriginalMetadata = populate;
   }
 
   /* @see Parser#isOriginalMetadataPopulated() */
@@ -276,19 +274,19 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
     FormatTools.assertId(currentId, true, 1);
     return globalMeta;
   }
-  
+
   /* @see Parser#getCurrentId() */
   public String getCurrentId() {
-	  return this.currentId;
+    return this.currentId;
   }
-  
+
   public M[] getMetadataArray() {
-	  return this.metadata;
+    return this.metadata;
   }
-  
+
   // -- Parser Helper Methods --
-  
+
   public RandomAccessInputStream getIn() {
-	  return in;
+    return in;
   }
 }

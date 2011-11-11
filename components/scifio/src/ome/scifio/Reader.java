@@ -70,7 +70,7 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
    * Obtains a sub-image of the specified image plane,
    * whose upper-left corner is given by (x, y).
    */
-  byte[] openBytes(int no,  int x, int y, int w, int h)
+  byte[] openBytes(int no, int x, int y, int w, int h)
     throws FormatException, IOException;
 
   /**
@@ -100,8 +100,7 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
    *   file.
    * @throws IOException if there was a problem reading the file.
    */
-  byte[] openBytes(int no, byte[] buf,  int x, int y,
-		    int w, int h)
+  byte[] openBytes(int no, byte[] buf, int x, int y, int w, int h)
     throws FormatException, IOException;
 
   /**
@@ -211,7 +210,7 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
    * @return A RandomAccessInputStream
    */
   RandomAccessInputStream getStream();
-  
+
   /** Gets whether the data is in little-endian format. */
   boolean isLittleEndian();
 
@@ -239,7 +238,7 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
 
   /** Gets the Metadata[] for this Reader */
   public M[] getMetadataArray();
-  
+
   //TODO also in Metadata
   /**
    * Gets the number of channels returned with each call to openBytes.
@@ -249,7 +248,7 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
    * TIFF with Planar rather than Chunky configuration.
    */
   int getRGBChannelCount();
-  
+
   /** Gets the size of the X dimension. */
   int getSizeX();
 
@@ -264,34 +263,34 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
 
   /** Gets the size of the T dimension. */
   int getSizeT();
-  
+
   /** Determines the number of image planes in the current file. */
   int getImageCount();
-  
+
   /**
    * Gets the pixel type.
    * @return the pixel type as an enumeration from {@link FormatTools}
    * <i>static</i> pixel types such as {@link FormatTools#INT8}.
    */
   int getPixelType();
-  
+
   /**
    * Gets the number of valid bits per pixel. The number of valid bits per
    * pixel is always less than or equal to the number of bits per pixel
    * that correspond to {@link #getPixelType()}.
    */
   int getBitsPerPixel();
-  
+
   /**
    * Gets whether the image planes are indexed color.
    * This value has no impact on {@link #getSizeC()},
    * {@link #getEffectiveSizeC()} or {@link #getRGBChannelCount()}.
    */
   boolean isIndexed();
-  
+
   /** Gets whether or not the channels in an image are interleaved. */
   boolean isInterleaved();
-  
+
   /**
    * Gets the effective size of the C dimension, guaranteeing that
    * getEffectiveSizeC() * getSizeZ() * getSizeT() == getImageCount()

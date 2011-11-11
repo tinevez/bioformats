@@ -48,7 +48,8 @@ public final class DataTools {
 
   // -- Constructor --
 
-  private DataTools() { }
+  private DataTools() {
+  }
 
   // -- Data reading --
 
@@ -77,9 +78,10 @@ public final class DataTools {
   {
     if (bytes.length - off < len) len = bytes.length - off;
     short total = 0;
-    for (int i=0, ndx=off; i<len; i++, ndx++) {
-      total |= (bytes[ndx] < 0 ? 256 + bytes[ndx] :
-        (int) bytes[ndx]) << ((little ? i : len - i - 1) * 8);
+    for (int i = 0, ndx = off; i < len; i++, ndx++) {
+      total |=
+        (bytes[ndx] < 0 ? 256 + bytes[ndx] : (int) bytes[ndx]) << ((little ? i
+          : len - i - 1) * 8);
     }
     return total;
   }
@@ -112,7 +114,7 @@ public final class DataTools {
   {
     if (bytes.length - off < len) len = bytes.length - off;
     short total = 0;
-    for (int i=0, ndx=off; i<len; i++, ndx++) {
+    for (int i = 0, ndx = off; i < len; i++, ndx++) {
       total |= bytes[ndx] << ((little ? i : len - i - 1) * 8);
     }
     return total;
@@ -141,14 +143,13 @@ public final class DataTools {
    * offset to an int. If there are fewer than len bytes available,
    * the MSBs are all assumed to be zero (regardless of endianness).
    */
-  public static int bytesToInt(byte[] bytes, int off, int len,
-    boolean little)
-  {
+  public static int bytesToInt(byte[] bytes, int off, int len, boolean little) {
     if (bytes.length - off < len) len = bytes.length - off;
     int total = 0;
-    for (int i=0, ndx=off; i<len; i++, ndx++) {
-      total |= (bytes[ndx] < 0 ? 256 + bytes[ndx] :
-        (int) bytes[ndx]) << ((little ? i : len - i - 1) * 8);
+    for (int i = 0, ndx = off; i < len; i++, ndx++) {
+      total |=
+        (bytes[ndx] < 0 ? 256 + bytes[ndx] : (int) bytes[ndx]) << ((little ? i
+          : len - i - 1) * 8);
     }
     return total;
   }
@@ -176,12 +177,11 @@ public final class DataTools {
    * offset to an int. If there are fewer than len bytes available,
    * the MSBs are all assumed to be zero (regardless of endianness).
    */
-  public static int bytesToInt(short[] bytes, int off, int len,
-    boolean little)
+  public static int bytesToInt(short[] bytes, int off, int len, boolean little)
   {
     if (bytes.length - off < len) len = bytes.length - off;
     int total = 0;
-    for (int i=0, ndx=off; i<len; i++, ndx++) {
+    for (int i = 0, ndx = off; i < len; i++, ndx++) {
       total |= bytes[ndx] << ((little ? i : len - i - 1) * 8);
     }
     return total;
@@ -268,14 +268,14 @@ public final class DataTools {
    * offset to a long. If there are fewer than len bytes available,
    * the MSBs are all assumed to be zero (regardless of endianness).
    */
-  public static long bytesToLong(byte[] bytes, int off, int len,
-    boolean little)
+  public static long bytesToLong(byte[] bytes, int off, int len, boolean little)
   {
     if (bytes.length - off < len) len = bytes.length - off;
     long total = 0;
-    for (int i=0, ndx=off; i<len; i++, ndx++) {
-      total |= (bytes[ndx] < 0 ? 256L + bytes[ndx] :
-        (long) bytes[ndx]) << ((little ? i : len - i - 1) * 8);
+    for (int i = 0, ndx = off; i < len; i++, ndx++) {
+      total |=
+        (bytes[ndx] < 0 ? 256L + bytes[ndx] : (long) bytes[ndx]) << ((little
+          ? i : len - i - 1) * 8);
     }
     return total;
   }
@@ -303,12 +303,11 @@ public final class DataTools {
    * offset to a long. If there are fewer than len bytes available,
    * the MSBs are all assumed to be zero (regardless of endianness).
    */
-  public static long bytesToLong(short[] bytes, int off, int len,
-    boolean little)
+  public static long bytesToLong(short[] bytes, int off, int len, boolean little)
   {
     if (bytes.length - off < len) len = bytes.length - off;
     long total = 0;
-    for (int i=0, ndx=off; i<len; i++, ndx++) {
+    for (int i = 0, ndx = off; i < len; i++, ndx++) {
       total |= ((long) bytes[ndx]) << ((little ? i : len - i - 1) * 8);
     }
     return total;
@@ -348,9 +347,7 @@ public final class DataTools {
    * offset to a double. If there are fewer than 8 bytes available,
    * the MSBs are all assumed to be zero (regardless of endianness).
    */
-  public static double bytesToDouble(byte[] bytes, int off,
-    boolean little)
-  {
+  public static double bytesToDouble(byte[] bytes, int off, boolean little) {
     return bytesToDouble(bytes, off, 8, little);
   }
 
@@ -379,9 +376,7 @@ public final class DataTools {
    * offset to a double. If there are fewer than 8 bytes available,
    * the MSBs are all assumed to be zero (regardless of endianness).
    */
-  public static double bytesToDouble(short[] bytes, int off,
-    boolean little)
-  {
+  public static double bytesToDouble(short[] bytes, int off, boolean little) {
     return bytesToDouble(bytes, off, 8, little);
   }
 
@@ -397,7 +392,7 @@ public final class DataTools {
   /** Translates the given byte array into a String of hexadecimal digits. */
   public static String bytesToHex(byte[] b) {
     StringBuffer sb = new StringBuffer();
-    for (int i=0; i<b.length; i++) {
+    for (int i = 0; i < b.length; i++) {
       String a = Integer.toHexString(b[i] & 0xff);
       if (a.length() == 1) sb.append("0");
       sb.append(a);
@@ -445,7 +440,7 @@ public final class DataTools {
   /** Translates an array of short values into an array of byte values. */
   public static byte[] shortsToBytes(short[] values, boolean little) {
     byte[] v = new byte[values.length * 2];
-    for (int i=0; i<values.length; i++) {
+    for (int i = 0; i < values.length; i++) {
       unpackBytes(values[i], v, i * 2, 2, little);
     }
     return v;
@@ -454,7 +449,7 @@ public final class DataTools {
   /** Translates an array of int values into an array of byte values. */
   public static byte[] intsToBytes(int[] values, boolean little) {
     byte[] v = new byte[values.length * 4];
-    for (int i=0; i<values.length; i++) {
+    for (int i = 0; i < values.length; i++) {
       unpackBytes(values[i], v, i * 4, 4, little);
     }
     return v;
@@ -463,7 +458,7 @@ public final class DataTools {
   /** Translates an array of float values into an array of byte values. */
   public static byte[] floatsToBytes(float[] values, boolean little) {
     byte[] v = new byte[values.length * 4];
-    for (int i=0; i<values.length; i++) {
+    for (int i = 0; i < values.length; i++) {
       unpackBytes(Float.floatToIntBits(values[i]), v, i * 4, 4, little);
     }
     return v;
@@ -472,7 +467,7 @@ public final class DataTools {
   /** Translates an array of long values into an array of byte values. */
   public static byte[] longsToBytes(long[] values, boolean little) {
     byte[] v = new byte[values.length * 8];
-    for (int i=0; i<values.length; i++) {
+    for (int i = 0; i < values.length; i++) {
       unpackBytes(values[i], v, i * 8, 8, little);
     }
     return v;
@@ -481,7 +476,7 @@ public final class DataTools {
   /** Translates an array of double values into an array of byte values. */
   public static byte[] doublesToBytes(double[] values, boolean little) {
     byte[] v = new byte[values.length * 8];
-    for (int i=0; i<values.length; i++) {
+    for (int i = 0; i < values.length; i++) {
       unpackBytes(Double.doubleToLongBits(values[i]), v, i * 8, 8, little);
     }
     return v;
@@ -502,21 +497,21 @@ public final class DataTools {
    * @throws IllegalArgumentException
    *   if the specified indices fall outside the buffer
    */
-  public static void unpackBytes(long value, byte[] buf, int ndx,
-    int nBytes, boolean little)
+  public static void unpackBytes(long value, byte[] buf, int ndx, int nBytes,
+    boolean little)
   {
     if (buf.length < ndx + nBytes) {
       throw new IllegalArgumentException("Invalid indices: buf.length=" +
         buf.length + ", ndx=" + ndx + ", nBytes=" + nBytes);
     }
     if (little) {
-      for (int i=0; i<nBytes; i++) {
-        buf[ndx + i] = (byte) ((value >> (8*i)) & 0xff);
+      for (int i = 0; i < nBytes; i++) {
+        buf[ndx + i] = (byte) ((value >> (8 * i)) & 0xff);
       }
     }
     else {
-      for (int i=0; i<nBytes; i++) {
-        buf[ndx + i] = (byte) ((value >> (8*(nBytes - i - 1))) & 0xff);
+      for (int i = 0; i < nBytes; i++) {
+        buf[ndx + i] = (byte) ((value >> (8 * (nBytes - i - 1))) & 0xff);
       }
     }
   }
@@ -530,44 +525,44 @@ public final class DataTools {
    * @param fp If set and bpp == 4 or bpp == 8, then return floats or doubles.
    * @param little Whether byte array is in little-endian order.
    */
-  public static Object makeDataArray(byte[] b,
-    int bpp, boolean fp, boolean little)
+  public static Object makeDataArray(byte[] b, int bpp, boolean fp,
+    boolean little)
   {
     if (bpp == 1) {
       return b;
     }
     else if (bpp == 2) {
       short[] s = new short[b.length / 2];
-      for (int i=0; i<s.length; i++) {
-        s[i] = bytesToShort(b, i*2, 2, little);
+      for (int i = 0; i < s.length; i++) {
+        s[i] = bytesToShort(b, i * 2, 2, little);
       }
       return s;
     }
     else if (bpp == 4 && fp) {
       float[] f = new float[b.length / 4];
-      for (int i=0; i<f.length; i++) {
+      for (int i = 0; i < f.length; i++) {
         f[i] = bytesToFloat(b, i * 4, 4, little);
       }
       return f;
     }
     else if (bpp == 4) {
       int[] i = new int[b.length / 4];
-      for (int j=0; j<i.length; j++) {
-        i[j] = bytesToInt(b, j*4, 4, little);
+      for (int j = 0; j < i.length; j++) {
+        i[j] = bytesToInt(b, j * 4, 4, little);
       }
       return i;
     }
     else if (bpp == 8 && fp) {
       double[] d = new double[b.length / 8];
-      for (int i=0; i<d.length; i++) {
+      for (int i = 0; i < d.length; i++) {
         d[i] = bytesToDouble(b, i * 8, 8, little);
       }
       return d;
     }
     else if (bpp == 8) {
       long[] l = new long[b.length / 8];
-      for (int i=0; i<l.length; i++) {
-        l[i] = bytesToLong(b, i*8, 8, little);
+      for (int i = 0; i < l.length; i++) {
+        l[i] = bytesToLong(b, i * 8, 8, little);
       }
       return l;
     }
@@ -580,8 +575,8 @@ public final class DataTools {
    *   regardless of signedness.
    */
   @Deprecated
-  public static Object makeDataArray(byte[] b,
-    int bpp, boolean fp, boolean little, boolean signed)
+  public static Object makeDataArray(byte[] b, int bpp, boolean fp,
+    boolean little, boolean signed)
   {
     return makeDataArray(b, bpp, fp, little);
   }
@@ -602,8 +597,8 @@ public final class DataTools {
    * @throws IllegalArgumentException if input byte array does not divide
    *   evenly into height pieces
    */
-  public static Object makeDataArray2D(byte[] b,
-    int bpp, boolean fp, boolean little, int height)
+  public static Object makeDataArray2D(byte[] b, int bpp, boolean fp,
+    boolean little, int height)
   {
     if (b.length % (bpp * height) != 0) {
       throw new IllegalArgumentException("Array length mismatch: " +
@@ -612,17 +607,17 @@ public final class DataTools {
     final int width = b.length / (bpp * height);
     if (bpp == 1) {
       byte[][] b2 = new byte[height][width];
-      for (int y=0; y<height; y++) {
-        int index = width*y;
+      for (int y = 0; y < height; y++) {
+        int index = width * y;
         System.arraycopy(b, index, b2[y], 0, width);
       }
       return b2;
     }
     else if (bpp == 2) {
       short[][] s = new short[height][width];
-      for (int y=0; y<height; y++) {
-        for (int x=0; x<width; x++) {
-          int index = 2*(width*y + x);
+      for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+          int index = 2 * (width * y + x);
           s[y][x] = bytesToShort(b, index, 2, little);
         }
       }
@@ -630,9 +625,9 @@ public final class DataTools {
     }
     else if (bpp == 4 && fp) {
       float[][] f = new float[height][width];
-      for (int y=0; y<height; y++) {
-        for (int x=0; x<width; x++) {
-          int index = 4*(width*y + x);
+      for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+          int index = 4 * (width * y + x);
           f[y][x] = bytesToFloat(b, index, 4, little);
         }
       }
@@ -640,9 +635,9 @@ public final class DataTools {
     }
     else if (bpp == 4) {
       int[][] i = new int[height][width];
-      for (int y=0; y<height; y++) {
-        for (int x=0; x<width; x++) {
-          int index = 4*(width*y + x);
+      for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+          int index = 4 * (width * y + x);
           i[y][x] = bytesToInt(b, index, 4, little);
         }
       }
@@ -650,9 +645,9 @@ public final class DataTools {
     }
     else if (bpp == 8 && fp) {
       double[][] d = new double[height][width];
-      for (int y=0; y<height; y++) {
-        for (int x=0; x<width; x++) {
-          int index = 8*(width*y + x);
+      for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+          int index = 8 * (width * y + x);
           d[y][x] = bytesToDouble(b, index, 8, little);
         }
       }
@@ -660,9 +655,9 @@ public final class DataTools {
     }
     else if (bpp == 8) {
       long[][] l = new long[height][width];
-      for (int y=0; y<height; y++) {
-        for (int x=0; x<width; x++) {
-          int index = 8*(width*y + x);
+      for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+          int index = 8 * (width * y + x);
           l[y][x] = bytesToLong(b, index, 8, little);
         }
       }
@@ -711,7 +706,7 @@ public final class DataTools {
   /** Remove null bytes from a string. */
   public static String stripString(String toStrip) {
     StringBuffer s = new StringBuffer();
-    for (int i=0; i<toStrip.length(); i++) {
+    for (int i = 0; i < toStrip.length(); i++) {
       if (toStrip.charAt(i) != 0) {
         s.append(toStrip.charAt(i));
       }
@@ -738,7 +733,7 @@ public final class DataTools {
   public static String sanitize(String s) {
     if (s == null) return null;
     StringBuffer buf = new StringBuffer(s);
-    for (int i=0; i<buf.length(); i++) {
+    for (int i = 0; i < buf.length(); i++) {
       char c = buf.charAt(i);
       if (c != '\t' && c != '\n' && (c < ' ' || c > '~')) {
         buf = buf.deleteCharAt(i--);
@@ -759,7 +754,7 @@ public final class DataTools {
     // determine the finite min and max values
     float min = Float.MAX_VALUE;
     float max = Float.MIN_VALUE;
-    for (int i=0; i<data.length; i++) {
+    for (int i = 0; i < data.length; i++) {
       if (data[i] == Float.POSITIVE_INFINITY ||
         data[i] == Float.NEGATIVE_INFINITY)
       {
@@ -770,14 +765,14 @@ public final class DataTools {
     }
 
     // normalize infinity values
-    for (int i=0; i<data.length; i++) {
+    for (int i = 0; i < data.length; i++) {
       if (data[i] == Float.POSITIVE_INFINITY) data[i] = max;
       else if (data[i] == Float.NEGATIVE_INFINITY) data[i] = min;
     }
 
     // now normalize; min => 0.0, max => 1.0
     float range = max - min;
-    for (int i=0; i<rtn.length; i++) {
+    for (int i = 0; i < rtn.length; i++) {
       rtn[i] = (data[i] - min) / range;
     }
     return rtn;
@@ -793,7 +788,7 @@ public final class DataTools {
     // determine the finite min and max values
     double min = Double.MAX_VALUE;
     double max = Double.MIN_VALUE;
-    for (int i=0; i<data.length; i++) {
+    for (int i = 0; i < data.length; i++) {
       if (data[i] == Double.POSITIVE_INFINITY ||
         data[i] == Double.NEGATIVE_INFINITY)
       {
@@ -804,14 +799,14 @@ public final class DataTools {
     }
 
     // normalize infinity values
-    for (int i=0; i<data.length; i++) {
+    for (int i = 0; i < data.length; i++) {
       if (data[i] == Double.POSITIVE_INFINITY) data[i] = max;
       else if (data[i] == Double.NEGATIVE_INFINITY) data[i] = min;
     }
 
     // now normalize; min => 0.0, max => 1.0
     double range = max - min;
-    for (int i=0; i<rtn.length; i++) {
+    for (int i = 0; i < rtn.length; i++) {
       rtn[i] = (data[i] - min) / range;
     }
     return rtn;
@@ -829,7 +824,7 @@ public final class DataTools {
    * array. If the value is not in the array, returns -1.
    */
   public static int indexOf(int[] array, int value) {
-    for (int i=0; i<array.length; i++) {
+    for (int i = 0; i < array.length; i++) {
       if (array[i] == value) return i;
     }
     return -1;
@@ -840,7 +835,7 @@ public final class DataTools {
    * Object array. If the value is not in the array, returns -1.
    */
   public static int indexOf(Object[] array, Object value) {
-    for (int i=0; i<array.length; i++) {
+    for (int i = 0; i < array.length; i++) {
       if (value == null) {
         if (array[i] == null) return i;
       }
@@ -852,21 +847,21 @@ public final class DataTools {
   // -- Signed data conversion --
 
   public static byte[] makeSigned(byte[] b) {
-    for (int i=0; i<b.length; i++) {
+    for (int i = 0; i < b.length; i++) {
       b[i] = (byte) (b[i] + 128);
     }
     return b;
   }
 
   public static short[] makeSigned(short[] s) {
-    for (int i=0; i<s.length; i++) {
+    for (int i = 0; i < s.length; i++) {
       s[i] = (short) (s[i] + 32768);
     }
     return s;
   }
 
   public static int[] makeSigned(int[] i) {
-    for (int j=0; j<i.length; j++) {
+    for (int j = 0; j < i.length; j++) {
       i[j] = (int) (i[j] + 2147483648L);
     }
     return i;
