@@ -31,8 +31,20 @@ public interface Metadata {
   /** Gets whether or not the channels in an image are interleaved. */
   boolean isInterleaved();
 
-  /** Gets the size of the dimension specified by dim */
-  int getSize(String dim);
+  /** Gets the size of the X dimension. */
+  int getSizeX();
+
+  /** Gets the size of the Y dimension. */
+  int getSizeY();
+
+  /** Gets the size of the Z dimension. */
+  int getSizeZ();
+
+  /** Gets the size of the C dimension. */
+  int getSizeC();
+
+  /** Gets the size of the T dimension. */
+  int getSizeT();
 
   /**
    * Gets the pixel type.

@@ -157,38 +157,27 @@ public class CoreMetadata extends AbstractMetadata {
 
   @Override
   public int getImageCount() {
-    // TODO Auto-generated method stub
-    return 0;
+    return this.imageCount;
   }
 
   @Override
   public void setInterleaved(boolean interleaved) {
-    // TODO Auto-generated method stub
-
+    this.interleaved = interleaved;
   }
 
   @Override
   public boolean isInterleaved() {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public int getSize(String dim) {
-    // TODO Auto-generated method stub
-    return 0;
+    return this.interleaved;
   }
 
   @Override
   public int getPixelType() {
-    // TODO Auto-generated method stub
-    return 0;
+    return this.pixelType;
   }
 
   @Override
   public int getBitsPerPixel() {
-    // TODO Auto-generated method stub
-    return 0;
+    return this.bitsPerPixel;
   }
 
   @Override
@@ -205,20 +194,17 @@ public class CoreMetadata extends AbstractMetadata {
 
   @Override
   public boolean isLittleEndian() {
-    // TODO Auto-generated method stub
-    return false;
+    return this.littleEndian;
   }
 
   @Override
   public boolean isIndexed() {
-    // TODO Auto-generated method stub
-    return false;
+    return this.indexed;
   }
 
   @Override
   public boolean isFalseColor() {
-    // TODO Auto-generated method stub
-    return false;
+    return this.falseColor;
   }
 
   @Override
@@ -249,8 +235,32 @@ public class CoreMetadata extends AbstractMetadata {
 
   @Override
   public boolean isRGB() {
-    // TODO Auto-generated method stub
-    return false;
+    return this.rgb;
   }
+
+@Override
+public int getSizeX() {
+	return this.sizeX;
+}
+
+@Override
+public int getSizeY() {
+	return this.sizeY;
+}
+
+@Override
+public int getSizeZ() {
+	return this.sizeZ;
+}
+
+@Override
+public int getSizeC() {
+	return this.sizeC;
+}
+
+@Override
+public int getSizeT() {
+	return this.sizeT;
+}
 
 }

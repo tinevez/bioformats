@@ -119,7 +119,7 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
 	    metadata[0].pixelType = BufferedImageTools.getPixelType(img);
 	    metadata[0].indexed = img.getColorModel() instanceof IndexColorModel;
 	    metadata[0].falseColor = false;
-
+	    
 	    if (isIndexed()) {
 	      lut = new byte[3][256];
 	      IndexColorModel model = (IndexColorModel) img.getColorModel();

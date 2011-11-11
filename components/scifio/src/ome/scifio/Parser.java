@@ -112,4 +112,12 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
    * from the file
    */
   public Hashtable<String, Object> getGlobalMetadata();
+  
+  /**
+   * Returns the current id for the file being parsed.
+   * @return
+   */
+  public String getCurrentId();
+  
+  public M[] getMetadataArray();
 }

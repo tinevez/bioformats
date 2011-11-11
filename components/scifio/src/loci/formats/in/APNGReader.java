@@ -80,11 +80,6 @@ public class APNGReader extends BIFormatReader {
     super("Animated PNG", "png");
 	checker = new APNGChecker();
 	parser = new APNGParser();
-	reader = new ome.scifio.in.apng.APNGReader((APNGParser)parser);
-	
-	// TODO
-    domains = new String[] {FormatTools.GRAPHICS_DOMAIN};
-    suffixNecessary = false;
   }
 
   // -- IFormatReader API methods --
@@ -100,115 +95,57 @@ public class APNGReader extends BIFormatReader {
     FormatTools.assertId(currentId, true, 1);
     return lut;
   }
+  
+  /* @see IFormatReader#openBytes(int) */
+  @Override
+  public byte[] openBytes(int no) throws FormatException, IOException {
+    try {
+		return reader.openBytes(no);
+	} catch (ome.scifio.FormatException e) {
+		throw new FormatException(e);
+	}
+  }
+
+  /* @see IFormatReader#openBytes(int, byte[]) */
+  @Override
+  public byte[] openBytes(int no, byte[] buf)
+    throws FormatException, IOException
+  {
+    try {
+		return reader.openBytes(no, buf);
+	} catch (ome.scifio.FormatException e) {
+		throw new FormatException(e);
+	}
+  }
+
+  /* @see IFormatReader#openBytes(int, int, int, int, int) */
+  @Override
+  public byte[] openBytes(int no, int x, int y, int w, int h)
+    throws FormatException, IOException
+  {
+    try {
+		return reader.openBytes(no, x, y, w, h);
+	} catch (ome.scifio.FormatException e) {
+		throw new FormatException(e);
+	}
+  }
 
   /* @see loci.formats.IFormatReader#openPlane(int, int, int, int, int int) */
   public Object openPlane(int no, int x, int y, int w, int h)
     throws FormatException, IOException
   {
-    FormatTools.checkPlaneParameters(this, no, -1, x, y, w, h);
-
-    if (no == lastImageIndex && lastImage != null) {
-      return AWTImageTools.getSubimage(lastImage, isLittleEndian(), x, y, w, h);
-    }
-
-    if (no == 0) {
-      in.seek(0);
-      DataInputStream dis =
-        new DataInputStream(new BufferedInputStream(in, 4096));
-      lastImage = ImageIO.read(dis);
-      lastImageIndex = 0;
-      if (x == 0 && y == 0 && w == getSizeX() && h == getSizeY()) {
-        return lastImage;
-      }
-      return AWTImageTools.getSubimage(lastImage, isLittleEndian(), x, y, w, h);
-    }
-
-    ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    stream.write(PNG_SIGNATURE);
-
-    boolean fdatValid = false;
-    int fctlCount = 0;
-
-    int[] coords = frameCoordinates.get(no);
-
-    // TODO lost computeCRC method?
-    /*
-    for (PNGBlock block : blocks) {
-      if (!block.type.equals("IDAT") && !block.type.equals("fdAT") &&
-        !block.type.equals("acTL") && !block.type.equals("fcTL") &&
-        block.length > 0)
-      {
-        byte[] b = new byte[block.length + 12];
-        DataTools.unpackBytes(block.length, b, 0, 4, isLittleEndian());
-        byte[] typeBytes = block.type.getBytes();
-        System.arraycopy(typeBytes, 0, b, 4, 4);
-        in.seek(block.offset);
-        in.read(b, 8, b.length - 12);
-        if (block.type.equals("IHDR")) {
-          DataTools.unpackBytes(coords[2], b, 8, 4, isLittleEndian());
-          DataTools.unpackBytes(coords[3], b, 12, 4, isLittleEndian());
-        }
-        int crc = (int) computeCRC(b, b.length - 4);
-        DataTools.unpackBytes(crc, b, b.length - 4, 4, isLittleEndian());
-        stream.write(b);
-        b = null;
-      }
-      else if (block.type.equals("fcTL")) {
-        fdatValid = fctlCount == no;
-        fctlCount++;
-      }
-      else if (block.type.equals("fdAT")) {
-        in.seek(block.offset + 4);
-        if (fdatValid) {
-          byte[] b = new byte[block.length + 8];
-          DataTools.unpackBytes(block.length - 4, b, 0, 4, isLittleEndian());
-          b[4] = 'I';
-          b[5] = 'D';
-          b[6] = 'A';
-          b[7] = 'T';
-          in.read(b, 8, b.length - 12);
-          int crc = (int) computeCRC(b, b.length - 4);
-          DataTools.unpackBytes(crc, b, b.length - 4, 4, isLittleEndian());
-          stream.write(b);
-          b = null;
-        }
-      }
-      
-    }
-
-    RandomAccessInputStream s =
-      new RandomAccessInputStream(stream.toByteArray());
-    DataInputStream dis = new DataInputStream(new BufferedInputStream(s, 4096));
-    BufferedImage b = ImageIO.read(dis);
-    dis.close();
-
-    lastImage = null;
-    openPlane(0, 0, 0, getSizeX(), getSizeY());
-	
-    // paste current image onto first image
-
-    WritableRaster firstRaster = lastImage.getRaster();
-    WritableRaster currentRaster = b.getRaster();
-	
-    firstRaster.setDataElements(coords[0], coords[1], currentRaster);
-    lastImage =
-      new BufferedImage(lastImage.getColorModel(), firstRaster, false, null);
-    lastImageIndex = no;
-    return lastImage;
-    */ 
-    return null;
+	  try {
+		return reader.openPlane(no, x, y, w, h);
+	} catch (ome.scifio.FormatException e) {
+		throw new FormatException(e.getCause());
+	}
   }
 
   /* @see loci.formats.IFormatReader#close(boolean) */
   public void close(boolean fileOnly) throws IOException {
-    super.close(fileOnly);
-    if (!fileOnly) {
-      lut = null;
-      frameCoordinates = null;
-      //blocks = null;
-      lastImage = null;
-      lastImageIndex = -1;
-    }
+    //super.close(fileOnly);
+    parser.close(fileOnly);
+    //TODO reader.close(fileOnly);
   }
 
   // -- Internal FormatReader methods --
@@ -217,6 +154,12 @@ public class APNGReader extends BIFormatReader {
   @Deprecated
   protected void initFile(String id) throws FormatException, IOException {
     super.initFile(id);
+    try {
+		parser.parse(id);
+	} catch (ome.scifio.FormatException e) {
+		throw new FormatException(e.getCause());
+	}
+	reader = new ome.scifio.in.apng.APNGReader((APNGParser)parser);
   }
   
   // -- Helper Methods --

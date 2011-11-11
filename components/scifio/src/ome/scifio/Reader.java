@@ -1,13 +1,8 @@
 package ome.scifio;
 
 import java.io.IOException;
-import java.util.Map;
-
-import loci.formats.FileInfo;
 
 import ome.scifio.io.RandomAccessInputStream;
-
-
 
 /**
  * Interface for all SciFIO Readers.
@@ -75,7 +70,7 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
    * Obtains a sub-image of the specified image plane,
    * whose upper-left corner is given by (x, y).
    */
-  byte[] openBytes(int no, Map<String, Integer> dims)
+  byte[] openBytes(int no,  int x, int y, int w, int h)
     throws FormatException, IOException;
 
   /**
@@ -105,7 +100,8 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
    *   file.
    * @throws IOException if there was a problem reading the file.
    */
-  byte[] openBytes(int no, byte[] buf, Map<String, Integer> dims)
+  byte[] openBytes(int no, byte[] buf,  int x, int y,
+		    int w, int h)
     throws FormatException, IOException;
 
   /**
@@ -119,7 +115,7 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
    * @see loci.formats.FormatReader
    * @see loci.formats.gui.BufferedImageReader
    */
-  Object openPlane(int no, Map<String, Integer> dims)
+  Object openPlane(int no, int x, int y, int w, int h)
     throws FormatException, IOException;
 
   /**
@@ -204,20 +200,6 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
   int[] getZCTCoords(int index);
 
   /**
-   * Sets the default metadata for this reader.
-   * @param meta a metadata implementation.
-   */
-  void setMetadata(M meta);
-
-  /**
-   * Retrieves the current metadata for this reader. You can be
-   * assured that this method will <b>never</b> return a <code>null</code>
-   * metadata.
-   * @return A metadata implementation.
-   */
-  M getMetadata();
-
-  /**
    * Sets the default input stream for this reader.
    * 
    * @param stream a RandomAccessInputStream for the source being read
@@ -229,6 +211,9 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
    * @return A RandomAccessInputStream
    */
   RandomAccessInputStream getStream();
+  
+  /** Gets whether the data is in little-endian format. */
+  boolean isLittleEndian();
 
   /**
    * Retrieves all underlying readers.
@@ -254,4 +239,63 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
 
   /** Gets the Metadata[] for this Reader */
   public M[] getMetadataArray();
+  
+  //TODO also in Metadata
+  /**
+   * Gets the number of channels returned with each call to openBytes.
+   * The most common case where this value is greater than 1 is for interleaved
+   * RGB data, such as a 24-bit color image plane. However, it is possible for
+   * this value to be greater than 1 for non-interleaved data, such as an RGB
+   * TIFF with Planar rather than Chunky configuration.
+   */
+  int getRGBChannelCount();
+  
+  /** Gets the size of the X dimension. */
+  int getSizeX();
+
+  /** Gets the size of the Y dimension. */
+  int getSizeY();
+
+  /** Gets the size of the Z dimension. */
+  int getSizeZ();
+
+  /** Gets the size of the C dimension. */
+  int getSizeC();
+
+  /** Gets the size of the T dimension. */
+  int getSizeT();
+  
+  /** Determines the number of image planes in the current file. */
+  int getImageCount();
+  
+  /**
+   * Gets the pixel type.
+   * @return the pixel type as an enumeration from {@link FormatTools}
+   * <i>static</i> pixel types such as {@link FormatTools#INT8}.
+   */
+  int getPixelType();
+  
+  /**
+   * Gets the number of valid bits per pixel. The number of valid bits per
+   * pixel is always less than or equal to the number of bits per pixel
+   * that correspond to {@link #getPixelType()}.
+   */
+  int getBitsPerPixel();
+  
+  /**
+   * Gets whether the image planes are indexed color.
+   * This value has no impact on {@link #getSizeC()},
+   * {@link #getEffectiveSizeC()} or {@link #getRGBChannelCount()}.
+   */
+  boolean isIndexed();
+  
+  /** Gets whether or not the channels in an image are interleaved. */
+  boolean isInterleaved();
+  
+  /**
+   * Gets the effective size of the C dimension, guaranteeing that
+   * getEffectiveSizeC() * getSizeZ() * getSizeT() == getImageCount()
+   * regardless of the result of isRGB().
+   */
+  public int getEffectiveSizeC();
 }

@@ -271,10 +271,24 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
     return saveOriginalMetadata;
   }
 
-
   /* @see Parser#getGlobalMetadata() */
   public Hashtable<String, Object> getGlobalMetadata() {
     FormatTools.assertId(currentId, true, 1);
     return globalMeta;
+  }
+  
+  /* @see Parser#getCurrentId() */
+  public String getCurrentId() {
+	  return this.currentId;
+  }
+  
+  public M[] getMetadataArray() {
+	  return this.metadata;
+  }
+  
+  // -- Parser Helper Methods --
+  
+  public RandomAccessInputStream getIn() {
+	  return in;
   }
 }
