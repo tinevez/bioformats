@@ -57,10 +57,10 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
   public M[] parse(RandomAccessInputStream stream)
     throws IOException, FormatException
   {
-    if (currentId != null) {
-      String[] s = getUsedFiles();
+    if (in != null) {
+      RandomAccessInputStream[] s = getUsedFiles();
       for (int i = 0; i < s.length; i++) {
-        if (currentId.equals(s[i])) return metadata;
+        if (in.equals(s[i])) return metadata;
       }
     }
 
@@ -70,19 +70,19 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
   }
 
   /* @see Parser#getUsedFiles() */
-  public String[] getUsedFiles() {
+  public RandomAccessInputStream[] getUsedFiles() {
     return getUsedFiles(false);
   }
 
   /* @see Parser#getUsedFiles() */
-  public String[] getUsedFiles(boolean noPixels) {
+  public RandomAccessInputStream[] getUsedFiles(boolean noPixels) {
     int oldSeries = getSeries();
-    Vector<String> files = new Vector<String>();
+    Vector<RandomAccessInputStream> files = new Vector<RandomAccessInputStream>();
     for (int i = 0; i < getSeriesCount(); i++) {
       setSeries(i);
-      String[] s = getSeriesUsedFiles(noPixels);
+      RandomAccessInputStream[] s = getSeriesUsedFiles(noPixels);
       if (s != null) {
-        for (String file : s) {
+        for (RandomAccessInputStream file : s) {
           if (!files.contains(file)) {
             files.add(file);
           }
@@ -90,7 +90,7 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
       }
     }
     setSeries(oldSeries);
-    return files.toArray(new String[files.size()]);
+    return files.toArray(new RandomAccessInputStream[files.size()]);
   }
 
   /* @see Parser#close(boolean) */
@@ -109,13 +109,13 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
 
   /* @see Parser#getSeriesCount() */
   public int getSeriesCount() {
-    FormatTools.assertId(currentId, true, 1);
+    FormatTools.assertStream(in, true, 1);
     return metadata.length;
   }
 
   /* @see Parser#isIndexed() */
   public boolean isIndexed() {
-    FormatTools.assertId(currentId, true, 1);
+    FormatTools.assertStream(in, true, 1);
     return metadata[series].isIndexed();
   }
 
@@ -129,13 +129,13 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
 
   /* @see Parser#getImageCount() */
   public int getImageCount() {
-    FormatTools.assertId(currentId, true, 1);
+    FormatTools.assertStream(in, true, 1);
     return metadata[series].getImageCount();
   }
 
   /* @see Parser#getSeriesUsedFiles(boolean) */
-  public String[] getSeriesUsedFiles(boolean noPixels) {
-    return noPixels ? null : new String[] {currentId};
+  public RandomAccessInputStream[] getSeriesUsedFiles(boolean noPixels) {
+    return noPixels ? null : new RandomAccessInputStream[] {in};
   }
 
   /* @see Parser#getSeries() */
@@ -249,7 +249,7 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
 
   /* @see Parser#setMetadataFiltered(boolean) */
   public void setMetadataFiltered(boolean filter) {
-    FormatTools.assertId(currentId, false, 1);
+    FormatTools.assertStream(in, false, 1);
     filterMetadata = filter;
   }
 
@@ -260,7 +260,7 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
 
   /* @see Parser#setOriginalMetadataPopulated(boolean) */
   public void setOriginalMetadataPopulated(boolean populate) {
-    FormatTools.assertId(currentId, false, 1);
+    FormatTools.assertStream(in, false, 1);
     saveOriginalMetadata = populate;
   }
 
@@ -271,7 +271,7 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
 
   /* @see Parser#getGlobalMetadata() */
   public Hashtable<String, Object> getGlobalMetadata() {
-    FormatTools.assertId(currentId, true, 1);
+    FormatTools.assertStream(in, true, 1);
     return globalMeta;
   }
 

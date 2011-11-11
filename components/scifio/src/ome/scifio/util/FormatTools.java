@@ -1,8 +1,8 @@
 package ome.scifio.util;
 
-import loci.formats.IFormatReader;
 import ome.scifio.FormatException;
 import ome.scifio.Reader;
+import ome.scifio.io.RandomAccessInputStream;
 
 public class FormatTools {
 
@@ -218,14 +218,14 @@ public class FormatTools {
    *   is reported as part of the exception message, if available. Use zero
    *   to suppress output of the calling method name.
    */
-  public static void assertId(String currentId, boolean notNull, int depth) {
+  public static void assertStream(RandomAccessInputStream stream, boolean notNull, int depth) {
     String msg = null;
-    if (currentId == null && notNull) {
+    if (stream == null && notNull) {
       msg = "Current file should not be null; call setId(String) first";
     }
-    else if (currentId != null && !notNull) {
+    else if (stream != null && !notNull) {
       msg =
-        "Current file should be null, but is '" + currentId +
+        "Current file should be null, but is '" + stream +
           "'; call close() first";
     }
     if (msg == null) return;
@@ -252,7 +252,7 @@ public class FormatTools {
   public static void checkPlaneParameters(Reader r, int no, int bufLength,
     int x, int y, int w, int h) throws FormatException
   {
-    assertId(r.getCurrentFile(), true, 2);
+    assertStream(r.getStream(), true, 2);
     checkPlaneNumber(r, no);
     checkTileSize(r, x, y, w, h);
     if (bufLength >= 0) checkBufferSize(r, bufLength, w, h);

@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
 
-import loci.formats.IFormatHandler;
-
 import ome.scifio.io.RandomAccessInputStream;
 
 /**
@@ -74,14 +72,14 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
   boolean isOriginalMetadataPopulated();
 
   /** Returns an array of filenames needed to open this dataset. */
-  String[] getUsedFiles();
+  RandomAccessInputStream[] getUsedFiles();
 
   /**
    * Returns an array of filenames needed to open this dataset.
    * If the 'noPixels' flag is set, then only files that do not contain
    * pixel data will be returned.
    */
-  String[] getUsedFiles(boolean noPixels);
+  RandomAccessInputStream[] getUsedFiles(boolean noPixels);
 
   /**
    * Specifies whether ugly metadata (entries with unprintable characters,

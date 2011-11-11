@@ -45,8 +45,6 @@ public class APNGReader extends BIFormatReader<APNGMetadata> {
 
     setMetadataArray(parser.getMetadataArray());
     setCurrentId(parser.getCurrentId());
-    setSeries(parser.getSeries());
-
     try {
       this.in = new RandomAccessInputStream(currentId);
     }
@@ -54,13 +52,14 @@ public class APNGReader extends BIFormatReader<APNGMetadata> {
       // TODO Auto-generated catch block
       e.printStackTrace();
     }
+    setSeries(parser.getSeries());
   }
 
   // -- Reader API Methods --
 
   @Override
   public byte[][] get8BitLookupTable() throws FormatException, IOException {
-    FormatTools.assertId(currentId, true, 1);
+    FormatTools.assertStream(in, true, 1);
     return lut;
   }
 

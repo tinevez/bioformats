@@ -54,7 +54,7 @@ public abstract class AbstractReader<M extends Metadata>
 
   /* @see IFormatReader#isIndexed() */
   public boolean isIndexed() {
-    FormatTools.assertId(currentId, true, 1);
+    FormatTools.assertStream(in, true, 1);
     return metadata[series].isIndexed();
   }
 
@@ -65,7 +65,7 @@ public abstract class AbstractReader<M extends Metadata>
 
   /* @see IFormatReader#isInterleaved(int) */
   public boolean isInterleaved(int subC) {
-    FormatTools.assertId(currentId, true, 1);
+    FormatTools.assertStream(in, true, 1);
     return metadata[series].isInterleaved();
   }
 
@@ -81,7 +81,7 @@ public abstract class AbstractReader<M extends Metadata>
 
   /* @see IFormatReader.isLittleEndian() */
   public boolean isLittleEndian() {
-    FormatTools.assertId(currentId, true, 1);
+    FormatTools.assertStream(in, true, 1);
     return metadata[series].isLittleEndian();
   }
 
@@ -115,37 +115,37 @@ public abstract class AbstractReader<M extends Metadata>
 
   @Override
   public int getSizeX() {
-    FormatTools.assertId(currentId, true, 1);
+    FormatTools.assertStream(in, true, 1);
     return metadata[series].getSizeX();
   }
 
   @Override
   public int getSizeY() {
-    FormatTools.assertId(currentId, true, 1);
+    FormatTools.assertStream(in, true, 1);
     return metadata[series].getSizeY();
   }
 
   @Override
   public int getSizeZ() {
-    FormatTools.assertId(currentId, true, 1);
+    FormatTools.assertStream(in, true, 1);
     return metadata[series].getSizeZ();
   }
 
   @Override
   public int getSizeC() {
-    FormatTools.assertId(currentId, true, 1);
+    FormatTools.assertStream(in, true, 1);
     return metadata[series].getSizeC();
   }
 
   @Override
   public int getSizeT() {
-    FormatTools.assertId(currentId, true, 1);
+    FormatTools.assertStream(in, true, 1);
     return metadata[series].getSizeT();
   }
 
   @Override
   public int getImageCount() {
-    FormatTools.assertId(currentId, true, 1);
+    FormatTools.assertStream(in, true, 1);
     return metadata[series].getImageCount();
   }
 
@@ -201,8 +201,7 @@ public abstract class AbstractReader<M extends Metadata>
 
   @Override
   public int getSeriesCount() {
-    System.out.println("AR current id: " + currentId);
-    FormatTools.assertId(currentId, true, 1);
+    FormatTools.assertStream(in, true, 1);
     return metadata.length;
   }
 
@@ -287,14 +286,12 @@ public abstract class AbstractReader<M extends Metadata>
 
   @Override
   public void setStream(final RandomAccessInputStream stream) {
-    // TODO Auto-generated method stub
-
+    this.in = stream;
   }
 
   @Override
   public RandomAccessInputStream getStream() {
-    // TODO Auto-generated method stub
-    return null;
+    return in;
   }
 
   @Override
@@ -350,12 +347,8 @@ public abstract class AbstractReader<M extends Metadata>
   }
 
   @Override
-  public byte[] openBytes(int no, byte[] buf, int x, int y, int w, int h)
-    throws FormatException, IOException
-  {
-    // TODO Auto-generated method stub
-    return null;
-  }
+  public abstract byte[] openBytes(int no, byte[] buf, int x, int y, int w, int h)
+    throws FormatException, IOException;
 
   // -- AbstractReader Methods --
 
