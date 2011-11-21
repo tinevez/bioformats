@@ -3,7 +3,6 @@ package ome.scifio;
 import java.awt.image.ColorModel;
 import java.io.IOException;
 
-import loci.formats.FormatException;
 import loci.formats.codec.CodecOptions;
 
 /**
