@@ -20,10 +20,7 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
   protected RandomAccessInputStream in;
 
   /** Core metadata values. */
-  protected M[] metadata;
-
-  /** Hashtable containing metadata key/value pairs. */
-  protected Hashtable<String, Object> globalMeta;
+  protected M metadata;
 
   /** Name of current file. */
   protected String currentId;
@@ -42,110 +39,118 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
   // -- Parser API Methods --
 
   /* @see Parser#parse(File file) */
-  public M[] parse(File file) throws IOException, FormatException {
+
+  public M parse(File file) throws IOException, FormatException
+  {
     return parse(file.getName());
   }
 
   /* @see Parser#parse(String fileName) */
-  public M[] parse(String fileName) throws IOException, FormatException {
-    // TODO call into setId logic?
-    currentId = fileName;
+
+  public M parse(String fileName)
+    throws IOException, FormatException
+  {
     return parse(new RandomAccessInputStream(fileName));
   }
 
   /* @see Parser#parse(RandomAccessInputStream stream) */
-  public M[] parse(RandomAccessInputStream stream)
+  public M parse(RandomAccessInputStream stream)
     throws IOException, FormatException
   {
-    if (in != null) {
-      RandomAccessInputStream[] s = getUsedFiles();
-      for (int i = 0; i < s.length; i++) {
-        if (in.equals(s[i])) return metadata;
+    if(in == null || !in.getFileName().equals(stream.getFileName())) {
+       init(stream);
+
+      if(saveOriginalMetadata) {
+        //TODO store all metadata in OMEXML store.. or equivalent function? as per setId
       }
     }
-
-    series = 0;
-    close();
     return metadata;
+  }
+  
+  /* @see Parser#close(boolean) */
+  public void close(boolean fileOnly) throws IOException {
+    if (in != null) in.close();
+    if (!fileOnly) {
+      in = null;
+    }
+  }
+  
+  /* @see Parser#close() */
+  public void close() throws IOException {
+    close(false);
+  }
+  
+  /* @see Parser#setOriginalMetadataPopulated(boolean) */
+  public void setOriginalMetadataPopulated(boolean populate) {
+    FormatTools.assertStream(in, false, 1);
+    saveOriginalMetadata = populate;
+  }
+
+  /* @see Parser#isOriginalMetadataPopulated() */
+  public boolean isOriginalMetadataPopulated() {
+    return saveOriginalMetadata;
   }
 
   /* @see Parser#getUsedFiles() */
-  public RandomAccessInputStream[] getUsedFiles() {
+  public String[] getUsedFiles() {
     return getUsedFiles(false);
   }
 
   /* @see Parser#getUsedFiles() */
-  public RandomAccessInputStream[] getUsedFiles(boolean noPixels) {
-    int oldSeries = getSeries();
-    Vector<RandomAccessInputStream> files = new Vector<RandomAccessInputStream>();
-    for (int i = 0; i < getSeriesCount(); i++) {
-      setSeries(i);
-      RandomAccessInputStream[] s = getSeriesUsedFiles(noPixels);
+  public String[] getUsedFiles(boolean noPixels) {
+    Vector<String> files =
+      new Vector<String>();
+    for (int i = 0; i < metadata.getImageCount(); i++) {
+      String[] s = getImageUsedFiles(i, noPixels);
       if (s != null) {
-        for (RandomAccessInputStream file : s) {
+        for (String file : s) {
           if (!files.contains(file)) {
             files.add(file);
           }
         }
       }
     }
-    setSeries(oldSeries);
-    return files.toArray(new RandomAccessInputStream[files.size()]);
+    return files.toArray(new String[files.size()]);
+  }
+  
+  /* @see Parser#setMetadataFiltered(boolean) */
+  public void setMetadataFiltered(boolean filter) {
+    FormatTools.assertStream(in, false, 1);
+    filterMetadata = filter;
   }
 
-  /* @see Parser#close(boolean) */
-  public void close(boolean fileOnly) throws IOException {
-    if (in != null) in.close();
-    if (!fileOnly) {
-      in = null;
-      //currentId = null;
-    }
+  /* @see Parser#isMetadataFiltered() */
+  public boolean isMetadataFiltered() {
+    return filterMetadata;
   }
 
-  /* @see Parser#close() */
-  public void close() throws IOException {
-    close(false);
+  /* @see Parser#getImageUsedFiles() */
+  public String[] getImageUsedFiles(int image) {
+    return getImageUsedFiles(image, false);
+  }
+  
+  /* @see Parser#getImageUsedFiles(boolean) */
+  public String[] getImageUsedFiles(int image, boolean noPixels) {
+    return noPixels ? null : new String[] {in.getFileName()};
   }
 
-  /* @see Parser#getSeriesCount() */
-  public int getSeriesCount() {
-    FormatTools.assertStream(in, true, 1);
-    return metadata.length;
+  /* @see Parser#getAdvancedUsedFiles(boolean) */
+  public FileInfo[] getAdvancedUsedFiles(final boolean noPixels) {
+    // TODO Auto-generated method stub
+    return null;
   }
 
-  /* @see Parser#isIndexed() */
-  public boolean isIndexed() {
-    FormatTools.assertStream(in, true, 1);
-    return metadata[series].isIndexed();
+  /* @see Parser#getAdvancedSeriesUsedFiles(boolean) */
+  public FileInfo[] getAdvancedSeriesUsedFiles(final boolean noPixels) {
+    // TODO Auto-generated method stub
+    return null;
   }
-
-  /* @see Parser#setSeries(int) */
-  public void setSeries(int no) {
-    if (no < 0 || no >= getSeriesCount()) {
-      throw new IllegalArgumentException("Invalid series: " + no);
-    }
-    series = no;
-  }
-
-  /* @see Parser#getImageCount() */
-  public int getImageCount() {
-    FormatTools.assertStream(in, true, 1);
-    return metadata[series].getImageCount();
-  }
-
-  /* @see Parser#getSeriesUsedFiles(boolean) */
-  public RandomAccessInputStream[] getSeriesUsedFiles(boolean noPixels) {
-    return noPixels ? null : new RandomAccessInputStream[] {in};
-  }
-
-  /* @see Parser#getSeries() */
-  public int getSeries() {
-    return series;
-  }
+  
+  // -- AbstractParser Methods --
 
   /** Adds an entry to the global metadata table. */
   protected void addGlobalMeta(String key, Object value) {
-    addMeta(key, value, getGlobalMetadata());
+    addMeta(key, value, metadata.getGlobalMetadata());
   }
 
   /** Adds an entry to the global metadata table. */
@@ -190,7 +195,7 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
 
   /** Gets a value from the global metadata table. */
   protected Object getGlobalMeta(String key) {
-    return globalMeta.get(key);
+    return metadata.getGlobalMetadata().get(key);
   }
 
   /** Adds an entry to the specified Hashtable. */
@@ -246,47 +251,17 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
 
     meta.put(key, val == null ? value : val);
   }
+  
+  private void init(RandomAccessInputStream stream) throws IOException {
 
-  /* @see Parser#setMetadataFiltered(boolean) */
-  public void setMetadataFiltered(boolean filter) {
-    FormatTools.assertStream(in, false, 1);
-    filterMetadata = filter;
-  }
+    if(in != null) {
+      String[] s = getUsedFiles();
+      for (int i = 0; i < s.length; i++) {
+        if (in.getFileName().equals(s[i])) return;
+      }
+    }
 
-  /* @see Parser#isMetadataFiltered() */
-  public boolean isMetadataFiltered() {
-    return filterMetadata;
-  }
-
-  /* @see Parser#setOriginalMetadataPopulated(boolean) */
-  public void setOriginalMetadataPopulated(boolean populate) {
-    FormatTools.assertStream(in, false, 1);
-    saveOriginalMetadata = populate;
-  }
-
-  /* @see Parser#isOriginalMetadataPopulated() */
-  public boolean isOriginalMetadataPopulated() {
-    return saveOriginalMetadata;
-  }
-
-  /* @see Parser#getGlobalMetadata() */
-  public Hashtable<String, Object> getGlobalMetadata() {
-    FormatTools.assertStream(in, true, 1);
-    return globalMeta;
-  }
-
-  /* @see Parser#getCurrentId() */
-  public String getCurrentId() {
-    return this.currentId;
-  }
-
-  public M[] getMetadataArray() {
-    return this.metadata;
-  }
-
-  // -- Parser Helper Methods --
-
-  public RandomAccessInputStream getIn() {
-    return in;
+    close();
+    this.in = stream;
   }
 }

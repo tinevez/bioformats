@@ -30,20 +30,20 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
 
   /** Constructs a new APNGParser. */
   public APNGParser() {
-    metadata = new APNGMetadata[1];
-    metadata[0] = new APNGMetadata();
-    metadata[0].orderCertain = true;
+
+    metadata = new APNGMetadata();
+    metadata.orderCertain = true;
   }
 
   // -- Parser API Methods --
 
   /* @see ome.scifio.AbstractParser#parse(RandomAccessInputStream stream) */
   @Override
-  public APNGMetadata[] parse(RandomAccessInputStream stream)
+
+  public APNGMetadata parse(RandomAccessInputStream stream)
     throws IOException, FormatException
   {
     super.parse(stream);
-    in = stream;
 
     // check that this is a valid PNG file
     byte[] signature = new byte[8];
@@ -77,18 +77,19 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
 
       if (type.equals("acTL")) {
         // APNG-specific chunk
-        metadata[0].imageCount = in.readInt();
-        int loop = in.readInt();
+
+        metadata.imageCount = in.readInt(); // read num_frames
+        int loop = in.readInt(); // read num_plays
         addGlobalMeta("Loop count", loop);
       }
       else if (type.equals("fcTL")) {
-        in.skipBytes(4);
-        int w = in.readInt();
-        int h = in.readInt();
-        int x = in.readInt();
-        int y = in.readInt();
+        in.skipBytes(4); // skips sequence_number
+        int w = in.readInt(); // read width
+        int h = in.readInt(); // read height 
+        int x = in.readInt(); // read x_offset
+        int y = in.readInt(); // read y_offset
         frameCoordinates.add(new int[] {x, y, w, h});
-        in.skipBytes(length - 20);
+        in.skipBytes(length - 20); // not read: delay_num, delay_den, dispose_op, blend_op
       }
       else in.skipBytes(length);
 
@@ -97,12 +98,13 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
       }
     }
 
-    if (metadata[0].imageCount == 0) metadata[0].imageCount = 1;
-    metadata[0].sizeZ = 1;
-    metadata[0].sizeT = getImageCount();
+    if (metadata.imageCount == 0)
+      metadata.imageCount = 1;
+    metadata.sizeZ = 1;
+    metadata.sizeT = metadata.imageCount;
 
-    metadata[0].dimensionOrder = "XYCTZ";
-    metadata[0].interleaved = false;
+    metadata.dimensionOrder = "XYCTZ";
+    metadata.interleaved = false;
 
     //RandomAccessInputStream ras = new RandomAccessInputStream(currentId);
     //DataInputStream dis = new DataInputStream(ras);
@@ -111,20 +113,25 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
     BufferedImage img = ImageIO.read(dis);
     dis.close();
 
-    metadata[0].sizeX = img.getWidth();
-    metadata[0].sizeY = img.getHeight();
-    metadata[0].rgb = img.getRaster().getNumBands() > 1;
-    metadata[0].sizeC = img.getRaster().getNumBands();
-    metadata[0].pixelType = BufferedImageTools.getPixelType(img);
-    metadata[0].indexed = img.getColorModel() instanceof IndexColorModel;
-    metadata[0].falseColor = false;
+    metadata.sizeX = img.getWidth();
+    metadata.sizeY = img.getHeight();
+    metadata.rgb = img.getRaster().getNumBands() > 1;
+    metadata.sizeC = img.getRaster().getNumBands();
+    metadata.pixelType = BufferedImageTools.getPixelType(img);
+    metadata.indexed =
+      img.getColorModel() instanceof IndexColorModel;
+    metadata.falseColor = false;
+    metadata.setBlocks(blocks);
+    metadata.setFrameCoordinates(frameCoordinates);
 
-    if (isIndexed()) {
-      lut = new byte[3][256];
+    if (metadata.indexed) {
+      byte[][] lut = new byte[3][256];
       IndexColorModel model = (IndexColorModel) img.getColorModel();
       model.getReds(lut[0]);
       model.getGreens(lut[1]);
       model.getBlues(lut[2]);
+
+      metadata.setLut(lut);
     }
 
     return metadata;

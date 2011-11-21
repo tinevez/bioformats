@@ -1,5 +1,6 @@
 package ome.scifio;
 
+import java.io.File;
 import java.io.IOException;
 
 import ome.scifio.FormatException;
@@ -13,9 +14,19 @@ import ome.scifio.util.FormatTools;
 public abstract class AbstractReader<M extends Metadata>
   extends AbstractFormatHandler implements Reader<M> {
 
+  // -- Constants --
+  
+  /** Default thumbnail width and height. */
+  protected static final int THUMBNAIL_DIMENSION = 128;
+  
   // -- Fields --
+  
   /** Metadata values. */
-  protected M[] metadata;
+
+  protected M metadata;
+  
+  /** Whether or not to group multi-file formats. */
+  protected boolean group = true;
 
   /** Current file. */
   protected RandomAccessInputStream in;
@@ -34,236 +45,105 @@ public abstract class AbstractReader<M extends Metadata>
   /** Constructs a reader with the given name and default suffix */
   public AbstractReader(String format, String suffix) {
     super(format, suffix);
-    // TODO Auto-generated constructor stub
   }
 
   /** Constructs a reader with the given name and default suffixes */
   public AbstractReader(String format, String[] suffixes) {
     super(format, suffixes);
-    // TODO Auto-generated constructor stub
   }
 
   // -- Reader API Methods --
-  public void setMetadataArray(M[] meta) {
-    this.metadata = meta;
+  
+  /* @see Reader#openBytes(int, int) */
+  public byte[] openBytes(final int iNo, final int no) throws FormatException, IOException {
+    return openBytes(iNo, no, 0, 0, metadata.getSizeX(iNo), metadata.getSizeY(iNo));
   }
 
-  public M[] getMetadataArray() {
-    return this.metadata;
-  }
-
-  /* @see IFormatReader#isIndexed() */
-  public boolean isIndexed() {
-    FormatTools.assertStream(in, true, 1);
-    return metadata[series].isIndexed();
-  }
-
-  /* @see IFormatReader#isInterleaved() */
-  public boolean isInterleaved() {
-    return isInterleaved(0);
-  }
-
-  /* @see IFormatReader#isInterleaved(int) */
-  public boolean isInterleaved(int subC) {
-    FormatTools.assertStream(in, true, 1);
-    return metadata[series].isInterleaved();
-  }
-
-  /* @see IFormatReader#get8BitLookupTable() */
-  public byte[][] get8BitLookupTable() throws FormatException, IOException {
-    return null;
-  }
-
-  /* @see IFormatReader#get16BitLookupTable() */
-  public short[][] get16BitLookupTable() throws FormatException, IOException {
-    return null;
-  }
-
-  /* @see IFormatReader.isLittleEndian() */
-  public boolean isLittleEndian() {
-    FormatTools.assertStream(in, true, 1);
-    return metadata[series].isLittleEndian();
-  }
-
-  /* @see Parser#setSeries(int) */
-  public void setSeries(int no) {
-    if (no < 0 || no >= getSeriesCount()) {
-      throw new IllegalArgumentException("Invalid series: " + no);
-    }
-    series = no;
-  }
-
-  /* @see Parser#getSeries() */
-  public int getSeries() {
-    return series;
-  }
-
-  /* @see IFormatReader#getEffectiveSizeC() */
-  public int getEffectiveSizeC() {
-    // NB: by definition, imageCount == effectiveSizeC * sizeZ * sizeT
-    int sizeZT = getSizeZ() * getSizeT();
-    if (sizeZT == 0) return 0;
-    return getImageCount() / sizeZT;
-  }
-
-  @Override
-  public int getRGBChannelCount() {
-    int effSizeC = getEffectiveSizeC();
-    if (effSizeC == 0) return 0;
-    return getSizeC() / effSizeC;
-  }
-
-  @Override
-  public int getSizeX() {
-    FormatTools.assertStream(in, true, 1);
-    return metadata[series].getSizeX();
-  }
-
-  @Override
-  public int getSizeY() {
-    FormatTools.assertStream(in, true, 1);
-    return metadata[series].getSizeY();
-  }
-
-  @Override
-  public int getSizeZ() {
-    FormatTools.assertStream(in, true, 1);
-    return metadata[series].getSizeZ();
-  }
-
-  @Override
-  public int getSizeC() {
-    FormatTools.assertStream(in, true, 1);
-    return metadata[series].getSizeC();
-  }
-
-  @Override
-  public int getSizeT() {
-    FormatTools.assertStream(in, true, 1);
-    return metadata[series].getSizeT();
-  }
-
-  @Override
-  public int getImageCount() {
-    FormatTools.assertStream(in, true, 1);
-    return metadata[series].getImageCount();
-  }
-
-  @Override
-  public int getPixelType() {
-    // TODO Auto-generated method stub
-    return 0;
-  }
-
-  @Override
-  public int getBitsPerPixel() {
-    // TODO Auto-generated method stub
-    return 0;
-  }
-
-  @Override
-  public int[] getChannelDimLengths() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public String[] getChannelDimTypes() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public int getThumbSizeX() {
-    // TODO Auto-generated method stub
-    return 0;
-  }
-
-  @Override
-  public int getThumbSizeY() {
-    // TODO Auto-generated method stub
-    return 0;
-  }
-
-  @Override
-  public boolean isThumbnailSeries() {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public byte[] openThumbBytes(final int no)
+  /* @see Reader#openBytes(int, int, int, int, int, int) */
+  public byte[] openBytes(int iNo, int no, int x, int y, int w, int h)
     throws FormatException, IOException
   {
-    // TODO Auto-generated method stub
+    int bpp = FormatTools.getBytesPerPixel(metadata.getPixelType(iNo));
+    int ch = metadata.getRGBChannelCount(iNo);
+    byte[] newBuffer = new byte[w * h * ch * bpp];
+    return openBytes(iNo, no, newBuffer, x, y, w, h);
+  }
+
+  /* @see Reader#openBytes(int, int, byte[]) */
+  public byte[] openBytes(int iNo, int no, byte[] buf)
+    throws FormatException, IOException
+  {
+    return openBytes(iNo, no, buf, 0, 0, metadata.getSizeX(iNo), metadata.getSizeY(iNo));
+  }
+
+  /* @see Reader#openBytes(int, int, byte[], int, int, int, int) */
+  public abstract byte[] openBytes(int iNo, int no, byte[] buf, int x, int y, int w,
+    int h) throws FormatException, IOException;
+  
+  /* @see Reader#openPlane(int, int, int, int, int, int int) */
+  public Object openPlane(int iNo, int no, int x, int y, int w, int h)
+    throws FormatException, IOException
+  {
+    // NB: Readers use byte arrays by default as the native type.
+    return openBytes(iNo, no, x, y, w, h);
+  }
+  
+  /* @see Reader#openThumbBytes(int) */
+  public byte[] openThumbBytes(final int iNo, final int no)
+    throws FormatException, IOException
+  {
+    FormatTools.assertStream(in, true, 1);
+    /* TODO move FormatTools implementation here 
+    return FormatTools.openThumbBytes(this, no); */
     return null;
   }
-
-  @Override
-  public int getSeriesCount() {
-    FormatTools.assertStream(in, true, 1);
-    return metadata.length;
+  
+  /* @see Reader#setGroupFiles(boolean) */
+  public void setGroupFiles(final boolean groupFiles) {
+    group = groupFiles;
   }
-
-  @Override
-  public void setGroupFiles(final boolean group) {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
+  
+  /* @see Reader#isGroupFiles() */
   public boolean isGroupFiles() {
-    // TODO Auto-generated method stub
-    return false;
+    FormatTools.assertStream(in, false, 1);
+    return group;
   }
-
-  @Override
+  
+  /* @see Reader#fileGroupOption(String) */
   public int fileGroupOption(final String id)
     throws FormatException, IOException
   {
-    // TODO Auto-generated method stub
-    return 0;
+    return FormatTools.CANNOT_GROUP;
+  }
+  
+  /* @see Reader#setMetadata(M) */
+  public void setMetadata(M meta) {
+    this.metadata = meta;
   }
 
-  @Override
-  public String[] getUsedFiles() {
-    // TODO Auto-generated method stub
-    return null;
+  /* @see Reader#getMetadata() */
+  public M getMetadata() {
+    return this.metadata;
   }
 
-  @Override
-  public String[] getUsedFiles(final boolean noPixels) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public String[] getSeriesUsedFiles() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public String[] getSeriesUsedFiles(final boolean noPixels) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public FileInfo[] getAdvancedUsedFiles(final boolean noPixels) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public FileInfo[] getAdvancedSeriesUsedFiles(final boolean noPixels) {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
+  /* @see Reader#getCurrentFile() */
   public String getCurrentFile() {
-    return currentId;
+
+    FormatTools.assertStream(in, true, 1);
+    return in.getFileName();
+  }
+  
+  /* @see Reader#close(boolean) */
+  public void close(boolean fileOnly) throws IOException {
+    if (in != null) in.close();
+    if (!fileOnly) {
+      in = null;
+    }
+  }
+  
+  /* @see Reader#close() */
+  public void close() throws IOException {
+    close(false);
   }
 
   @Override
@@ -324,32 +204,6 @@ public abstract class AbstractReader<M extends Metadata>
     return false;
   }
 
-  @Override
-  public byte[] openBytes(final int no) throws FormatException, IOException {
-    return openBytes(no, 0, 0, getSizeX(), getSizeY());
-  }
-
-  @Override
-  public byte[] openBytes(int no, int x, int y, int w, int h)
-    throws FormatException, IOException
-  {
-    int bpp = FormatTools.getBytesPerPixel(getPixelType());
-    int ch = getRGBChannelCount();
-    byte[] newBuffer = new byte[w * h * ch * bpp];
-    return openBytes(no, newBuffer, x, y, w, h);
-  }
-
-  @Override
-  public byte[] openBytes(int no, byte[] buf)
-    throws FormatException, IOException
-  {
-    return openBytes(no, buf, 0, 0, getSizeX(), getSizeY());
-  }
-
-  @Override
-  public abstract byte[] openBytes(int no, byte[] buf, int x, int y, int w, int h)
-    throws FormatException, IOException;
-
   // -- AbstractReader Methods --
 
   /* TODO seems a bit off... if we write to an output stream, do we need to know if a filename is valid? 
@@ -358,11 +212,34 @@ public abstract class AbstractReader<M extends Metadata>
     return checkSuffix(name, suffixes);
   }
 
-  protected void setCurrentId(String id) {
-    this.currentId = id;
-  }
 
   protected void setIn(RandomAccessInputStream stream) {
+    this.in = stream;
+  }
+
+  /**
+   * Sets the source for this reader to read from.
+   * @param file
+   * @throws IOException 
+   */
+  public void setSource(File file) throws IOException {
+    setSource(file.getName());
+  }
+
+  /**
+   * Sets the source for this reader to read from.
+   * @param fileName
+   * @throws IOException 
+   */
+  public void setSource(String fileName) throws IOException {
+    setSource(new RandomAccessInputStream(fileName));
+  }
+
+  /**
+   * Sets the source for this reader to read from.
+   * @param in
+   */
+  public void setSource(RandomAccessInputStream stream) {
     this.in = stream;
   }
 }

@@ -1,114 +1,123 @@
 package ome.scifio;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.io.Serializable;
 import java.util.Hashtable;
-import java.util.Map;
-
-import loci.formats.FormatException;
-import loci.formats.FormatTools;
 
 /**
  * Interface for all SciFIO Metadata objects.
+ * Based on the format, a Metadata object can
+ * be a single N-dimensional collection of bytes
+ * (an image) or a list of multiple images.
  *
  * <dl><dt><b>Source code:</b></dt>
  * <dd><a href="">Trac</a>,
  * <a href="">Gitweb</a></dd></dl>
  */
-public interface Metadata {
-  // -- Constants --
-  /** Allows for N-dimensional tracking */
-  final Map<String, Integer> dimensionSizes = new HashMap<String, Integer>();
+public interface Metadata extends Serializable {
 
-  // -- Metadata API methods --
+  /** Gets whether the data of the image at the given index is 
+   *  in little-endian format.
+   *  @param iNo the index of the desired image within the dataset
+   */
+  boolean isLittleEndian(int iNo);
+  
+  /** Gets the size of the X dimension of the image at the given index.
+   * @param iNo the index of the desired image within the dataset
+   */
+  int getSizeX(int iNo);
 
-  /** Determines the number of image planes in the current file. */
-  int getImageCount();
+  /** Gets the size of the Y dimension of the image at the given index.
+   * @param iNo the index of the desired image within the dataset
+   */
+  int getSizeY(int iNo);
 
-  /** Sets whether or not the channels in an image are interleaved. */
-  void setInterleaved(boolean interleaved);
+  /** Gets the size of the Z dimension of the image at the given index.
+   * @param iNo the index of the desired image within the dataset
+   */
+  int getSizeZ(int iNo);
 
-  /** Gets whether or not the channels in an image are interleaved. */
-  boolean isInterleaved();
+  /** Gets the size of the C dimension of the image at the given index.
+   * @param iNo the index of the desired image within the dataset
+   */
+  int getSizeC(int iNo);
 
-  /** Gets the size of the X dimension. */
-  int getSizeX();
-
-  /** Gets the size of the Y dimension. */
-  int getSizeY();
-
-  /** Gets the size of the Z dimension. */
-  int getSizeZ();
-
-  /** Gets the size of the C dimension. */
-  int getSizeC();
-
-  /** Gets the size of the T dimension. */
-  int getSizeT();
-
+  /** Gets the size of the T dimension of the image at the given index.
+   * @param iNo the index of the desired image within the dataset
+   */
+  int getSizeT(int iNo);
+  
   /**
-   * Gets the pixel type.
+   * Gets the pixel type of the image at the given index.
+   * @param iNo the index of the desired image within the dataset
    * @return the pixel type as an enumeration from {@link FormatTools}
    * <i>static</i> pixel types such as {@link FormatTools#INT8}.
    */
-  int getPixelType();
+  int getPixelType(int iNo);
+  
+  /**
+   * Gets whether or not the channels of the image at the given index are interleaved.
+   * This method exists because X and Y must appear first in the dimension order.
+   * For interleaved data, {@link #getDimensionOrder()} returns XYCTZ or XYCZT,
+   * and this method returns true.
+   *
+   * Note that this flag returns whether or not the data returned by
+   * {@link #openBytes(int)} is interleaved.  In most cases, this will
+   * match the interleaving in the original file, but for some formats (e.g.
+   * TIFF) channel re-ordering is done internally and the return value of
+   * this method will not match what is in the original file.
+   * 
+   * @param iNo the index of the desired image within the dataset
+   */
+  boolean isInterleaved(int iNo);
+  
+  /**
+   * Gets whether the planes of the image at the given index are indexed color.
+   * This value has no impact on {@link #getSizeC()},
+   * {@link #getEffectiveSizeC()} or {@link #getRGBChannelCount()}.
+   * 
+   * @param iNo the index of the desired image within the dataset
+   */
+  boolean isIndexed(int iNo);
+  
+  /**
+   * Gets the 8-bit color lookup table associated with
+   * the image at the given index's planes.
+   * If no image planes have been opened, or if {@link #isIndexed()} returns
+   * false, then this may return null. Also, if {@link #getPixelType()} returns
+   * anything other than {@link FormatTools#INT8} or {@link FormatTools#UINT8},
+   * this method will return null.
+   * 
+   * @param iNo the index of the desired image within the dataset
+   */
+  byte[][] get8BitLookupTable(int iNo) throws FormatException, IOException;
 
   /**
-   * Gets the number of valid bits per pixel. The number of valid bits per
-   * pixel is always less than or equal to the number of bits per pixel
-   * that correspond to {@link #getPixelType()}.
+   * Gets the 16-bit color lookup table associated with
+   * the image at the given index's planes.
+   * If no image planes have been opened, or if {@link #isIndexed()} returns
+   * false, then this may return null. Also, if {@link #getPixelType()} returns
+   * anything other than {@link FormatTools#INT16} or {@link
+   * FormatTools#UINT16}, this method will return null.
+   * 
+   * @param iNo the index of the desired image within the dataset
    */
-  int getBitsPerPixel();
-
-  /**
-   * Gets the effective size of the C dimension, guaranteeing that
-   * getEffectiveSizeC() * getSize("Z") * getSize("T") == getImageCount()
-   * regardless of the result of isRGB().
-   */
-  int getEffectiveSizeC();
-
+  short[][] get16BitLookupTable(int iNo) throws FormatException, IOException;
+  
   /**
    * Gets the number of channels returned with each call to openBytes.
    * The most common case where this value is greater than 1 is for interleaved
    * RGB data, such as a 24-bit color image plane. However, it is possible for
    * this value to be greater than 1 for non-interleaved data, such as an RGB
    * TIFF with Planar rather than Chunky configuration.
+   * 
+   * @param iNo the index of the desired image within the dataset
    */
-  int getRGBChannelCount();
-
-  /** Gets whether the data is in little-endian format. */
-  boolean isLittleEndian();
-
-  /**
-   * Gets whether the image planes are indexed color.
-   * This value has no impact on {@link #getSizeC()},
-   * {@link #getEffectiveSizeC()} or {@link #getRGBChannelCount()}.
-   */
-  boolean isIndexed();
-
-  /**
-   * Returns false if {@link #isIndexed()} is false, or if {@link #isIndexed()}
-   * is true and the lookup table represents "real" color data. Returns true
-   * if {@link #isIndexed()} is true and the lookup table is only present to aid
-   * in visualization.
-   */
-  boolean isFalseColor();
-
-  /**
-   * Obtains the specified metadata field's value for the current file.
-   * @param field the name associated with the metadata field
-   * @return the value, or null if the field doesn't exist
-   */
-  Object getMetadataValue(String field);
-
-  /**
-   * Obtains the specified metadata field's value for the current series
-   * in the current file.
-   * @param field the name associated with the metadata field
-   * @return the value, or null if the field doesn't exist
-   */
-  Object getSeriesMetadataValue(String field);
-
+  int getRGBChannelCount(int iNo);
+  
+  /** Gets the number of images in this dataset. */
+  int getImageCount();
+  
   /**
    * Obtains the hashtable containing the metadata field/value pairs from
    * the current file.
@@ -116,46 +125,35 @@ public interface Metadata {
    * from the file
    */
   Hashtable<String, Object> getGlobalMetadata();
-
+  
   /**
    * Obtains the hashtable containing metadata field/value pairs from the
    * current series in the current file.
-   */
-  Hashtable<String, Object> getSeriesMetadata();
-
-  /** Obtains the core metadata values for the current file. */
-  CoreMetadata[] getCoreMetadata();
-
-  /** Returns true if this is a single-file format. */
-  boolean isSingleFile(String id) throws FormatException, IOException;
-
-  /** Returns a list of scientific domains in which this format is used. */
-  String[] getPossibleDomains(String id) throws FormatException, IOException;
-
-  /** Returns true if this format supports multi-file datasets. */
-  boolean hasCompanionFiles();
-
-  /** Returns true if this format's metadata is completely parsed. */
-  boolean isMetadataComplete();
-
-  // -- Deprecated methods --
-
-  /**
-   * Returns a hashtable containing the union of all of the field/value pairs
-   * in getGlobalMetadata() and getSeriesMetadata(). The series name is
-   * prepended to fields in the getSeriesMetadata() hashtable.
-   *
-   * @deprecated Use #getGlobalMetadata() or #getSeriesMetadata() instead.
-   */
-  Hashtable<String, Object> getMetadata();
-
-  /**
-   * Checks if the image planes in the file have more than one channel per
-   * {@link #openBytes} call.
-   * This method returns true if and only if {@link #getRGBChannelCount()}
-   * returns a value greater than 1.
    * 
-   * @deprecated
+   * @param iNo the index of the desired image within the dataset
    */
-  boolean isRGB();
+  Hashtable<String, Object> getImageMetadata(int iNo);
+  
+  /**
+   * Obtains the specified metadata field's value for the current file.
+   * @param field the name associated with the metadata field
+   * @param iNo the index of the desired image within the dataset
+   * @return the value, or null if the field doesn't exist
+   */
+  Object getMetadataValue(int iNo, String field);
+
+  /**
+   * Obtains the specified metadata field's value for the current series
+   * in the current file.
+   * @param field the name associated with the metadata field
+   * @param iNo the index of the desired image within the dataset
+   * @return the value, or null if the field doesn't exist
+   */
+  Object getImageMetadataValue(int iNo, String field);
+  
+  /**
+   * Resets this Metadata object's values as though it had just been
+   * instantiated.
+   */
+  void clear();
 }

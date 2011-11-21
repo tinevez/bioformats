@@ -23,28 +23,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 package loci.formats.in;
 
-import java.awt.image.BufferedImage;
-import java.awt.image.IndexColorModel;
-import java.awt.image.WritableRaster;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.IOException;
-import java.util.Vector;
-import java.util.zip.CRC32;
-
-import javax.imageio.ImageIO;
-
 import ome.scifio.in.apng.APNGChecker;
 import ome.scifio.in.apng.APNGParser;
 
-import loci.common.DataTools;
 import ome.scifio.io.RandomAccessInputStream;
 import loci.formats.FormatException;
-import loci.formats.FormatTools;
-import loci.formats.MetadataTools;
-import loci.formats.gui.AWTImageTools;
-import loci.formats.meta.MetadataStore;
+
 
 /**
  * APNGReader is the file format reader for
@@ -60,26 +45,16 @@ public class APNGReader extends BIFormatReader {
 
   // -- Constants --
 
-  private static final byte[] PNG_SIGNATURE = new byte[] {
-    (byte) 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a
-  };
-
   // -- Fields --
-
-  private Vector<int[]> frameCoordinates;
-
-  private byte[][] lut;
-
-  private BufferedImage lastImage;
-  private int lastImageIndex = -1;
 
   // -- Constructor --
 
   /** Constructs a new APNGReader. */
   public APNGReader() {
     super("Animated PNG", "png");
-	checker = new APNGChecker();
-	parser = new APNGParser();
+    checker = new APNGChecker();
+    parser = new APNGParser();
+	  reader = new ome.scifio.in.apng.APNGReader();
   }
 
   // -- IFormatReader API methods --
@@ -91,13 +66,25 @@ public class APNGReader extends BIFormatReader {
   }
 
   /* @see loci.formats.IFormatReader#get8BitLookupTable() */
+  @Deprecated
   public byte[][] get8BitLookupTable() {
-    FormatTools.assertId(currentId, true, 1);
-    return lut;
+    try {
+      return reader.getMetadata().get8BitLookupTable(0);
+    }
+    catch (ome.scifio.FormatException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    catch (IOException e) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
+    return null;
   }
   
   /* @see IFormatReader#openBytes(int) */
   @Override
+  @Deprecated
   public byte[] openBytes(int no) throws FormatException, IOException {
     try {
 		return reader.openBytes(no);
@@ -108,6 +95,7 @@ public class APNGReader extends BIFormatReader {
 
   /* @see IFormatReader#openBytes(int, byte[]) */
   @Override
+  @Deprecated
   public byte[] openBytes(int no, byte[] buf)
     throws FormatException, IOException
   {
@@ -120,6 +108,7 @@ public class APNGReader extends BIFormatReader {
 
   /* @see IFormatReader#openBytes(int, int, int, int, int) */
   @Override
+  @Deprecated
   public byte[] openBytes(int no, int x, int y, int w, int h)
     throws FormatException, IOException
   {
@@ -131,6 +120,7 @@ public class APNGReader extends BIFormatReader {
   }
 
   /* @see loci.formats.IFormatReader#openPlane(int, int, int, int, int int) */
+  @Deprecated
   public Object openPlane(int no, int x, int y, int w, int h)
     throws FormatException, IOException
   {
@@ -143,9 +133,8 @@ public class APNGReader extends BIFormatReader {
 
   /* @see loci.formats.IFormatReader#close(boolean) */
   public void close(boolean fileOnly) throws IOException {
-    //super.close(fileOnly);
     parser.close(fileOnly);
-    //TODO reader.close(fileOnly);
+    reader.close(fileOnly);
   }
 
   // -- Internal FormatReader methods --
@@ -154,19 +143,13 @@ public class APNGReader extends BIFormatReader {
   @Deprecated
   protected void initFile(String id) throws FormatException, IOException {
     super.initFile(id);
+    APNGMetadata meta = null;
     try {
-		parser.parse(id);
-	} catch (ome.scifio.FormatException e) {
-		throw new FormatException(e.getCause());
-	}
-	reader = new ome.scifio.in.apng.APNGReader((APNGParser)parser);
+      meta = (APNGMetadata) parser.parse(id);
+    } catch (ome.scifio.FormatException e) {
+      throw new FormatException(e.getCause());
+    }
+    reader.setSource(id);
+    ((ome.scifio.in.apng.APNGReader)reader).setMetadata(meta);
   }
-  
-  // -- Helper Methods --
-  
-  private long computeCRC(byte[] buf, int len) {
-	  CRC32 crc = new CRC32();
-	  crc.update(buf, 0, len);
-	  return crc.getValue();
-	  }
 }

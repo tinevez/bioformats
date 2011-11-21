@@ -20,7 +20,6 @@ public class APNGChecker extends AbstractChecker<APNGMetadata> {
   public APNGChecker() {
     super("Animated PNG", "png");
     suffixNecessary = false;
-    // TODO Auto-generated constructor stub
   }
 
   // -- Checker API Methods --

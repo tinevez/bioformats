@@ -254,25 +254,25 @@ public class FormatTools {
   {
     assertStream(r.getStream(), true, 2);
     checkPlaneNumber(r, no);
-    checkTileSize(r, x, y, w, h);
-    if (bufLength >= 0) checkBufferSize(r, bufLength, w, h);
+    checkTileSize(r, x, y, w, h, no);
+    if (bufLength >= 0) checkBufferSize(r, bufLength, w, h, no);
   }
 
   /** Checks that the given plane number is valid for the given reader. */
   public static void checkPlaneNumber(Reader r, int no) throws FormatException {
-    int imageCount = r.getImageCount();
+    int imageCount = r.getMetadata().getImageCount();
     if (no < 0 || no >= imageCount) {
-      throw new FormatException("Invalid image number: " + no + " (series=" +
-        r.getSeries() + ", imageCount=" + imageCount + ")");
+      throw new FormatException("Invalid image number: " + no + " (" +/* TODO series=" +
+        r.getMetadata().getSeries() + ", */"imageCount=" + imageCount + ")");
     }
   }
 
   /** Checks that the given tile size is valid for the given reader. */
-  public static void checkTileSize(Reader r, int x, int y, int w, int h)
+  public static void checkTileSize(Reader r, int x, int y, int w, int h, int no)
     throws FormatException
   {
-    int width = r.getSizeX();
-    int height = r.getSizeY();
+    int width = r.getMetadata().getSizeX(no);
+    int height = r.getMetadata().getSizeY(no);
     if (x < 0 || y < 0 || w < 0 || h < 0 || (x + w) > width || (y + h) > height)
     {
       throw new FormatException("Invalid tile size: x=" + x + ", y=" + y +
@@ -280,8 +280,8 @@ public class FormatTools {
     }
   }
 
-  public static void checkBufferSize(Reader r, int len) throws FormatException {
-    checkBufferSize(r, len, r.getSizeX(), r.getSizeY());
+  public static void checkBufferSize(int no, Reader r, int len) throws FormatException {
+    checkBufferSize(r, len, r.getMetadata().getSizeX(no), r.getMetadata().getSizeY(no), no);
   }
 
   /**
@@ -289,10 +289,10 @@ public class FormatTools {
    * image as returned by the given reader.
    * @throws FormatException if the buffer is too small
    */
-  public static void checkBufferSize(Reader r, int len, int w, int h)
+  public static void checkBufferSize(Reader r, int len, int w, int h, int no)
     throws FormatException
   {
-    int size = getPlaneSize(r, w, h);
+    int size = getPlaneSize(r, w, h, no);
     if (size > len) {
       throw new FormatException("Buffer too small (got " + len + ", expected " +
         size + ").");
@@ -300,13 +300,13 @@ public class FormatTools {
   }
 
   /** Returns the size in bytes of a single plane. */
-  public static int getPlaneSize(Reader r) {
-    return getPlaneSize(r, r.getSizeX(), r.getSizeY());
+  public static int getPlaneSize(Reader r, int no) {
+    return getPlaneSize(r, r.getMetadata().getSizeX(no), r.getMetadata().getSizeY(no), no);
   }
 
   /** Returns the size in bytes of a w * h tile. */
-  public static int getPlaneSize(Reader r, int w, int h) {
-    return w * h * r.getRGBChannelCount() * getBytesPerPixel(r.getPixelType());
+  public static int getPlaneSize(Reader r, int w, int h, int no) {
+    return w * h * r.getMetadata().getRGBChannelCount(no) * getBytesPerPixel(r.getMetadata().getPixelType(no));
   }
 
   // -- Utility methods - pixel types --

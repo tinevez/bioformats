@@ -2,7 +2,6 @@ package ome.scifio;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Hashtable;
 
 import ome.scifio.io.RandomAccessInputStream;
 
@@ -25,7 +24,8 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
    * @return most specific metadata for this type
    * @throws IOException 
    */
-  M[] parse(String fileName) throws IOException, FormatException;
+
+  M parse(String fileName) throws IOException, FormatException;
 
   /**
    * Wraps the file in a File handle and returns parse(RandomAccessInputStream).
@@ -35,7 +35,7 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
    * @return most specific metadata for this type
    * @throws IOException 
    */
-  M[] parse(File file) throws IOException, FormatException;
+  M parse(File file) throws IOException, FormatException;
 
   /**
    * Returns the most specific Metadata object possible, for the provided RandomAccessInputStream.
@@ -44,7 +44,8 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
    * @return most specific metadata for this type   
    * @throws IOException 
    */
-  M[] parse(RandomAccessInputStream stream) throws IOException, FormatException;
+   M parse(RandomAccessInputStream stream)
+    throws IOException, FormatException;
 
   /**
    * Closes the currently open file. If the flag is set, this is all that
@@ -52,12 +53,18 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
    * {@link IFormatHandler#close()}.
    */
   void close(boolean fileOnly) throws IOException;
+  
+  /** Closes currently open file(s) and frees allocated memory. */
+  public void close() throws IOException;
 
   /** Gets the number of series in this file. */
-  int getSeriesCount();
+  //TODO int getSeriesCount();
 
   /** Activates the specified series. */
-  void setSeries(int no);
+  //TODO void setSeries(int no);
+  
+  /** Gets the currently active series. */
+  //TODO int getSeries();
 
   /**
    * Specifies whether or not to save proprietary metadata
@@ -72,14 +79,14 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
   boolean isOriginalMetadataPopulated();
 
   /** Returns an array of filenames needed to open this dataset. */
-  RandomAccessInputStream[] getUsedFiles();
+  String[] getUsedFiles();
 
   /**
    * Returns an array of filenames needed to open this dataset.
    * If the 'noPixels' flag is set, then only files that do not contain
    * pixel data will be returned.
    */
-  RandomAccessInputStream[] getUsedFiles(boolean noPixels);
+  String[] getUsedFiles(boolean noPixels);
 
   /**
    * Specifies whether ugly metadata (entries with unprintable characters,
@@ -92,30 +99,31 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
    * and extremely large entries) are discarded from the metadata table.
    */
   boolean isMetadataFiltered();
+  
+  /** Returns an array of filenames needed to open the indicated image index. */
+  String[] getImageUsedFiles(int image);
 
   /**
-   * Gets whether the image planes are indexed color.
-   * This value has no impact on {@link #getSizeC()},
-   * {@link #getEffectiveSizeC()} or {@link #getRGBChannelCount()}.
+   * Returns an array of filenames needed to open the indicated image.
+   * If the 'noPixels' flag is set, then only files that do not contain
+   * pixel data will be returned.
    */
-  boolean isIndexed();
-
-  /** Determines the number of image planes in the current file. */
-  int getImageCount();
+  String[] getImageUsedFiles(int image, boolean noPixels);
+  
 
   /**
-   * Obtains the hashtable containing the metadata field/value pairs from
-   * the current file.
-   * @return the hashtable containing all non-series-specific metadata
-   * from the file
+   * Returns an array of FileInfo objects representing the files needed
+   * to open this dataset.
+   * If the 'noPixels' flag is set, then only files that do not contain
+   * pixel data will be returned.
    */
-  public Hashtable<String, Object> getGlobalMetadata();
+  FileInfo[] getAdvancedUsedFiles(boolean noPixels);
 
   /**
-   * Returns the current id for the file being parsed.
-   * @return
+   * Returns an array of FileInfo objects representing the files needed to
+   * open the current series.
+   * If the 'noPixels' flag is set, then only files that do not contain
+   * pixel data will be returned.
    */
-  public String getCurrentId();
-
-  public M[] getMetadataArray();
+  FileInfo[] getAdvancedSeriesUsedFiles(boolean noPixels);
 }

@@ -29,7 +29,7 @@ import java.awt.image.Raster;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
 
-import loci.common.DataTools;
+import ome.scifio.common.DataTools;
 
 /**
  * ColorModel that handles 16 bits per channel lookup tables.

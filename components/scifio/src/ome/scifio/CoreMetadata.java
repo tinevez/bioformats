@@ -1,266 +1,161 @@
 package ome.scifio;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Hashtable;
 
-import loci.formats.FormatException;
-
 /**
- * Format-agnostic metadata representation, with no
- * backing XML information (minimum information knowable
- * by SCIFIO).
+ * CoreMetadata represents the metadata for a complete dataset, consisting of an
+ * arbitrary number of images (and corresponding CoreImageMetadata objects).
  *
  */
-public class CoreMetadata extends AbstractMetadata {
+public class CoreMetadata extends ArrayList<CoreImageMetadata> implements Metadata {
 
+  
   // -- Fields --
-  /** Width (in pixels) of images in this series. */
-  public int sizeX;
-
-  /** Height (in pixels) of images in this series. */
-  public int sizeY;
-
-  /** Number of Z sections. */
-  public int sizeZ;
-
-  /** Number of channels. */
-  public int sizeC;
-
-  /** Number of timepoints. */
-  public int sizeT;
-
-  /** Width (in pixels) of thumbnail images in this series. */
-  public int thumbSizeX;
-
-  /** Height (in pixels) of thumbnail images in this series. */
-  public int thumbSizeY;
-
-  /**
-   * Describes the number of bytes per pixel.  Must be one of the <i>static</i>
-   * pixel types (e.g. <code>INT8</code>) in {@link loci.formats.FormatTools}.
-   */
-  public int pixelType;
-
-  /** Number of valid bits per pixel. */
-  public int bitsPerPixel;
-
-  /** Total number of images. */
-  public int imageCount;
-
-  /** Length of each subdimension of C. */
-  public int[] cLengths;
-
-  /** Name of each subdimension of C. */
-  public String[] cTypes;
-
-  /**
-   * Order in which dimensions are stored.  Must be one of the following:<ul>
-   *  <li>XYCZT</li>
-   *  <li>XYCTZ</li>
-   *  <li>XYZCT</li>
-   *  <li>XYZTC</li>
-   *  <li>XYTCZ</li>
-   *  <li>XYTZC</li>
-   * </ul>
-   */
-  public String dimensionOrder;
-
-  /**
-   * Indicates whether or not we are confident that the
-   * dimension order is correct.
-   */
-  public boolean orderCertain;
-
-  /**
-   * Indicates whether or not the images are stored as RGB
-   * (multiple channels per plane).
-   */
-  public boolean rgb;
-
-  /** Indicates whether or not each pixel's bytes are in little endian order. */
-  public boolean littleEndian;
-
-  /**
-   * True if channels are stored RGBRGBRGB...; false if channels are stored
-   * RRR...GGG...BBB...
-   */
-  public boolean interleaved;
-
-  /** Indicates whether or not the images are stored as indexed color. */
-  public boolean indexed;
-
-  /** Indicates whether or not we can ignore the color map (if present). */
-  public boolean falseColor = true;
-
-  /**
-   * Indicates whether or not we are confident that all of the metadata stored
-   * within the file has been parsed.
-   */
-  public boolean metadataComplete;
-
-  /** Non-core metadata associated with this series. */
-  public Hashtable<String, Object> seriesMetadata;
-
-  /**
-   * Indicates whether or not this series is a lower-resolution copy of
-   * another series.
-   */
-  public boolean thumbnail;
-
-  // -- Constructors --
-
-  public CoreMetadata() {
-    seriesMetadata = new Hashtable<String, Object>();
-  }
-
+  
+  /** Contains global metadata key, value pairs for this dataset */
+  Hashtable<String, Object> globalMeta;
+  
   /**
    * 
    */
   private static final long serialVersionUID = 1L;
 
+  // -- Constructors --
+  
+  public CoreMetadata() {
+    globalMeta = new Hashtable<String, Object>();
+  }
+
   // -- Metadata API Methods --
-  @Override
-  public Object getMetadataValue(String field) {
-    // TODO Auto-generated method stub
-    return null;
+  
+  /* @see Metadata#getMetadataValue() */
+  public Object getMetadataValue(int no, String field) {
+    return globalMeta.get(field);
   }
+  
+  /* @see Metadata#getImageMetadataValue() */
+  public Object getImageMetadataValue(int no, String field) {
+    return get(no).imageMetadata.get(field);
 
-  @Override
-  public Object getSeriesMetadataValue(String field) {
-    // TODO Auto-generated method stub
-    return null;
   }
-
-  @Override
+  
+  /* @see Metadata#getGlobalMetadata() */
   public Hashtable<String, Object> getGlobalMetadata() {
-    // TODO Auto-generated method stub
-    return null;
+    return this.globalMeta;
   }
 
-  @Override
-  public Hashtable<String, Object> getSeriesMetadata() {
-    // TODO Auto-generated method stub
-    return null;
+  /* @see Metadata#getImageMetadata() */
+  public Hashtable<String, Object> getImageMetadata(int no) {
+    return get(no).imageMetadata;
   }
-
-  @Override
-  public CoreMetadata[] getCoreMetadata() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public Hashtable<String, Object> getMetadata() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
+  
+  /* @see Metadata#getImageCount() */
   public int getImageCount() {
-    return this.imageCount;
+    return this.size();
+  }
+  
+  /* @see Metadata#isInterleaved(int) */
+  public boolean isInterleaved(int no) {
+    return get(no).interleaved;
+  }
+  
+  /* @see Metadata#getPixelType(int) */
+  public int getPixelType(int no) {
+    return get(no).pixelType;
+  }
+  
+  public int getBitsPerPixel(int no) {
+    return get(no).bitsPerPixel;
+  }
+  
+  public int getEffectiveSizeC(int no) {
+    int sizeZT = getSizeZ(no) * getSizeT(no);
+    if (sizeZT == 0) return 0;
+    return getImageCount() / sizeZT;
+  }
+  
+  /* @see Metadata#getRGBChannelCount(int) */
+  public int getRGBChannelCount(int no) {
+    int effSizeC = getEffectiveSizeC(no);
+    if (effSizeC == 0) return 0;
+    return getSizeC(no) / effSizeC;
+  }
+  
+  /* @see Metadata#isLittleEndian(int) */
+  public boolean isLittleEndian(int no) {
+    return get(no).littleEndian;
+  }
+  
+  /* @see Metadata#isIndexed(int) */
+  public boolean isIndexed(int no) {
+    return get(no).indexed;
   }
 
-  @Override
-  public void setInterleaved(boolean interleaved) {
-    this.interleaved = interleaved;
+  /* @see Metadata#getSizeX(int) */
+  public int getSizeX(int no) {
+    return get(no).sizeX;
   }
 
-  @Override
-  public boolean isInterleaved() {
-    return this.interleaved;
+  /* @see Metadata#getSizeY(int) */
+  public int getSizeY(int no) {
+    return get(no).sizeY;
   }
 
-  @Override
-  public int getPixelType() {
-    return this.pixelType;
+  /* @see Metadata#getSizeZ(int) */
+  public int getSizeZ(int no) {
+    return get(no).sizeZ;
   }
 
-  @Override
-  public int getBitsPerPixel() {
-    return this.bitsPerPixel;
+  /* @see Metadata#getSizeC(int) */
+  public int getSizeC(int no) {
+    return get(no).sizeC;
   }
 
-  @Override
-  public int getEffectiveSizeC() {
-    // TODO Auto-generated method stub
-    return 0;
+  /* @see Metadata#getSizeT(int) */
+  public int getSizeT(int no) {
+    return get(no).sizeT;
   }
 
-  @Override
-  public int getRGBChannelCount() {
-    // TODO Auto-generated method stub
-    return 0;
-  }
-
-  @Override
-  public boolean isLittleEndian() {
-    return this.littleEndian;
-  }
-
-  @Override
-  public boolean isIndexed() {
-    return this.indexed;
-  }
-
-  @Override
-  public boolean isFalseColor() {
-    return this.falseColor;
-  }
-
-  @Override
-  public boolean isSingleFile(String id) throws FormatException, IOException {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
-  @Override
-  public String[] getPossibleDomains(String id)
-    throws FormatException, IOException
+  /* @see Metadata#get8BitLookupTable(int) */
+  public byte[][] get8BitLookupTable(int no)
+    throws ome.scifio.FormatException, IOException
   {
     // TODO Auto-generated method stub
     return null;
   }
 
-  @Override
+  /* @see Metadata#get16BitLookupTable(int) */
+  public short[][] get16BitLookupTable(int no)
+    throws ome.scifio.FormatException, IOException
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+  
+  /* TODO not sure if these are necessary
+  public boolean isFalseColor(int no) {
+    return get(no).falseColor;
+  }
+  
+  public boolean isSingleFile() {
+    return this.size() <= 1;
+  }
+  
   public boolean hasCompanionFiles() {
     // TODO Auto-generated method stub
     return false;
   }
 
-  @Override
+  
   public boolean isMetadataComplete() {
     // TODO Auto-generated method stub
     return false;
   }
-
-  @Override
-  public boolean isRGB() {
-    return this.rgb;
+  
+  public boolean isRGB(int no) {
+    return get(no).rgb;
   }
-
-  @Override
-  public int getSizeX() {
-    return this.sizeX;
-  }
-
-  @Override
-  public int getSizeY() {
-    return this.sizeY;
-  }
-
-  @Override
-  public int getSizeZ() {
-    return this.sizeZ;
-  }
-
-  @Override
-  public int getSizeC() {
-    return this.sizeC;
-  }
-
-  @Override
-  public int getSizeT() {
-    return this.sizeT;
-  }
-
+  */
 }

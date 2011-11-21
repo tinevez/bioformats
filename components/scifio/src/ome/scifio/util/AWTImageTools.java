@@ -729,15 +729,15 @@ public final class AWTImageTools {
    * Creates an image from the given byte array, using the given
    * IFormatReader to retrieve additional information.
    */
-  public static BufferedImage openImage(byte[] buf, Reader r, int w, int h)
+  public static BufferedImage openImage(byte[] buf, Reader r, int w, int h, int no)
     throws FormatException, IOException
   {
-    int pixelType = r.getPixelType();
-    boolean little = r.isLittleEndian();
+    int pixelType = r.getMetadata().getPixelType(no);
+    boolean little = r.getMetadata().isLittleEndian(no);
     boolean normal = r.isNormalized();
-    int rgbChanCount = r.getRGBChannelCount();
-    boolean interleaved = r.isInterleaved();
-    boolean indexed = r.isIndexed();
+    int rgbChanCount = r.getMetadata().getRGBChannelCount(no);
+    boolean interleaved = r.getMetadata().isInterleaved(no);
+    boolean indexed = r.getMetadata().isIndexed(no);
 
     if (pixelType == FormatTools.FLOAT) {
       float[] f = (float[]) DataTools.makeDataArray(buf, 4, true, little);
@@ -775,7 +775,7 @@ public final class AWTImageTools {
 
     if (indexed && rgbChanCount == 1) {
       if (pixelType == FormatTools.UINT8 || pixelType == FormatTools.INT8) {
-        byte[][] table = r.get8BitLookupTable();
+        byte[][] table = r.getMetadata().get8BitLookupTable(no);
         if (table != null && table.length > 0 && table[0] != null) {
           int len = table[0].length;
           byte[] dummy = table.length < 3 ? new byte[len] : null;
@@ -788,11 +788,11 @@ public final class AWTImageTools {
       else if (pixelType == FormatTools.UINT16 ||
         pixelType == FormatTools.INT16)
       {
-        short[][] table = r.get16BitLookupTable();
+        short[][] table = r.getMetadata().get16BitLookupTable(no);
         if (table != null && table.length > 0 && table[0] != null) {
           model =
             new Index16ColorModel(
-              16, table[0].length, table, r.isLittleEndian());
+              16, table[0].length, table, r.getMetadata().isLittleEndian(no));
         }
       }
     }
