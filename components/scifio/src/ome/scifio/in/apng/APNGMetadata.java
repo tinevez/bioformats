@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Vector;
 
+import ome.scifio.AbstractMetadata;
 import ome.scifio.FormatException;
 import ome.scifio.Metadata;
 
@@ -13,7 +14,7 @@ import ome.scifio.Metadata;
  * (APNG) images.
  *
  */
-public class APNGMetadata implements Metadata {
+public class APNGMetadata extends AbstractMetadata {
 
 
   // -- Fields --
@@ -247,5 +248,12 @@ public class APNGMetadata implements Metadata {
   /* @see Metadata#getImageMetadataValue() */
   public Object getImageMetadataValue(int no, String field) {
     return this.imageMetadata.get(field);
+  }
+
+  // -- Helper Methods --
+  
+  public void resetMeta() {
+    super.resetMeta(this.getClass());
+    this.imageMetadata = new Hashtable<String, Object>();
   }
 }

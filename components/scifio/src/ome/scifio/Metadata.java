@@ -155,5 +155,5 @@ public interface Metadata extends Serializable {
    * Resets this Metadata object's values as though it had just been
    * instantiated.
    */
-  void clear();
+  void resetMeta(Class<?> type);
 }
