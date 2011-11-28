@@ -148,12 +148,4 @@ public class APNGReader extends BIFormatReader<APNGMetadata> {
     crc.update(buf, 0, len);
     return crc.getValue();
   }
-
-  @Override
-  public byte[] openBytes(int iNo, int no, byte[] buf, int x, int y, int w,
-    int h) throws FormatException, IOException
-  {
-    // TODO Auto-generated method stub
-    return null;
-  }
 }
