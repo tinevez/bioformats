@@ -15,11 +15,11 @@ public class APNGCoreTranslator extends AbstractTranslator<APNGMetadata, CoreMet
 
   @Override
   public void translate(APNGMetadata source, CoreMetadata dest) {
+    dest.resetMeta();
     CoreImageMetadata coreMeta = new CoreImageMetadata();
-    CoreMetadata meta = new CoreMetadata();
-    meta.add(coreMeta);
+    dest.add(coreMeta);
     
-    // TODO use setters.. clear?
+    // TODO use setters..
     coreMeta.sizeX = source.sizeX;
     coreMeta.sizeY = source.sizeY;
     coreMeta.sizeZ = source.sizeZ;
