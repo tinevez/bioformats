@@ -91,6 +91,7 @@ public abstract class AbstractWriter<M extends Metadata>
   protected void checkParams(int no, byte[] buf, int x, int y, int w, int h)
     throws FormatException
   {
+    /*TODO
     MetadataTools.verifyMinimumPopulated(r, no);
 
     if (buf == null) throw new FormatException("Buffer cannot be null.");
@@ -141,5 +142,6 @@ public abstract class AbstractWriter<M extends Metadata>
       throw new FormatException("Unsupported image type '" +
         FormatTools.getPixelTypeString(pixelType) + "'.");
     }
+    */
   }
 }
