@@ -25,6 +25,7 @@ package loci.formats.in;
 
 import java.io.IOException;
 import ome.scifio.in.apng.APNGChecker;
+import ome.scifio.in.apng.APNGMetadata;
 import ome.scifio.in.apng.APNGParser;
 
 import ome.scifio.io.RandomAccessInputStream;
@@ -87,7 +88,7 @@ public class APNGReader extends BIFormatReader {
   @Deprecated
   public byte[] openBytes(int no) throws FormatException, IOException {
     try {
-		return reader.openBytes(no);
+		return reader.openBytes(this.getSeries(), no);
 	} catch (ome.scifio.FormatException e) {
 		throw new FormatException(e);
 	}
@@ -100,7 +101,7 @@ public class APNGReader extends BIFormatReader {
     throws FormatException, IOException
   {
     try {
-		return reader.openBytes(no, buf);
+		return reader.openBytes(this.getSeries(), no, buf);
 	} catch (ome.scifio.FormatException e) {
 		throw new FormatException(e);
 	}
@@ -113,7 +114,7 @@ public class APNGReader extends BIFormatReader {
     throws FormatException, IOException
   {
     try {
-		return reader.openBytes(no, x, y, w, h);
+		return reader.openBytes(this.getSeries(), no, x, y, w, h);
 	} catch (ome.scifio.FormatException e) {
 		throw new FormatException(e);
 	}
@@ -125,7 +126,7 @@ public class APNGReader extends BIFormatReader {
     throws FormatException, IOException
   {
 	  try {
-		return reader.openPlane(no, x, y, w, h);
+		return reader.openPlane(this.getSeries(), no, x, y, w, h);
 	} catch (ome.scifio.FormatException e) {
 		throw new FormatException(e.getCause());
 	}
