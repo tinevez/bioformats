@@ -20,27 +20,27 @@ public class APNGCoreTranslator extends AbstractTranslator<APNGMetadata, CoreMet
     dest.add(coreMeta);
     
     // TODO use setters..
-    coreMeta.sizeX = source.sizeX;
-    coreMeta.sizeY = source.sizeY;
-    coreMeta.sizeZ = source.sizeZ;
-    coreMeta.sizeC = source.sizeC;
-    coreMeta.sizeT = source.sizeT;
-    coreMeta.thumbSizeX = source.thumbSizeX;
-    coreMeta.thumbSizeY = source.thumbSizeY;
-    coreMeta.pixelType = source.pixelType;
-    coreMeta.pixelType = source.bitsPerPixel;
-    coreMeta.cLengths = source.cLengths;
-    coreMeta.cTypes = source.cTypes;
-    coreMeta.dimensionOrder = source.dimensionOrder;
-    coreMeta.orderCertain = source.orderCertain;
-    coreMeta.rgb = source.rgb;
-    coreMeta.littleEndian = source.littleEndian;
-    coreMeta.interleaved = source.interleaved;
-    coreMeta.indexed = source.indexed;
-    coreMeta.falseColor = true;
-    coreMeta.metadataComplete = source.metadataComplete;
-    coreMeta.imageMetadata = source.imageMetadata;
-    coreMeta.thumbnail = source.thumbnail;
+    coreMeta.setSizeX(source.sizeX);
+    coreMeta.setSizeY(source.sizeY);
+    coreMeta.setSizeZ(source.sizeZ);
+    coreMeta.setSizeC(source.sizeC);
+    coreMeta.setSizeT(source.sizeT);
+    coreMeta.setThumbSizeX(source.thumbSizeX);
+    coreMeta.setThumbSizeY(source.thumbSizeY);
+    coreMeta.setPixelType(source.pixelType);
+    coreMeta.setBitsPerPixel(source.bitsPerPixel);
+    coreMeta.setcLengths(source.cLengths);
+    coreMeta.setcTypes(source.cTypes);
+    coreMeta.setDimensionOrder(source.dimensionOrder);
+    coreMeta.setOrderCertain(source.orderCertain);
+    coreMeta.setRgb(source.rgb);
+    coreMeta.setLittleEndian(source.littleEndian);
+    coreMeta.setInterleaved(source.interleaved);
+    coreMeta.setIndexed(source.indexed);
+    coreMeta.setFalseColor(true);
+    coreMeta.setMetadataComplete(source.metadataComplete);
+    coreMeta.setImageMetadata(source.imageMetadata);
+    coreMeta.setThumbnail(source.thumbnail);
   }
 
   // -- MetadataHandler API Methods --
