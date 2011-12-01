@@ -20,6 +20,8 @@ public class CoreMetadata extends AbstractMetadata {
   /** Contains global metadata key, value pairs for this dataset */
   Hashtable<String, Object> globalMeta;
   
+  /** Contains a list of metadata objects for each image in this dataset */
+  @Field(label = "imageMeta", isList = true)
   List<CoreImageMetadata> imageMeta;
   
   /**

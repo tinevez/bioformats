@@ -1,13 +1,12 @@
 package ome.scifio.in.apng;
 
-
 import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Vector;
 
 import ome.scifio.AbstractMetadata;
+import ome.scifio.Field;
 import ome.scifio.FormatException;
-import ome.scifio.Metadata;
 
 /**
  * File format SCIFIO Metadata for Animated Portable Network Graphics
@@ -30,39 +29,49 @@ public class APNGMetadata extends AbstractMetadata {
   @Field(label = "blocks", isList = true)
   protected Vector<APNGChunk> blocks;
 
-  // -- Fields --
+  // -- Common Fields --
 
   /** 8-bit lookup table for this image */
+  @Field(label = "lut")
   protected byte[][] lut;
   
   /** Width (in pixels) of planes in this image. */
+  @Field(label = "sizeX")
   protected int sizeX;
 
   /** Height (in pixels) of planes in this image. */
+  @Field(label = "sizeY")
   protected int sizeY;
 
   /** Number of Z sections. */
+  @Field(label = "sizeZ")
   protected int sizeZ;
 
   /** Number of channels. */
+  @Field(label = "sizeC")
   protected int sizeC;
 
   /** Number of timepoints. */
+  @Field(label = "sizeT")
   protected int sizeT;
 
   /** Width (in pixels) of thumbnail planes in this image. */
+  @Field(label = "thumbSizeX")
   protected int thumbSizeX;
 
   /** Height (in pixels) of thumbnail planes in this image. */
+  @Field(label = "thumbSizeY")
   protected int thumbSizeY;
 
   /**
    * Describes the number of bytes per pixel.  Must be one of the <i>static</i>
    * pixel types (e.g. <code>INT8</code>) in {@link loci.formats.FormatTools}.
    */
+  @Field(label = "pixelType")
   protected int pixelType;
 
   /** Number of valid bits per pixel. */
+  @Field(label = "bitsPerPixel")
   protected int bitsPerPixel;
 
   /** Total number of images. */
@@ -70,9 +79,11 @@ public class APNGMetadata extends AbstractMetadata {
   protected int imageCount = 1; // always 1 for APNG
   
   /** Length of each subdimension of C. */
+  @Field(label = "cLengths")
   protected int[] cLengths;
 
   /** Name of each subdimension of C. */
+  @Field(label = "cTypes")
   protected String[] cTypes;
 
   /**
@@ -85,48 +96,57 @@ public class APNGMetadata extends AbstractMetadata {
    *  <li>XYTZC</li>
    * </ul>
    */
+  @Field(label = "dimensionOrder")
   protected String dimensionOrder;
 
   /**
    * Indicates whether or not we are confident that the
    * dimension order is correct.
    */
+  @Field(label = "orderCertain")
   protected boolean orderCertain;
 
   /**
    * Indicates whether or not the images are stored as RGB
    * (multiple channels per plane).
    */
+  @Field(label = "rgb")
   protected boolean rgb;
 
   /** Indicates whether or not each pixel's bytes are in little endian order. */
+  @Field(label = "littleEndian")
   protected boolean littleEndian;
 
   /**
    * True if channels are stored RGBRGBRGB...; false if channels are stored
    * RRR...GGG...BBB...
    */
+  @Field(label = "interleaved")
   protected boolean interleaved;
 
   /** Indicates whether or not the images are stored as indexed color. */
+  @Field(label = "indexed")
   protected boolean indexed;
 
   /** Indicates whether or not we can ignore the color map (if present). */
+  @Field(label = "falseColor")
   protected boolean falseColor = true;
 
   /**
    * Indicates whether or not we are confident that all of the metadata stored
    * within the file has been parsed.
    */
+  @Field(label = "metadataComplete")
   protected boolean metadataComplete;
 
-  /** Non-core metadata associated with this series. */
+  /** Original metadata associated with this series. */
   protected Hashtable<String, Object> imageMetadata;
 
   /**
    * Indicates whether or not this series is a lower-resolution copy of
    * another series.
    */
+  @Field(label = "thumbnail")
   protected boolean thumbnail;
   
   /**
