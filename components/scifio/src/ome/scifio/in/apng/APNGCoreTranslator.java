@@ -19,7 +19,6 @@ public class APNGCoreTranslator extends AbstractTranslator<APNGMetadata, CoreMet
     CoreImageMetadata coreMeta = new CoreImageMetadata();
     dest.add(coreMeta);
     
-    // TODO use setters..
     coreMeta.setSizeX(source.sizeX);
     coreMeta.setSizeY(source.sizeY);
     coreMeta.setSizeZ(source.sizeZ);
