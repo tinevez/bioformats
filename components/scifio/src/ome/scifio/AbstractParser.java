@@ -25,9 +25,6 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
   /** Name of current file. */
   protected String currentId;
 
-  /** The number of the current series. */
-  private int series;
-
   /** Whether or not to filter out invalid metadata. */
   protected boolean filterMetadata;
 

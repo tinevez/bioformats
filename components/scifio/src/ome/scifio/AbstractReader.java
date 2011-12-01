@@ -37,9 +37,6 @@ public abstract class AbstractReader<M extends Metadata>
   /** Name of current file. */
   protected String currentId;
 
-  /** The number of the current series. */
-  private int series;
-
   // -- Constructors --
 
   /** Constructs a reader with the given name and default suffix */
