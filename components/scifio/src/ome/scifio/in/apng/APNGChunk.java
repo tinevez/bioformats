@@ -5,7 +5,7 @@ package ome.scifio.in.apng;
  * a PNG block.
  *
  */
-public class APNGBlock {
+public class APNGChunk {
 
   // -- Constants --
   public static final byte[] PNG_SIGNATURE = new byte[] {
@@ -16,5 +16,11 @@ public class APNGBlock {
   public long offset;
   public int length;
   public String type;
+  
+  // -- Methods --
+  
+  public int[] getFrameCoordinates() {
+    return new int[0];
+  }
 
 }

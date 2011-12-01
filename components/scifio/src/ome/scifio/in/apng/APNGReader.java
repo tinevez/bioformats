@@ -62,14 +62,14 @@ public class APNGReader extends BIFormatReader<APNGMetadata> {
     }
 
     ByteArrayOutputStream stream = new ByteArrayOutputStream();
-    stream.write(APNGBlock.PNG_SIGNATURE);
+    stream.write(APNGChunk.PNG_SIGNATURE);
 
     boolean fdatValid = false;
     int fctlCount = 0;
 
-    int[] coords = metadata.getFrameCoordinates().get(no);
+    int[] coords = metadata.getBlocks().get(no).getFrameCoordinates();
 
-    for (APNGBlock block : metadata.getBlocks()) {
+    for (APNGChunk block : metadata.getBlocks()) {
       if (!block.type.equals("IDAT") && !block.type.equals("fdAT") &&
         !block.type.equals("acTL") && !block.type.equals("fcTL") &&
         block.length > 0)

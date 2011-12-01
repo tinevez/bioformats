@@ -16,17 +16,24 @@ import ome.scifio.Metadata;
  */
 public class APNGMetadata extends AbstractMetadata {
 
+  // -- APNG Specific Fields --
+  
+  /** Number of frames in this APNG image */
+  @Field(label = "num_frames")
+  protected int numFrames;
+  
+  /** Number of times the frames are played.  0 = infinite */
+  @Field(label = "num_plays")
+  protected int numPlays;
+  
+  /** The collection of APNG blocks for this image */
+  @Field(label = "blocks", isList = true)
+  protected Vector<APNGChunk> blocks;
 
   // -- Fields --
 
-  /** The collection of APNG blocks for this image */
-  protected Vector<APNGBlock> blocks;
-  
   /** 8-bit lookup table for this image */
   protected byte[][] lut;
-  
-  /** Collection of frame coordinates for this image */
-  protected Vector<int[]> frameCoordinates;
   
   /** Width (in pixels) of planes in this image. */
   protected int sizeX;
@@ -59,8 +66,9 @@ public class APNGMetadata extends AbstractMetadata {
   protected int bitsPerPixel;
 
   /** Total number of images. */
-  protected int imageCount;
-
+  @Field(label = "imageCount")
+  protected int imageCount = 1; // always 1 for APNG
+  
   /** Length of each subdimension of C. */
   protected int[] cLengths;
 
@@ -134,24 +142,16 @@ public class APNGMetadata extends AbstractMetadata {
 
   // -- APNGMetadata Methods --
 
-  public void setBlocks(Vector<APNGBlock> blocks) {
+  public void setBlocks(Vector<APNGChunk> blocks) {
     this.blocks = blocks;
   }
 
-  public Vector<APNGBlock> getBlocks() {
+  public Vector<APNGChunk> getBlocks() {
     return blocks;
   }
 
   public void setLut(byte[][] lut) {
     this.lut = lut;
-  }
-
-  public void setFrameCoordinates(Vector<int[]> frameCoords) {
-    this.frameCoordinates = frameCoords;
-  }
-
-  public Vector<int[]> getFrameCoordinates() {
-    return frameCoordinates;
   }
   
   public int getEffectiveSizeC(int no) {

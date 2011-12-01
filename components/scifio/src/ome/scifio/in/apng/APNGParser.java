@@ -22,15 +22,12 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
 
   // -- Fields --
 
-  private Vector<APNGBlock> blocks;
-  private byte[][] lut;
-  private Vector<int[]> frameCoordinates;
+  private Vector<APNGChunk> blocks;
 
   // -- Constructor --
 
   /** Constructs a new APNGParser. */
   public APNGParser() {
-
     metadata = new APNGMetadata();
     metadata.orderCertain = true;
   }
@@ -62,37 +59,40 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
     // 3) 'length' bytes of data
     // 4) 32 bit CRC
 
-    blocks = new Vector<APNGBlock>();
-    frameCoordinates = new Vector<int[]>();
+    blocks = new Vector<APNGChunk>();
 
     while (in.getFilePointer() < in.length()) {
       int length = in.readInt();
       String type = in.readString(4);
+      long offset = in.getFilePointer();
 
-      APNGBlock block = new APNGBlock();
-      block.length = length;
-      block.type = type;
-      block.offset = in.getFilePointer();
-      blocks.add(block);
+      APNGChunk block = new APNGChunk();
+
 
       if (type.equals("acTL")) {
         // APNG-specific chunk
-
-        metadata.imageCount = in.readInt(); // read num_frames
-        int loop = in.readInt(); // read num_plays
-        addGlobalMeta("Loop count", loop);
+        metadata.numFrames = in.readInt(); // read num_frames
+        metadata.numPlays = in.readInt(); // read num_plays
       }
       else if (type.equals("fcTL")) {
-        in.skipBytes(4); // skips sequence_number
-        int w = in.readInt(); // read width
-        int h = in.readInt(); // read height 
-        int x = in.readInt(); // read x_offset
-        int y = in.readInt(); // read y_offset
-        frameCoordinates.add(new int[] {x, y, w, h});
-        in.skipBytes(length - 20); // not read: delay_num, delay_den, dispose_op, blend_op
+        block = new APNGfcTLChunk();
+        ((APNGfcTLChunk)block).sequenceNumber = in.readInt();
+        ((APNGfcTLChunk)block).width = in.readInt();
+        ((APNGfcTLChunk)block).height = in.readInt();
+        ((APNGfcTLChunk)block).xOffset = in.readInt();
+        ((APNGfcTLChunk)block).yOffset = in.readInt();
+        ((APNGfcTLChunk)block).delayNum = in.readShort();
+        ((APNGfcTLChunk)block).delayDen = in.readShort();
+        ((APNGfcTLChunk)block).disposeOp = in.readByte();
+        ((APNGfcTLChunk)block).blendOp = in.readByte();
       }
       else in.skipBytes(length);
 
+      block.length = length;
+      block.type = type;
+      block.offset = offset;
+      blocks.add(block);
+      
       if (in.getFilePointer() < in.length() - 4) {
         in.skipBytes(4); // skip the CRC
       }
@@ -122,7 +122,6 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
       img.getColorModel() instanceof IndexColorModel;
     metadata.falseColor = false;
     metadata.setBlocks(blocks);
-    metadata.setFrameCoordinates(frameCoordinates);
 
     if (metadata.indexed) {
       byte[][] lut = new byte[3][256];
@@ -142,19 +141,5 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
   /* @see MetadataHandler#getMetadataTypes() */
   public Class<APNGMetadata> getMetadataType() {
     return APNGMetadata.class;
-  }
-
-  // -- APNGParser Methods --
-
-  public Vector<APNGBlock> getBlocks() {
-    return blocks;
-  }
-
-  public byte[][] getLut() {
-    return lut;
-  }
-
-  public Vector<int[]> getFrameCoordinates() {
-    return frameCoordinates;
   }
 }
