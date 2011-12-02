@@ -45,7 +45,7 @@ public class CoreImageMetadata {
 
   /**
    * Describes the number of bytes per pixel.  Must be one of the <i>static</i>
-   * pixel types (e.g. <code>INT8</code>) in {@link loci.formats.FormatTools}.
+   * pixel types (e.g. <code>INT8</code>) in {@link ome.scifio.util.FormatTools}.
    */
   @Field(label = "pixelType")
   protected int pixelType;

@@ -24,10 +24,10 @@ public abstract class BIFormatReader<M extends Metadata>
     super(name, suffixes);
   }
 
-  // -- IFormatReader API methods --
+  // -- Reader API methods --
 
   /**
-   * @see loci.formats.IFormatReader#openBytes(int, byte[], int, int, int, int)
+   * @see ome.scifio.Reader#openBytes(int, byte[], int, int, int, int)
    */
   public byte[] openBytes(int iNo, int no, byte[] buf, int x, int y, int w, int h)
     throws FormatException, IOException
@@ -54,9 +54,8 @@ public abstract class BIFormatReader<M extends Metadata>
     return buf;
   }
 
-  // -- IFormatHandler API methods --
+  // -- BIFormatReader methods --
 
-  /* @see loci.formats.IFormatHandler#getNativeDataType() */
   public Class<?> getNativeDataType() {
     return BufferedImage.class;
   }

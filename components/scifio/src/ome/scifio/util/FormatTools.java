@@ -234,7 +234,7 @@ public class FormatTools {
     String header;
     if (depth > 0 && ste.length > depth) {
       String c = ste[depth].getClassName();
-      if (c.startsWith("loci.formats.")) {
+      if (c.startsWith("ome.scifio.")) {
         c = c.substring(c.lastIndexOf(".") + 1);
       }
       header = c + "." + ste[depth].getMethodName() + ": ";

@@ -70,7 +70,7 @@ import org.slf4j.LoggerFactory;
  * in {@link java.awt.image.BufferedImage} form.
  *
  * To work with images in primitive array form,
- * use the {@link loci.formats.ImageTools} class.
+ * use the {@link ome.scifio.util.ImageTools} class.
  *
  * Much code was stolen and adapted from
  * <a href="http://forum.java.sun.com/thread.jspa?threadID=522483">
