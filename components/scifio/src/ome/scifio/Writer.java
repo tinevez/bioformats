@@ -1,9 +1,11 @@
 package ome.scifio;
 
 import java.awt.image.ColorModel;
+import java.io.File;
 import java.io.IOException;
 
-import loci.formats.codec.CodecOptions;
+import ome.scifio.codec.CodecOptions;
+import ome.scifio.io.RandomAccessOutputStream;
 
 /**
  * Interface for all SciFIO writers.
@@ -18,17 +20,19 @@ public interface Writer<M extends Metadata> extends MetadataHandler<M> {
   /**
    * Saves the given image to the current series in the current file.
    *
-   * @param no the image index within the current file, starting from 0.
+   * @param iNo the image index within the file.
+   * @param no the plane index within the image.
    * @param buf the byte array that represents the image.
    * @throws FormatException if one of the parameters is invalid.
    * @throws IOException if there was a problem writing to the file.
    */
-  void saveBytes(int no, byte[] buf) throws FormatException, IOException;
+  void saveBytes(int iNo, int no, byte[] buf) throws FormatException, IOException;
 
   /**
    * Saves the given image tile to the current series in the current file.
    *
-   * @param no the image index within the current file, starting from 0.
+   * @param iNo the image index within the file.
+   * @param no the plane index within the image.
    * @param buf the byte array that represents the image tile.
    * @param x the X coordinate of the upper-left corner of the image tile.
    * @param y the Y coordinate of the upper-left corner of the image tile.
@@ -37,24 +41,24 @@ public interface Writer<M extends Metadata> extends MetadataHandler<M> {
    * @throws FormatException if one of the parameters is invalid.
    * @throws IOException if there was a problem writing to the file.
    */
-  void saveBytes(int no, byte[] buf, int x, int y, int w, int h)
+  void saveBytes(int iNo, int no, byte[] buf, int x, int y, int w, int h)
     throws FormatException, IOException;
 
   /**
    * Saves the given image plane to the current series in the current file.
    *
-   * @param no the image index within the current file, starting from 0.
-   * @param plane the image plane.
+   * @param iNo the image index within the file.
+   * @param no the plane index within the image.   * @param plane the image plane.
    * @throws FormatException if one of the parameters is invalid.
    * @throws IOException if there was a problem writing to the file.
    */
-  void savePlane(int no, Object plane) throws FormatException, IOException;
+  void savePlane(int iNo, int no, Object plane) throws FormatException, IOException;
 
   /**
    * Saves the given image plane to the current series in the current file.
    *
-   * @param no the image index within the current file, starting from 0.
-   * @param plane the image plane.
+   * @param iNo the image index within the file.
+   * @param no the plane index within the image.   * @param plane the image plane.
    * @param x the X coordinate of the upper-left corner of the image tile.
    * @param y the Y coordinate of the upper-left corner of the image tile.
    * @param w the width (in pixels) of the image tile.
@@ -62,19 +66,8 @@ public interface Writer<M extends Metadata> extends MetadataHandler<M> {
    * @throws FormatException if one of the parameters is invalid.
    * @throws IOException if there was a problem writing to the file.
    */
-  void savePlane(int no, Object plane, int x, int y, int w, int h)
+  void savePlane(int iNo, int no, Object plane, int x, int y, int w, int h)
     throws FormatException, IOException;
-
-  /**
-   * Sets the current series.
-   *
-   * @param series the series index, starting from 0.
-   * @throws FormatException if the specified series is invalid.
-   */
-  void setSeries(int series) throws FormatException;
-
-  /** Returns the current series. */
-  int getSeries();
 
   /** Sets the number of valid bits per pixel. */
   void setValidBitsPerPixel(int bits);
@@ -86,7 +79,7 @@ public interface Writer<M extends Metadata> extends MetadataHandler<M> {
    * Sets the metadata retrieval object from
    * which to retrieve standardized metadata.
    */
-  void setMetadata(M r);
+  void setMetadata(M meta);
 
   /**
    * Retrieves the current metadata retrieval object for this writer. You can
@@ -95,6 +88,33 @@ public interface Writer<M extends Metadata> extends MetadataHandler<M> {
    * @return A metadata retrieval object.
    */
   M getMetadata();
+  
+  /**
+   * Sets the source for this reader to read from.
+   * @param file
+   * @throws IOException 
+   */
+  public void setDest(File file) throws IOException;
+
+  /**
+   * Sets the source for this reader to read from.
+   * @param fileName
+   * @throws IOException 
+   */
+  public void setDest(String fileName) throws IOException;
+  
+  /**
+   * Sets the default input stream for this reader.
+   * 
+   * @param stream a RandomAccessInputStream for the source being read
+   */
+  void setDest(RandomAccessOutputStream stream);
+
+  /**
+   * Retrieves the current input stream for this reader.
+   * @return A RandomAccessInputStream
+   */
+  RandomAccessOutputStream getStream();
 
   /** Sets the color model. */
   void setColorModel(ColorModel cm);
@@ -141,6 +161,9 @@ public interface Writer<M extends Metadata> extends MetadataHandler<M> {
    * will be slightly improved.
    */
   void setWriteSequentially(boolean sequential);
+  
+  /** Closes currently open file(s) and frees allocated memory. */
+  void close() throws IOException;
 
   // -- Deprecated methods --
 
@@ -163,4 +186,5 @@ public interface Writer<M extends Metadata> extends MetadataHandler<M> {
    */
   void savePlane(Object plane, int series, boolean lastInSeries, boolean last)
     throws FormatException, IOException;
+
 }
