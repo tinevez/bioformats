@@ -112,13 +112,6 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
   int[] getZCTCoords(int index);
 
   /**
-   * Sets the default input stream for this reader.
-   * 
-   * @param stream a RandomAccessInputStream for the source being read
-   */
-  void setStream(RandomAccessInputStream stream);
-
-  /**
    * Retrieves the current input stream for this reader.
    * @return A RandomAccessInputStream
    */

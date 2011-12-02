@@ -162,11 +162,6 @@ public abstract class AbstractReader<M extends Metadata>
   }
 
   @Override
-  public void setStream(final RandomAccessInputStream stream) {
-    this.in = stream;
-  }
-
-  @Override
   public RandomAccessInputStream getStream() {
     return in;
   }
