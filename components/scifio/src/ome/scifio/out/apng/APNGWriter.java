@@ -1,4 +1,4 @@
-package ome.scifio.in.apng;
+package ome.scifio.out.apng;
 
 import java.awt.image.IndexColorModel;
 import java.io.ByteArrayOutputStream;
@@ -9,6 +9,7 @@ import java.util.zip.DeflaterOutputStream;
 import ome.scifio.AbstractWriter;
 import ome.scifio.FormatException;
 import ome.scifio.common.DataTools;
+import ome.scifio.in.apng.APNGMetadata;
 import ome.scifio.util.FormatTools;
 
 public class APNGWriter extends AbstractWriter<APNGMetadata> {
