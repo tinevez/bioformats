@@ -10,6 +10,7 @@ import ome.scifio.AbstractWriter;
 import ome.scifio.FormatException;
 import ome.scifio.common.DataTools;
 import ome.scifio.in.apng.APNGMetadata;
+import ome.scifio.in.apng.APNGfcTLChunk;
 import ome.scifio.util.FormatTools;
 
 public class APNGWriter extends AbstractWriter<APNGMetadata> {
@@ -47,11 +48,11 @@ public class APNGWriter extends AbstractWriter<APNGMetadata> {
         "APNGWriter does not yet support saving image tiles.");
     }
 
-    int width = metadata.getSizeX(iNo);
-    int height = metadata.getSizeY(iNo);
+    //int width = metadata.getSizeX(iNo);
+    //int height = metadata.getSizeY(iNo);
 
     if (!initialized[iNo][no]) {
-      writeFCTL(width, height);
+      writeFCTL();
       if (numFrames == 0) writePLTE();
       initialized[iNo][no] = true;
     }
@@ -145,7 +146,8 @@ public class APNGWriter extends AbstractWriter<APNGMetadata> {
     return (int) crc.getValue();
   }
 
-  private void writeFCTL(int width, int height) throws IOException {
+  private void writeFCTL() throws IOException {
+    APNGfcTLChunk fctlChunk = (APNGfcTLChunk) metadata.getBlocks().get(nextSequenceNumber);
     out.writeInt(26);
     byte[] b = new byte[30];
     b[0] = 'f';
@@ -154,14 +156,14 @@ public class APNGWriter extends AbstractWriter<APNGMetadata> {
     b[3] = 'L';
 
     DataTools.unpackBytes(nextSequenceNumber++, b, 4, 4, false);
-    DataTools.unpackBytes(width, b, 8, 4, false);
-    DataTools.unpackBytes(height, b, 12, 4, false);
-    DataTools.unpackBytes(0, b, 16, 4, false);
-    DataTools.unpackBytes(0, b, 20, 4, false);
-    DataTools.unpackBytes(1, b, 24, 2, false);
-    DataTools.unpackBytes(fps, b, 26, 2, false);
-    b[28] = (byte) 1;
-    b[29] = (byte) 0;
+    DataTools.unpackBytes(fctlChunk.width, b, 8, 4, false);
+    DataTools.unpackBytes(fctlChunk.height, b, 12, 4, false);
+    DataTools.unpackBytes(fctlChunk.xOffset, b, 16, 4, false);
+    DataTools.unpackBytes(fctlChunk.yOffset, b, 20, 4, false);
+    DataTools.unpackBytes(fctlChunk.delayNum, b, 24, 2, false);
+    DataTools.unpackBytes(fctlChunk.delayDen, b, 26, 2, false);
+    b[28] = (byte) fctlChunk.disposeOp;
+    b[29] = (byte) fctlChunk.blendOp;
 
     out.write(b);
     out.writeInt(crc(b));
