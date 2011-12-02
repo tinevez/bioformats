@@ -74,10 +74,7 @@ public class CoreMetadata extends AbstractMetadata {
     return imageMeta.get(no).pixelType;
   }
   
-  public int getBitsPerPixel(int no) {
-    return imageMeta.get(no).bitsPerPixel;
-  }
-  
+  /* @see Metadata#getEffectiveSizeC(int no) */
   public int getEffectiveSizeC(int no) {
     int sizeZT = getSizeZ(no) * getSizeT(no);
     if (sizeZT == 0) return 0;
@@ -125,6 +122,11 @@ public class CoreMetadata extends AbstractMetadata {
   public int getSizeT(int no) {
     return imageMeta.get(no).sizeT;
   }
+  
+  /* @see Metadata#getBitsPerPixel(int) */
+  public int getBitsPerPixel(int no) {
+    return imageMeta.get(no).bitsPerPixel;
+  }
 
   /* @see Metadata#get8BitLookupTable(int) */
   public byte[][] get8BitLookupTable(int no)
@@ -140,6 +142,11 @@ public class CoreMetadata extends AbstractMetadata {
   {
     // TODO Auto-generated method stub
     return null;
+  }
+  
+  /* @see Metadata#getDimensionOrder(int) */
+  public String getDimensionOrder(int no) {
+    return imageMeta.get(no).dimensionOrder;
   }
   
   // -- Helper Methods --

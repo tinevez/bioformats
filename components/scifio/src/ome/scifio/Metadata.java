@@ -143,8 +143,8 @@ public interface Metadata extends Serializable {
   Object getMetadataValue(int iNo, String field);
 
   /**
-   * Obtains the specified metadata field's value for the current series
-   * in the current file.
+   * Obtains the specified metadata field's value for the specified
+   *  image in the current file.
    * @param field the name associated with the metadata field
    * @param iNo the index of the desired image within the dataset
    * @return the value, or null if the field doesn't exist
@@ -156,4 +156,32 @@ public interface Metadata extends Serializable {
    * instantiated.
    */
   void resetMeta(Class<?> type);
+  
+  /**
+   * Returns image count / (sizeZ * sizeT) for the specified image
+   * in the current file.
+   * @param iNo the index of the desired image within the dataset
+   * @return the effective size C for the indicated image number
+   */
+  int getEffectiveSizeC(int iNo);
+  
+  /**
+   * Returns the # valid bits per pixel for the specified image.
+   * @param iNo the index of the desired image within the dataset
+   * @return the effective size C for the indicated image number
+   */
+  int getBitsPerPixel(int iNo);
+  
+  /**
+   * Order in which dimensions are stored.  Must be one of the following:<ul>
+   *  <li>XYCZT</li>
+   *  <li>XYCTZ</li>
+   *  <li>XYZCT</li>
+   *  <li>XYZTC</li>
+   *  <li>XYTCZ</li>
+   *  <li>XYTZC</li>
+   * </ul>
+   * @param iNo the index of the desired image within the dataset
+   */
+   String getDimensionOrder(int no);
 }

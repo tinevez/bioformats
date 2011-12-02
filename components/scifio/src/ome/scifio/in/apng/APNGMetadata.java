@@ -65,7 +65,7 @@ public class APNGMetadata extends AbstractMetadata {
 
   /**
    * Describes the number of bytes per pixel.  Must be one of the <i>static</i>
-   * pixel types (e.g. <code>INT8</code>) in {@link loci.formats.FormatTools}.
+   * pixel types (e.g. <code>INT8</code>) in {@link ome.scifio.util.FormatTools}.
    */
   @Field(label = "pixelType")
   protected int pixelType;
@@ -152,7 +152,6 @@ public class APNGMetadata extends AbstractMetadata {
   /**
    * 
    */
-
   protected static final long serialVersionUID = 1L;
   
   // -- Constructor --
@@ -172,12 +171,6 @@ public class APNGMetadata extends AbstractMetadata {
 
   public void setLut(byte[][] lut) {
     this.lut = lut;
-  }
-  
-  public int getEffectiveSizeC(int no) {
-    int sizeZT = getSizeZ(no) * getSizeT(no);
-    if (sizeZT == 0) return 0;
-    return getImageCount() / sizeZT;
   }
 
   // -- Metadata API Methods --
@@ -238,6 +231,11 @@ public class APNGMetadata extends AbstractMetadata {
   public boolean isIndexed(int no) {
     return this.indexed;
   }
+  
+  /* @see Metadata#getBitsPerPixel(int) */
+  public int getBitsPerPixel(int no) {
+    return this.bitsPerPixel;
+  }
 
   /* @see Metadata#get8BitLookupTable(int) */
   public byte[][] get8BitLookupTable(int no) throws FormatException, IOException {
@@ -268,6 +266,18 @@ public class APNGMetadata extends AbstractMetadata {
   /* @see Metadata#getImageMetadataValue() */
   public Object getImageMetadataValue(int no, String field) {
     return this.imageMetadata.get(field);
+  }
+  
+  /* @see Metadata#getEffectiveSizeC(int no) */
+  public int getEffectiveSizeC(int no) {
+    int sizeZT = getSizeZ(no) * getSizeT(no);
+    if (sizeZT == 0) return 0;
+    return getImageCount() / sizeZT;
+  }
+  
+  /* @see Metadata#getDimensionOrder(int) */
+  public String getDimensionOrder(int no) {
+    return this.dimensionOrder;
   }
 
   // -- Helper Methods --
