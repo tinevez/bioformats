@@ -727,10 +727,10 @@ public final class AWTImageTools {
 
   /**
    * Creates an image from the given byte array, using the given
-   * IFormatReader to retrieve additional information.
+   * ome.scifio.Reader to retrieve additional information.
    */
-  public static BufferedImage openImage(byte[] buf, Reader r, int w, int h, int no)
-    throws FormatException, IOException
+  public static BufferedImage openImage(byte[] buf, Reader r, int w, int h,
+    int no) throws FormatException, IOException
   {
     int pixelType = r.getMetadata().getPixelType(no);
     boolean little = r.getMetadata().isLittleEndian(no);
@@ -791,8 +791,8 @@ public final class AWTImageTools {
         short[][] table = r.getMetadata().get16BitLookupTable(no);
         if (table != null && table.length > 0 && table[0] != null) {
           model =
-            new Index16ColorModel(
-              16, table[0].length, table, r.getMetadata().isLittleEndian(no));
+            new Index16ColorModel(16, table[0].length, table, r.getMetadata()
+              .isLittleEndian(no));
         }
       }
     }

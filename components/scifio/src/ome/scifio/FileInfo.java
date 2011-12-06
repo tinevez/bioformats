@@ -14,7 +14,7 @@ public class FileInfo {
   /** Absolute path to this file. */
   public String filename;
 
-  /** IFormatReader implementation that would be used to read this file. */
+  /** ome.scifio.Reader implementation that would be used to read this file. */
   public Class<?> reader;
 
   /**

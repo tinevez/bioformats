@@ -62,7 +62,7 @@ public class RandomAccessInputStream extends InputStream implements DataInput {
 
   /** Maximum number of bytes to search when searching through the stream. */
   protected static final int MAX_SEARCH_SIZE = 512 * 1024 * 1024; // 512 MB
-  
+
   /**
    * Default file name
    */
@@ -104,7 +104,7 @@ public class RandomAccessInputStream extends InputStream implements DataInput {
   public RandomAccessInputStream(byte[] array) throws IOException {
     this(new ByteArrayHandle(array));
   }
-  
+
   // -- RAIS methods --
   public String getFileName() {
     return file;

@@ -46,7 +46,8 @@ public class APNGReader extends BIFormatReader<APNGMetadata> {
     FormatTools.checkPlaneParameters(this, no, -1, x, y, w, h);
 
     if (no == lastPlaneIndex && lastPlane != null) {
-      return AWTImageTools.getSubimage(lastPlane, metadata.isLittleEndian(no), x, y, w, h);
+      return AWTImageTools.getSubimage(
+        lastPlane, metadata.isLittleEndian(no), x, y, w, h);
     }
 
     if (no == 0) {
@@ -55,10 +56,13 @@ public class APNGReader extends BIFormatReader<APNGMetadata> {
         new DataInputStream(new BufferedInputStream(in, 4096));
       lastPlane = ImageIO.read(dis);
       lastPlaneIndex = 0;
-      if (x == 0 && y == 0 && w == metadata.getSizeX(iNo) && h == metadata.getSizeY(iNo)) {
+      if (x == 0 && y == 0 && w == metadata.getSizeX(iNo) &&
+        h == metadata.getSizeY(iNo))
+      {
         return lastPlane;
       }
-      return AWTImageTools.getSubimage(lastPlane, metadata.isLittleEndian(iNo), x, y, w, h);
+      return AWTImageTools.getSubimage(
+        lastPlane, metadata.isLittleEndian(iNo), x, y, w, h);
     }
 
     ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -75,17 +79,21 @@ public class APNGReader extends BIFormatReader<APNGMetadata> {
         block.length > 0)
       {
         byte[] b = new byte[block.length + 12];
-        DataTools.unpackBytes(block.length, b, 0, 4, metadata.isLittleEndian(iNo));
+        DataTools.unpackBytes(
+          block.length, b, 0, 4, metadata.isLittleEndian(iNo));
         byte[] typeBytes = block.type.getBytes();
         System.arraycopy(typeBytes, 0, b, 4, 4);
         in.seek(block.offset);
         in.read(b, 8, b.length - 12);
         if (block.type.equals("IHDR")) {
-          DataTools.unpackBytes(coords[2], b, 8, 4, metadata.isLittleEndian(iNo));
-          DataTools.unpackBytes(coords[3], b, 12, 4, metadata.isLittleEndian(iNo));
+          DataTools.unpackBytes(
+            coords[2], b, 8, 4, metadata.isLittleEndian(iNo));
+          DataTools.unpackBytes(
+            coords[3], b, 12, 4, metadata.isLittleEndian(iNo));
         }
         int crc = (int) computeCRC(b, b.length - 4);
-        DataTools.unpackBytes(crc, b, b.length - 4, 4, metadata.isLittleEndian(iNo));
+        DataTools.unpackBytes(
+          crc, b, b.length - 4, 4, metadata.isLittleEndian(iNo));
         stream.write(b);
         b = null;
       }
@@ -97,14 +105,16 @@ public class APNGReader extends BIFormatReader<APNGMetadata> {
         in.seek(block.offset + 4);
         if (fdatValid) {
           byte[] b = new byte[block.length + 8];
-          DataTools.unpackBytes(block.length - 4, b, 0, 4, metadata.isLittleEndian(iNo));
+          DataTools.unpackBytes(
+            block.length - 4, b, 0, 4, metadata.isLittleEndian(iNo));
           b[4] = 'I';
           b[5] = 'D';
           b[6] = 'A';
           b[7] = 'T';
           in.read(b, 8, b.length - 12);
           int crc = (int) computeCRC(b, b.length - 4);
-          DataTools.unpackBytes(crc, b, b.length - 4, 4, metadata.isLittleEndian(iNo));
+          DataTools.unpackBytes(
+            crc, b, b.length - 4, 4, metadata.isLittleEndian(iNo));
           stream.write(b);
           b = null;
         }

@@ -29,8 +29,8 @@ public abstract class BIFormatReader<M extends Metadata>
   /**
    * @see ome.scifio.Reader#openBytes(int, byte[], int, int, int, int)
    */
-  public byte[] openBytes(int iNo, int no, byte[] buf, int x, int y, int w, int h)
-    throws FormatException, IOException
+  public byte[] openBytes(int iNo, int no, byte[] buf, int x, int y, int w,
+    int h) throws FormatException, IOException
   {
     FormatTools.checkPlaneParameters(this, no, buf.length, x, y, w, h);
 
@@ -45,7 +45,8 @@ public abstract class BIFormatReader<M extends Metadata>
         for (int c = 0; c < ts.length; c++) {
           int offset = c * ts[c].length * 2;
           for (int i = 0; i < ts[c].length && offset < buf.length; i++) {
-            DataTools.unpackBytes(ts[c][i], buf, offset, 2, metadata.isLittleEndian(no));
+            DataTools.unpackBytes(
+              ts[c][i], buf, offset, 2, metadata.isLittleEndian(no));
             offset += 2;
           }
         }

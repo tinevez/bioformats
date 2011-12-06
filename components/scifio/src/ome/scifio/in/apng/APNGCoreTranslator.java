@@ -9,7 +9,8 @@ import ome.scifio.CoreMetadata;
  * (APNG) images to the Core SCIFIO image type.
  *
  */
-public class APNGCoreTranslator extends AbstractTranslator<APNGMetadata, CoreMetadata> {
+public class APNGCoreTranslator
+  extends AbstractTranslator<APNGMetadata, CoreMetadata> {
 
   // -- Translator API Methods --
 
@@ -18,7 +19,7 @@ public class APNGCoreTranslator extends AbstractTranslator<APNGMetadata, CoreMet
     dest.resetMeta();
     CoreImageMetadata coreMeta = new CoreImageMetadata();
     dest.add(coreMeta);
-    
+
     coreMeta.setSizeX(source.sizeX);
     coreMeta.setSizeY(source.sizeY);
     coreMeta.setSizeZ(source.sizeZ);

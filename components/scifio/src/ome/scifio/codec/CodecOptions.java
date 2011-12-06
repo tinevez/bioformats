@@ -110,7 +110,8 @@ public class CodecOptions {
   // -- Constructors --
 
   /** Construct a new CodecOptions. */
-  public CodecOptions() {}
+  public CodecOptions() {
+  }
 
   /** Construct a new CodecOptions using the given CodecOptions. */
   public CodecOptions(CodecOptions options) {

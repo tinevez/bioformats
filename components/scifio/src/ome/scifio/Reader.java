@@ -42,7 +42,8 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
    *   file.
    * @throws IOException if there was a problem reading the file.
    */
-  byte[] openBytes(int iNo, int no, byte[] buf) throws FormatException, IOException;
+  byte[] openBytes(int iNo, int no, byte[] buf)
+    throws FormatException, IOException;
 
   /**
    * Obtains a sub-image of the specified image plane
@@ -134,7 +135,7 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
 
   /** Gets the Metadata for this Reader */
   public M getMetadata();
-  
+
   //TODO remove normalization methods
   /** Specifies whether or not to normalize float data. */
   void setNormalized(boolean normalize);
@@ -161,14 +162,13 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
    * @param in
    */
   public void setSource(RandomAccessInputStream stream);
-  
+
   /**
    * Closes the currently open file. If the flag is set, this is all that
    * happens; if unset, it is equivalent to calling
-   * {@link IFormatHandler#close()}.
    */
   void close(boolean fileOnly) throws IOException;
-  
+
   /** Closes currently open file(s) and frees allocated memory. */
   public void close() throws IOException;
 }

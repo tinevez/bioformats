@@ -21,7 +21,7 @@ public interface Metadata extends Serializable {
    *  @param iNo the index of the desired image within the dataset
    */
   boolean isLittleEndian(int iNo);
-  
+
   /** Gets the size of the X dimension of the image at the given index.
    * @param iNo the index of the desired image within the dataset
    */
@@ -46,7 +46,7 @@ public interface Metadata extends Serializable {
    * @param iNo the index of the desired image within the dataset
    */
   int getSizeT(int iNo);
-  
+
   /**
    * Gets the pixel type of the image at the given index.
    * @param iNo the index of the desired image within the dataset
@@ -54,7 +54,7 @@ public interface Metadata extends Serializable {
    * <i>static</i> pixel types such as {@link FormatTools#INT8}.
    */
   int getPixelType(int iNo);
-  
+
   /**
    * Gets whether or not the channels of the image at the given index are interleaved.
    * This method exists because X and Y must appear first in the dimension order.
@@ -70,7 +70,7 @@ public interface Metadata extends Serializable {
    * @param iNo the index of the desired image within the dataset
    */
   boolean isInterleaved(int iNo);
-  
+
   /**
    * Gets whether the planes of the image at the given index are indexed color.
    * This value has no impact on {@link #getSizeC()},
@@ -79,7 +79,7 @@ public interface Metadata extends Serializable {
    * @param iNo the index of the desired image within the dataset
    */
   boolean isIndexed(int iNo);
-  
+
   /**
    * Gets the 8-bit color lookup table associated with
    * the image at the given index's planes.
@@ -103,7 +103,7 @@ public interface Metadata extends Serializable {
    * @param iNo the index of the desired image within the dataset
    */
   short[][] get16BitLookupTable(int iNo) throws FormatException, IOException;
-  
+
   /**
    * Gets the number of channels returned with each call to openBytes.
    * The most common case where this value is greater than 1 is for interleaved
@@ -114,10 +114,10 @@ public interface Metadata extends Serializable {
    * @param iNo the index of the desired image within the dataset
    */
   int getRGBChannelCount(int iNo);
-  
+
   /** Gets the number of images in this dataset. */
   int getImageCount();
-  
+
   /**
    * Obtains the hashtable containing the metadata field/value pairs from
    * the current file.
@@ -125,7 +125,7 @@ public interface Metadata extends Serializable {
    * from the file
    */
   Hashtable<String, Object> getGlobalMetadata();
-  
+
   /**
    * Obtains the hashtable containing metadata field/value pairs from the
    * current series in the current file.
@@ -133,7 +133,7 @@ public interface Metadata extends Serializable {
    * @param iNo the index of the desired image within the dataset
    */
   Hashtable<String, Object> getImageMetadata(int iNo);
-  
+
   /**
    * Obtains the specified metadata field's value for the current file.
    * @param field the name associated with the metadata field
@@ -150,13 +150,13 @@ public interface Metadata extends Serializable {
    * @return the value, or null if the field doesn't exist
    */
   Object getImageMetadataValue(int iNo, String field);
-  
+
   /**
    * Resets this Metadata object's values as though it had just been
    * instantiated.
    */
   void resetMeta(Class<?> type);
-  
+
   /**
    * Returns image count / (sizeZ * sizeT) for the specified image
    * in the current file.
@@ -164,14 +164,14 @@ public interface Metadata extends Serializable {
    * @return the effective size C for the indicated image number
    */
   int getEffectiveSizeC(int iNo);
-  
+
   /**
    * Returns the # valid bits per pixel for the specified image.
    * @param iNo the index of the desired image within the dataset
    * @return the effective size C for the indicated image number
    */
   int getBitsPerPixel(int iNo);
-  
+
   /**
    * Order in which dimensions are stored.  Must be one of the following:<ul>
    *  <li>XYCZT</li>
@@ -183,5 +183,5 @@ public interface Metadata extends Serializable {
    * </ul>
    * @param iNo the index of the desired image within the dataset
    */
-   String getDimensionOrder(int no);
+  String getDimensionOrder(int no);
 }

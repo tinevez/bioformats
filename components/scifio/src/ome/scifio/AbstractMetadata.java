@@ -7,12 +7,12 @@ public abstract class AbstractMetadata implements Metadata {
 
   /* @see Metadata#resetMeta(Class<?>) */
   public void resetMeta(final Class<?> type) {
-    if(type == null || type.equals(AbstractMetadata.class)) return;
-    
-    for(final Field f : type.getDeclaredFields()) {
+    if (type == null || type.equals(AbstractMetadata.class)) return;
+
+    for (final Field f : type.getDeclaredFields()) {
       f.setAccessible(true);
-      
-      if(Modifier.isFinal(f.getModifiers())) continue;
+
+      if (Modifier.isFinal(f.getModifiers())) continue;
       Class<?> fieldType = f.getType();
       try {
         if (fieldType == boolean.class) f.set(this, false);
@@ -32,7 +32,7 @@ public abstract class AbstractMetadata implements Metadata {
         // TODO Auto-generated catch block
         e.printStackTrace();
       }
-      
+
       // check superclasses and interfaces
       resetMeta(type.getSuperclass());
       for (final Class<?> c : type.getInterfaces()) {

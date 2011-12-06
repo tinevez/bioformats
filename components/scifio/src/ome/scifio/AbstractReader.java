@@ -15,16 +15,16 @@ public abstract class AbstractReader<M extends Metadata>
   extends AbstractFormatHandler implements Reader<M> {
 
   // -- Constants --
-  
+
   /** Default thumbnail width and height. */
   protected static final int THUMBNAIL_DIMENSION = 128;
-  
+
   // -- Fields --
-  
+
   /** Metadata values. */
 
   protected M metadata;
-  
+
   /** Whether or not to group multi-file formats. */
   protected boolean group = true;
 
@@ -50,10 +50,13 @@ public abstract class AbstractReader<M extends Metadata>
   }
 
   // -- Reader API Methods --
-  
+
   /* @see Reader#openBytes(int, int) */
-  public byte[] openBytes(final int iNo, final int no) throws FormatException, IOException {
-    return openBytes(iNo, no, 0, 0, metadata.getSizeX(iNo), metadata.getSizeY(iNo));
+  public byte[] openBytes(final int iNo, final int no)
+    throws FormatException, IOException
+  {
+    return openBytes(
+      iNo, no, 0, 0, metadata.getSizeX(iNo), metadata.getSizeY(iNo));
   }
 
   /* @see Reader#openBytes(int, int, int, int, int, int) */
@@ -70,13 +73,14 @@ public abstract class AbstractReader<M extends Metadata>
   public byte[] openBytes(int iNo, int no, byte[] buf)
     throws FormatException, IOException
   {
-    return openBytes(iNo, no, buf, 0, 0, metadata.getSizeX(iNo), metadata.getSizeY(iNo));
+    return openBytes(
+      iNo, no, buf, 0, 0, metadata.getSizeX(iNo), metadata.getSizeY(iNo));
   }
 
   /* @see Reader#openBytes(int, int, byte[], int, int, int, int) */
-  public abstract byte[] openBytes(int iNo, int no, byte[] buf, int x, int y, int w,
-    int h) throws FormatException, IOException;
-  
+  public abstract byte[] openBytes(int iNo, int no, byte[] buf, int x, int y,
+    int w, int h) throws FormatException, IOException;
+
   /* @see Reader#openPlane(int, int, int, int, int, int int) */
   public Object openPlane(int iNo, int no, int x, int y, int w, int h)
     throws FormatException, IOException
@@ -84,7 +88,7 @@ public abstract class AbstractReader<M extends Metadata>
     // NB: Readers use byte arrays by default as the native type.
     return openBytes(iNo, no, x, y, w, h);
   }
-  
+
   /* @see Reader#openThumbBytes(int) */
   public byte[] openThumbBytes(final int iNo, final int no)
     throws FormatException, IOException
@@ -94,25 +98,25 @@ public abstract class AbstractReader<M extends Metadata>
     return FormatTools.openThumbBytes(this, no); */
     return null;
   }
-  
+
   /* @see Reader#setGroupFiles(boolean) */
   public void setGroupFiles(final boolean groupFiles) {
     group = groupFiles;
   }
-  
+
   /* @see Reader#isGroupFiles() */
   public boolean isGroupFiles() {
     FormatTools.assertStream(in, false, 1);
     return group;
   }
-  
+
   /* @see Reader#fileGroupOption(String) */
   public int fileGroupOption(final String id)
     throws FormatException, IOException
   {
     return FormatTools.CANNOT_GROUP;
   }
-  
+
   /* @see Reader#setMetadata(M) */
   public void setMetadata(M meta) {
     this.metadata = meta;
@@ -129,7 +133,7 @@ public abstract class AbstractReader<M extends Metadata>
     FormatTools.assertStream(in, true, 1);
     return in.getFileName();
   }
-  
+
   /* @see Reader#close(boolean) */
   public void close(boolean fileOnly) throws IOException {
     if (in != null) in.close();
@@ -137,7 +141,7 @@ public abstract class AbstractReader<M extends Metadata>
       in = null;
     }
   }
-  
+
   /* @see Reader#close() */
   public void close() throws IOException {
     close(false);
@@ -203,7 +207,6 @@ public abstract class AbstractReader<M extends Metadata>
   public boolean supportsFormat(String name) {
     return checkSuffix(name, suffixes);
   }
-
 
   protected void setIn(RandomAccessInputStream stream) {
     this.in = stream;

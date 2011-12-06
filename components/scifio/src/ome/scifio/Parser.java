@@ -44,16 +44,14 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
    * @return most specific metadata for this type   
    * @throws IOException 
    */
-   M parse(RandomAccessInputStream stream)
-    throws IOException, FormatException;
+  M parse(RandomAccessInputStream stream) throws IOException, FormatException;
 
   /**
    * Closes the currently open file. If the flag is set, this is all that
    * happens; if unset, it is equivalent to calling
-   * {@link IFormatHandler#close()}.
    */
   void close(boolean fileOnly) throws IOException;
-  
+
   /** Closes currently open file(s) and frees allocated memory. */
   public void close() throws IOException;
 
@@ -62,7 +60,7 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
 
   /** Activates the specified series. */
   //TODO void setSeries(int no);
-  
+
   /** Gets the currently active series. */
   //TODO int getSeries();
 
@@ -99,7 +97,7 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
    * and extremely large entries) are discarded from the metadata table.
    */
   boolean isMetadataFiltered();
-  
+
   /** Returns an array of filenames needed to open the indicated image index. */
   String[] getImageUsedFiles(int image);
 
@@ -109,7 +107,6 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
    * pixel data will be returned.
    */
   String[] getImageUsedFiles(int image, boolean noPixels);
-  
 
   /**
    * Returns an array of FileInfo objects representing the files needed

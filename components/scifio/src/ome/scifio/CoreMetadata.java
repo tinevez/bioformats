@@ -14,41 +14,40 @@ import java.util.List;
  */
 public class CoreMetadata extends AbstractMetadata {
 
-  
   // -- Fields --
-  
+
   /** Contains global metadata key, value pairs for this dataset */
   Hashtable<String, Object> globalMeta;
-  
+
   /** Contains a list of metadata objects for each image in this dataset */
   @Field(label = "imageMeta", isList = true)
   List<CoreImageMetadata> imageMeta;
-  
+
   /**
    * 
    */
   private static final long serialVersionUID = 1L;
 
   // -- Constructors --
-  
+
   public CoreMetadata() {
     globalMeta = new Hashtable<String, Object>();
     imageMeta = new ArrayList<CoreImageMetadata>();
   }
 
   // -- Metadata API Methods --
-  
+
   /* @see Metadata#getMetadataValue() */
   public Object getMetadataValue(int no, String field) {
     return globalMeta.get(field);
   }
-  
+
   /* @see Metadata#getImageMetadataValue() */
   public Object getImageMetadataValue(int no, String field) {
     return imageMeta.get(no).imageMetadata.get(field);
 
   }
-  
+
   /* @see Metadata#getGlobalMetadata() */
   public Hashtable<String, Object> getGlobalMetadata() {
     return this.globalMeta;
@@ -58,41 +57,41 @@ public class CoreMetadata extends AbstractMetadata {
   public Hashtable<String, Object> getImageMetadata(int no) {
     return imageMeta.get(no).imageMetadata;
   }
-  
+
   /* @see Metadata#getImageCount() */
   public int getImageCount() {
     return imageMeta.size();
   }
-  
+
   /* @see Metadata#isInterleaved(int) */
   public boolean isInterleaved(int no) {
     return imageMeta.get(no).interleaved;
   }
-  
+
   /* @see Metadata#getPixelType(int) */
   public int getPixelType(int no) {
     return imageMeta.get(no).pixelType;
   }
-  
+
   /* @see Metadata#getEffectiveSizeC(int no) */
   public int getEffectiveSizeC(int no) {
     int sizeZT = getSizeZ(no) * getSizeT(no);
     if (sizeZT == 0) return 0;
     return getImageCount() / sizeZT;
   }
-  
+
   /* @see Metadata#getRGBChannelCount(int) */
   public int getRGBChannelCount(int no) {
     int effSizeC = getEffectiveSizeC(no);
     if (effSizeC == 0) return 0;
     return getSizeC(no) / effSizeC;
   }
-  
+
   /* @see Metadata#isLittleEndian(int) */
   public boolean isLittleEndian(int no) {
     return imageMeta.get(no).littleEndian;
   }
-  
+
   /* @see Metadata#isIndexed(int) */
   public boolean isIndexed(int no) {
     return imageMeta.get(no).indexed;
@@ -122,7 +121,7 @@ public class CoreMetadata extends AbstractMetadata {
   public int getSizeT(int no) {
     return imageMeta.get(no).sizeT;
   }
-  
+
   /* @see Metadata#getBitsPerPixel(int) */
   public int getBitsPerPixel(int no) {
     return imageMeta.get(no).bitsPerPixel;
@@ -143,28 +142,28 @@ public class CoreMetadata extends AbstractMetadata {
     // TODO Auto-generated method stub
     return null;
   }
-  
+
   /* @see Metadata#getDimensionOrder(int) */
   public String getDimensionOrder(int no) {
     return imageMeta.get(no).dimensionOrder;
   }
-  
+
   // -- Helper Methods --
-  
+
   public void resetMeta() {
     super.resetMeta(this.getClass());
     globalMeta = new Hashtable<String, Object>();
     imageMeta = new ArrayList<CoreImageMetadata>();
   }
-  
+
   public Collection<CoreImageMetadata> getImageMetadata() {
     return Collections.unmodifiableCollection(imageMeta);
   }
-  
+
   public void add(final CoreImageMetadata meta) {
     imageMeta.add(meta);
   }
-  
+
   /* TODO not sure if these are necessary
   public boolean isFalseColor(int no) {
     return get(no).falseColor;

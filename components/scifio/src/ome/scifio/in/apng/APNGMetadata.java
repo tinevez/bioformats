@@ -16,15 +16,15 @@ import ome.scifio.FormatException;
 public class APNGMetadata extends AbstractMetadata {
 
   // -- APNG Specific Fields --
-  
+
   /** Number of frames in this APNG image */
   @Field(label = "num_frames")
   protected int numFrames;
-  
+
   /** Number of times the frames are played.  0 = infinite */
   @Field(label = "num_plays")
   protected int numPlays;
-  
+
   /** The collection of APNG blocks for this image */
   @Field(label = "blocks", isList = true)
   protected Vector<APNGChunk> blocks;
@@ -34,7 +34,7 @@ public class APNGMetadata extends AbstractMetadata {
   /** 8-bit lookup table for this image */
   @Field(label = "lut")
   protected byte[][] lut;
-  
+
   /** Width (in pixels) of planes in this image. */
   @Field(label = "sizeX")
   protected int sizeX;
@@ -77,7 +77,7 @@ public class APNGMetadata extends AbstractMetadata {
   /** Total number of images. */
   @Field(label = "imageCount")
   protected int imageCount = 1; // always 1 for APNG
-  
+
   /** Length of each subdimension of C. */
   @Field(label = "cLengths")
   protected int[] cLengths;
@@ -148,12 +148,12 @@ public class APNGMetadata extends AbstractMetadata {
    */
   @Field(label = "thumbnail")
   protected boolean thumbnail;
-  
+
   /**
    * 
    */
   protected static final long serialVersionUID = 1L;
-  
+
   // -- Constructor --
   public APNGMetadata() {
     this.imageMetadata = new Hashtable<String, Object>();
@@ -174,7 +174,7 @@ public class APNGMetadata extends AbstractMetadata {
   }
 
   // -- Metadata API Methods --
-  
+
   /* @see Metadata#isLittleEndian(int) */
   public boolean isLittleEndian(int no) {
     return this.littleEndian;
@@ -231,23 +231,27 @@ public class APNGMetadata extends AbstractMetadata {
   public boolean isIndexed(int no) {
     return this.indexed;
   }
-  
+
   /* @see Metadata#getBitsPerPixel(int) */
   public int getBitsPerPixel(int no) {
     return this.bitsPerPixel;
   }
 
   /* @see Metadata#get8BitLookupTable(int) */
-  public byte[][] get8BitLookupTable(int no) throws FormatException, IOException {
+  public byte[][] get8BitLookupTable(int no)
+    throws FormatException, IOException
+  {
     return lut;
   }
 
   /* @see Metadata#get16BitLookupTable(int) */
-  public short[][] get16BitLookupTable(int no) throws FormatException, IOException {
+  public short[][] get16BitLookupTable(int no)
+    throws FormatException, IOException
+  {
     // TODO Auto-generated method stub
     return null;
   }
-  
+
   /* @see Metadata#getGlobalMetadata() */
   public Hashtable<String, Object> getGlobalMetadata() {
     return this.imageMetadata;
@@ -267,21 +271,21 @@ public class APNGMetadata extends AbstractMetadata {
   public Object getImageMetadataValue(int no, String field) {
     return this.imageMetadata.get(field);
   }
-  
+
   /* @see Metadata#getEffectiveSizeC(int no) */
   public int getEffectiveSizeC(int no) {
     int sizeZT = getSizeZ(no) * getSizeT(no);
     if (sizeZT == 0) return 0;
     return getImageCount() / sizeZT;
   }
-  
+
   /* @see Metadata#getDimensionOrder(int) */
   public String getDimensionOrder(int no) {
     return this.dimensionOrder;
   }
 
   // -- Helper Methods --
-  
+
   public void resetMeta() {
     super.resetMeta(this.getClass());
     this.imageMetadata = new Hashtable<String, Object>();

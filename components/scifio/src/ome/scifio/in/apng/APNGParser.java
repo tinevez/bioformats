@@ -12,6 +12,7 @@ import ome.scifio.AbstractParser;
 import ome.scifio.FormatException;
 import ome.scifio.io.RandomAccessInputStream;
 import ome.scifio.util.BufferedImageTools;
+import ome.scifio.util.FormatTools;
 
 /**
  * File format SCIFIO Parser for Animated Portable Network Graphics
@@ -36,7 +37,6 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
 
   /* @see ome.scifio.AbstractParser#parse(RandomAccessInputStream stream) */
   @Override
-
   public APNGMetadata parse(RandomAccessInputStream stream)
     throws IOException, FormatException
   {
@@ -68,7 +68,6 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
 
       APNGChunk block = new APNGChunk();
 
-
       if (type.equals("acTL")) {
         // APNG-specific chunk
         metadata.numFrames = in.readInt(); // read num_frames
@@ -76,15 +75,15 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
       }
       else if (type.equals("fcTL")) {
         block = new APNGfcTLChunk();
-        ((APNGfcTLChunk)block).sequenceNumber = in.readInt();
-        ((APNGfcTLChunk)block).width = in.readInt();
-        ((APNGfcTLChunk)block).height = in.readInt();
-        ((APNGfcTLChunk)block).xOffset = in.readInt();
-        ((APNGfcTLChunk)block).yOffset = in.readInt();
-        ((APNGfcTLChunk)block).delayNum = in.readShort();
-        ((APNGfcTLChunk)block).delayDen = in.readShort();
-        ((APNGfcTLChunk)block).disposeOp = in.readByte();
-        ((APNGfcTLChunk)block).blendOp = in.readByte();
+        ((APNGfcTLChunk) block).sequenceNumber = in.readInt();
+        ((APNGfcTLChunk) block).width = in.readInt();
+        ((APNGfcTLChunk) block).height = in.readInt();
+        ((APNGfcTLChunk) block).xOffset = in.readInt();
+        ((APNGfcTLChunk) block).yOffset = in.readInt();
+        ((APNGfcTLChunk) block).delayNum = in.readShort();
+        ((APNGfcTLChunk) block).delayDen = in.readShort();
+        ((APNGfcTLChunk) block).disposeOp = in.readByte();
+        ((APNGfcTLChunk) block).blendOp = in.readByte();
       }
       else in.skipBytes(length);
 
@@ -92,14 +91,13 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
       block.type = type;
       block.offset = offset;
       blocks.add(block);
-      
+
       if (in.getFilePointer() < in.length() - 4) {
         in.skipBytes(4); // skip the CRC
       }
     }
 
-    if (metadata.imageCount == 0)
-      metadata.imageCount = 1;
+    if (metadata.imageCount == 0) metadata.imageCount = 1;
     metadata.sizeZ = 1;
     metadata.sizeT = metadata.imageCount;
 
@@ -118,8 +116,8 @@ public class APNGParser extends AbstractParser<APNGMetadata> {
     metadata.rgb = img.getRaster().getNumBands() > 1;
     metadata.sizeC = img.getRaster().getNumBands();
     metadata.pixelType = BufferedImageTools.getPixelType(img);
-    metadata.indexed =
-      img.getColorModel() instanceof IndexColorModel;
+    metadata.bitsPerPixel = FormatTools.getBitsPerPixel(metadata.pixelType);
+    metadata.indexed = img.getColorModel() instanceof IndexColorModel;
     metadata.falseColor = false;
     metadata.setBlocks(blocks);
 

@@ -10,11 +10,11 @@ import java.util.Hashtable;
  */
 public class CoreImageMetadata {
   // -- Fields --
-  
+
   /** 8-bit lookup table for this image */
   @Field(label = "lut")
   protected byte[][] lut;
-  
+
   /** Width (in pixels) of planes in this image. */
   @Field(label = "sizeX")
   protected int sizeX;
@@ -53,7 +53,7 @@ public class CoreImageMetadata {
   /** Number of valid bits per pixel. */
   @Field(label = "bitsPerPixel")
   protected int bitsPerPixel;
-  
+
   /** Length of each subdimension of C. */
   @Field(label = "cLengths")
   protected int[] cLengths;
@@ -125,7 +125,7 @@ public class CoreImageMetadata {
    */
   @Field(label = "thumbnail")
   protected boolean thumbnail;
-  
+
   /**
    * 
    */

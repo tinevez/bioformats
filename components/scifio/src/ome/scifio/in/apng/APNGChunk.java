@@ -16,9 +16,9 @@ public class APNGChunk {
   public long offset;
   public int length;
   public String type;
-  
+
   // -- Methods --
-  
+
   public int[] getFrameCoordinates() {
     return new int[0];
   }

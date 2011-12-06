@@ -8,7 +8,8 @@ package ome.scifio;
  * <dd><a href="">Trac</a>,
  * <a href="">Gitweb</a></dd></dl>
  */
-public interface Translator<M extends Metadata, N extends Metadata> extends MetadataHandler<M> {
+public interface Translator<M extends Metadata, N extends Metadata>
+  extends MetadataHandler<M> {
 
   // -- Translator API methods --
 

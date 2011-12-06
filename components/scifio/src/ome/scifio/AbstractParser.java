@@ -37,16 +37,13 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
 
   /* @see Parser#parse(File file) */
 
-  public M parse(File file) throws IOException, FormatException
-  {
+  public M parse(File file) throws IOException, FormatException {
     return parse(file.getName());
   }
 
   /* @see Parser#parse(String fileName) */
 
-  public M parse(String fileName)
-    throws IOException, FormatException
-  {
+  public M parse(String fileName) throws IOException, FormatException {
     return parse(new RandomAccessInputStream(fileName));
   }
 
@@ -54,16 +51,16 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
   public M parse(RandomAccessInputStream stream)
     throws IOException, FormatException
   {
-    if(in == null || !in.getFileName().equals(stream.getFileName())) {
-       init(stream);
+    if (in == null || !in.getFileName().equals(stream.getFileName())) {
+      init(stream);
 
-      if(saveOriginalMetadata) {
+      if (saveOriginalMetadata) {
         //TODO store all metadata in OMEXML store.. or equivalent function? as per setId
       }
     }
     return metadata;
   }
-  
+
   /* @see Parser#close(boolean) */
   public void close(boolean fileOnly) throws IOException {
     if (in != null) in.close();
@@ -71,12 +68,12 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
       in = null;
     }
   }
-  
+
   /* @see Parser#close() */
   public void close() throws IOException {
     close(false);
   }
-  
+
   /* @see Parser#setOriginalMetadataPopulated(boolean) */
   public void setOriginalMetadataPopulated(boolean populate) {
     FormatTools.assertStream(in, false, 1);
@@ -95,8 +92,7 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
 
   /* @see Parser#getUsedFiles() */
   public String[] getUsedFiles(boolean noPixels) {
-    Vector<String> files =
-      new Vector<String>();
+    Vector<String> files = new Vector<String>();
     for (int i = 0; i < metadata.getImageCount(); i++) {
       String[] s = getImageUsedFiles(i, noPixels);
       if (s != null) {
@@ -109,7 +105,7 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
     }
     return files.toArray(new String[files.size()]);
   }
-  
+
   /* @see Parser#setMetadataFiltered(boolean) */
   public void setMetadataFiltered(boolean filter) {
     FormatTools.assertStream(in, false, 1);
@@ -125,7 +121,7 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
   public String[] getImageUsedFiles(int image) {
     return getImageUsedFiles(image, false);
   }
-  
+
   /* @see Parser#getImageUsedFiles(boolean) */
   public String[] getImageUsedFiles(int image, boolean noPixels) {
     return noPixels ? null : new String[] {in.getFileName()};
@@ -142,7 +138,7 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
     // TODO Auto-generated method stub
     return null;
   }
-  
+
   // -- AbstractParser Methods --
 
   /** Adds an entry to the global metadata table. */
@@ -248,10 +244,10 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
 
     meta.put(key, val == null ? value : val);
   }
-  
+
   private void init(RandomAccessInputStream stream) throws IOException {
 
-    if(in != null) {
+    if (in != null) {
       String[] s = getUsedFiles();
       for (int i = 0; i < s.length; i++) {
         if (in.getFileName().equals(s[i])) return;

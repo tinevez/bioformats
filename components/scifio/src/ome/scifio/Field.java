@@ -8,10 +8,10 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
 public @interface Field {
-  
+
   /** Original label of this field */
   String label() default "";
-  
+
   /** Whether or not this field is actually a list of fields */
   boolean isList() default false;
 }

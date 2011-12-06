@@ -218,7 +218,9 @@ public class FormatTools {
    *   is reported as part of the exception message, if available. Use zero
    *   to suppress output of the calling method name.
    */
-  public static void assertStream(RandomAccessInputStream stream, boolean notNull, int depth) {
+  public static void assertStream(RandomAccessInputStream stream,
+    boolean notNull, int depth)
+  {
     String msg = null;
     if (stream == null && notNull) {
       msg = "Current file should not be null; call setId(String) first";
@@ -262,7 +264,8 @@ public class FormatTools {
   public static void checkPlaneNumber(Reader r, int no) throws FormatException {
     int imageCount = r.getMetadata().getImageCount();
     if (no < 0 || no >= imageCount) {
-      throw new FormatException("Invalid image number: " + no + " (" +/* TODO series=" +
+      throw new FormatException("Invalid image number: " + no + " (" +
+        /* TODO series=" +
         r.getMetadata().getSeries() + ", */"imageCount=" + imageCount + ")");
     }
   }
@@ -280,8 +283,11 @@ public class FormatTools {
     }
   }
 
-  public static void checkBufferSize(int no, Reader r, int len) throws FormatException {
-    checkBufferSize(r, len, r.getMetadata().getSizeX(no), r.getMetadata().getSizeY(no), no);
+  public static void checkBufferSize(int no, Reader r, int len)
+    throws FormatException
+  {
+    checkBufferSize(r, len, r.getMetadata().getSizeX(no), r.getMetadata()
+      .getSizeY(no), no);
   }
 
   /**
@@ -301,12 +307,14 @@ public class FormatTools {
 
   /** Returns the size in bytes of a single plane. */
   public static int getPlaneSize(Reader r, int no) {
-    return getPlaneSize(r, r.getMetadata().getSizeX(no), r.getMetadata().getSizeY(no), no);
+    return getPlaneSize(r, r.getMetadata().getSizeX(no), r.getMetadata()
+      .getSizeY(no), no);
   }
 
   /** Returns the size in bytes of a w * h tile. */
   public static int getPlaneSize(Reader r, int w, int h, int no) {
-    return w * h * r.getMetadata().getRGBChannelCount(no) * getBytesPerPixel(r.getMetadata().getPixelType(no));
+    return w * h * r.getMetadata().getRGBChannelCount(no) *
+      getBytesPerPixel(r.getMetadata().getPixelType(no));
   }
 
   // -- Utility methods - pixel types --
@@ -340,9 +348,8 @@ public class FormatTools {
   /**
    * Retrieves how many bytes per pixel the current plane or section has.
    * @param pixelType the pixel type as retrieved from
-   *   {@link IFormatReader#getPixelType()}.
    * @return the number of bytes per pixel.
-   * @see IFormatReader#getPixelType()
+   * @see ome.scifio.Metadata#getPixelType()
    */
   public static int getBytesPerPixel(int pixelType) {
     switch (pixelType) {
@@ -363,6 +370,17 @@ public class FormatTools {
   }
 
   /**
+   * Retrieves how many bytes per pixel the current plane or section has.
+   * @param pixelType the pixel type as retrieved from
+   *   {@link ome.scifio.Metadata#getPixelType()}.
+   * @return the number of bytes per pixel.
+   * @see ome.scifio.Metadata#getPixelType()
+   */
+  public static int getBitsPerPixel(int pixelType) {
+    return 8 * FormatTools.getBytesPerPixel(pixelType);
+  }
+
+  /**
    * Retrieves the number of bytes per pixel in the current plane.
    * @param pixelType the pixel type, as a String.
    * @return the number of bytes per pixel.
@@ -376,9 +394,9 @@ public class FormatTools {
   /**
    * Determines whether the given pixel type is floating point or integer.
    * @param pixelType the pixel type as retrieved from
-   *   {@link IFormatReader#getPixelType()}.
+   *   {@link ome.scifio.Metadata#getPixelType()}.
    * @return true if the pixel type is floating point.
-   * @see IFormatReader#getPixelType()
+   * @see ome.scifio.Metadata#getPixelType()
    */
   public static boolean isFloatingPoint(int pixelType) {
     switch (pixelType) {
@@ -399,9 +417,9 @@ public class FormatTools {
   /**
    * Determines whether the given pixel type is signed or unsigned.
    * @param pixelType the pixel type as retrieved from
-   *   {@link IFormatReader#getPixelType()}.
+   *   {@link ome.scifio.Metadata#getPixelType()}.
    * @return true if the pixel type is signed.
-   * @see IFormatReader#getPixelType()
+   * @see ome.scifio.Metadata#getPixelType()
    */
   public static boolean isSigned(int pixelType) {
     switch (pixelType) {
