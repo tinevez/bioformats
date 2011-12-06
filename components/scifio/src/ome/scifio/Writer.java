@@ -26,7 +26,8 @@ public interface Writer<M extends Metadata> extends MetadataHandler<M> {
    * @throws FormatException if one of the parameters is invalid.
    * @throws IOException if there was a problem writing to the file.
    */
-  void saveBytes(int iNo, int no, byte[] buf) throws FormatException, IOException;
+  void saveBytes(int iNo, int no, byte[] buf)
+    throws FormatException, IOException;
 
   /**
    * Saves the given image tile to the current series in the current file.
@@ -52,7 +53,8 @@ public interface Writer<M extends Metadata> extends MetadataHandler<M> {
    * @throws FormatException if one of the parameters is invalid.
    * @throws IOException if there was a problem writing to the file.
    */
-  void savePlane(int iNo, int no, Object plane) throws FormatException, IOException;
+  void savePlane(int iNo, int no, Object plane)
+    throws FormatException, IOException;
 
   /**
    * Saves the given image plane to the current series in the current file.
@@ -68,9 +70,6 @@ public interface Writer<M extends Metadata> extends MetadataHandler<M> {
    */
   void savePlane(int iNo, int no, Object plane, int x, int y, int w, int h)
     throws FormatException, IOException;
-
-  /** Sets the number of valid bits per pixel. */
-  void setValidBitsPerPixel(int bits);
 
   /** Reports whether the writer can save multiple images to a single file. */
   boolean canDoStacks();
@@ -88,27 +87,54 @@ public interface Writer<M extends Metadata> extends MetadataHandler<M> {
    * @return A metadata retrieval object.
    */
   M getMetadata();
-  
+
   /**
    * Sets the source for this reader to read from.
    * @param file
    * @throws IOException 
    */
-  public void setDest(File file) throws IOException;
+  public void setDest(File file) throws FormatException, IOException;
 
   /**
    * Sets the source for this reader to read from.
    * @param fileName
    * @throws IOException 
    */
-  public void setDest(String fileName) throws IOException;
-  
+  public void setDest(String fileName) throws FormatException, IOException;
+
   /**
    * Sets the default input stream for this reader.
    * 
    * @param stream a RandomAccessInputStream for the source being read
    */
-  void setDest(RandomAccessOutputStream stream);
+  void setDest(RandomAccessOutputStream stream)
+    throws FormatException, IOException;
+
+  /**
+   * Sets the source for this reader to read from.
+   * @param iNo the image index to use for initialization (default: 0)
+   * @param file
+   * @throws IOException 
+   */
+  public void setDest(File file, int iNo) throws FormatException, IOException;
+
+  /**
+   * Sets the source for this reader to read from.
+   * @param iNo the image index to use for initialization (default: 0)
+   * @param fileName
+   * @throws IOException 
+   */
+  public void setDest(String fileName, int iNo)
+    throws FormatException, IOException;
+
+  /**
+   * Sets the default input stream for this reader.
+   * @param iNo the image index to use for initialization (default: 0)
+   * 
+   * @param stream a RandomAccessInputStream for the source being read
+   */
+  void setDest(RandomAccessOutputStream stream, int iNo)
+    throws FormatException, IOException;
 
   /**
    * Retrieves the current input stream for this reader.
@@ -161,7 +187,7 @@ public interface Writer<M extends Metadata> extends MetadataHandler<M> {
    * will be slightly improved.
    */
   void setWriteSequentially(boolean sequential);
-  
+
   /** Closes currently open file(s) and frees allocated memory. */
   void close() throws IOException;
 
