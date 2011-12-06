@@ -24,13 +24,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 package loci.formats.in;
 
 import java.io.IOException;
+
 import ome.scifio.in.apng.APNGChecker;
 import ome.scifio.in.apng.APNGMetadata;
 import ome.scifio.in.apng.APNGParser;
 
 import ome.scifio.io.RandomAccessInputStream;
 import loci.formats.FormatException;
-
 
 /**
  * APNGReader is the file format reader for
@@ -55,7 +55,7 @@ public class APNGReader extends BIFormatReader {
     super("Animated PNG", "png");
     checker = new APNGChecker();
     parser = new APNGParser();
-	  reader = new ome.scifio.in.apng.APNGReader();
+    reader = new ome.scifio.in.apng.APNGReader();
   }
 
   // -- IFormatReader API methods --
@@ -82,16 +82,17 @@ public class APNGReader extends BIFormatReader {
     }
     return null;
   }
-  
+
   /* @see IFormatReader#openBytes(int) */
   @Override
   @Deprecated
   public byte[] openBytes(int no) throws FormatException, IOException {
     try {
-		return reader.openBytes(this.getSeries(), no);
-	} catch (ome.scifio.FormatException e) {
-		throw new FormatException(e);
-	}
+      return reader.openBytes(this.getSeries(), no);
+    }
+    catch (ome.scifio.FormatException e) {
+      throw new FormatException(e);
+    }
   }
 
   /* @see IFormatReader#openBytes(int, byte[]) */
@@ -101,10 +102,11 @@ public class APNGReader extends BIFormatReader {
     throws FormatException, IOException
   {
     try {
-		return reader.openBytes(this.getSeries(), no, buf);
-	} catch (ome.scifio.FormatException e) {
-		throw new FormatException(e);
-	}
+      return reader.openBytes(this.getSeries(), no, buf);
+    }
+    catch (ome.scifio.FormatException e) {
+      throw new FormatException(e);
+    }
   }
 
   /* @see IFormatReader#openBytes(int, int, int, int, int) */
@@ -114,10 +116,11 @@ public class APNGReader extends BIFormatReader {
     throws FormatException, IOException
   {
     try {
-		return reader.openBytes(this.getSeries(), no, x, y, w, h);
-	} catch (ome.scifio.FormatException e) {
-		throw new FormatException(e);
-	}
+      return reader.openBytes(this.getSeries(), no, x, y, w, h);
+    }
+    catch (ome.scifio.FormatException e) {
+      throw new FormatException(e);
+    }
   }
 
   /* @see loci.formats.IFormatReader#openPlane(int, int, int, int, int int) */
@@ -125,11 +128,12 @@ public class APNGReader extends BIFormatReader {
   public Object openPlane(int no, int x, int y, int w, int h)
     throws FormatException, IOException
   {
-	  try {
-		return reader.openPlane(this.getSeries(), no, x, y, w, h);
-	} catch (ome.scifio.FormatException e) {
-		throw new FormatException(e.getCause());
-	}
+    try {
+      return reader.openPlane(this.getSeries(), no, x, y, w, h);
+    }
+    catch (ome.scifio.FormatException e) {
+      throw new FormatException(e.getCause());
+    }
   }
 
   /* @see loci.formats.IFormatReader#close(boolean) */
@@ -147,10 +151,12 @@ public class APNGReader extends BIFormatReader {
     APNGMetadata meta = null;
     try {
       meta = (APNGMetadata) parser.parse(id);
-    } catch (ome.scifio.FormatException e) {
+    }
+    catch (ome.scifio.FormatException e) {
       throw new FormatException(e.getCause());
     }
     reader.setSource(id);
-    ((ome.scifio.in.apng.APNGReader)reader).setMetadata(meta);
+    metadataStore.setSCIFIOMeta(meta);
+    ((ome.scifio.in.apng.APNGReader) reader).setMetadata(meta);
   }
 }
