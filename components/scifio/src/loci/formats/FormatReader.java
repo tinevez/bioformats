@@ -133,9 +133,6 @@ public abstract class FormatReader extends FormatHandler
   /** Scifio Translator for deference */
   protected Translator translator;
 
-  /** Scifio Writer for deference */
-  protected Writer writer;
-
   /** Current file. */
   protected RandomAccessInputStream in;
 

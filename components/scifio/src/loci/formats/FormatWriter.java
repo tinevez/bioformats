@@ -27,6 +27,7 @@ import java.awt.image.ColorModel;
 import java.io.IOException;
 import java.util.HashMap;
 
+import ome.scifio.Writer;
 import ome.xml.model.primitives.PositiveInteger;
 
 import loci.common.DataTools;
@@ -47,6 +48,9 @@ public abstract class FormatWriter extends FormatHandler
 {
 
   // -- Fields --
+
+  /** Scifio Writer for deference */
+  protected Writer writer;
 
   /** Frame rate to use when writing in frames per second, if applicable. */
   protected int fps = 10;
