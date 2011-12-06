@@ -10,7 +10,6 @@ import ome.scifio.AbstractWriter;
 import ome.scifio.FormatException;
 import ome.scifio.common.DataTools;
 import ome.scifio.in.apng.APNGMetadata;
-import ome.scifio.in.apng.APNGfcTLChunk;
 import ome.scifio.util.FormatTools;
 
 public class APNGWriter extends AbstractWriter<APNGMetadata> {
@@ -18,8 +17,7 @@ public class APNGWriter extends AbstractWriter<APNGMetadata> {
   // -- Constants --
 
   private static final byte[] PNG_SIG = new byte[] {
-    (byte) 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a
-  };
+      (byte) 0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a};
 
   // -- Fields --
 
@@ -27,15 +25,15 @@ public class APNGWriter extends AbstractWriter<APNGMetadata> {
   private long numFramesPointer = 0;
   private int nextSequenceNumber;
   private boolean littleEndian;
-  
+
   // -- Constructor --
-  
+
   public APNGWriter() {
     super("Animated PNG", "png");
   }
 
   // -- Writer API Methods --
-  
+
   /**
    * @see ome.scifio.Writer#saveBytes(int, byte[], int, int, int, int)
    */
@@ -48,11 +46,10 @@ public class APNGWriter extends AbstractWriter<APNGMetadata> {
         "APNGWriter does not yet support saving image tiles.");
     }
 
-    //int width = metadata.getSizeX(iNo);
-    //int height = metadata.getSizeY(iNo);
-
+    int width = metadata.getSizeX(iNo);
+    int height = metadata.getSizeY(iNo);
     if (!initialized[iNo][no]) {
-      writeFCTL();
+      writeFCTL(width, height);
       if (numFrames == 0) writePLTE();
       initialized[iNo][no] = true;
     }
@@ -61,16 +58,29 @@ public class APNGWriter extends AbstractWriter<APNGMetadata> {
     numFrames++;
   }
 
+  /* @see ome.scifio.Writer#canDoStacks() */
+  @Override
+  public boolean canDoStacks() {
+    return true;
+  }
+
+  /* @see ome.scifio.Writer#getPixelTypes(String) */
+  @Override
+  public int[] getPixelTypes(String codec) {
+    return new int[] {
+        FormatTools.INT8, FormatTools.UINT8, FormatTools.INT16,
+        FormatTools.UINT16};
+  }
+
   // -- MetadataHandler methods --
-  
+
   @Override
   public Class<APNGMetadata> getMetadataType() {
-    // TODO Auto-generated method stub
-    return null;
+    return APNGMetadata.class;
   }
 
   // -- APNGWriter Methods --
-  
+
   /* @see ome.scifio.Writer#close() */
   public void close() throws IOException {
     if (out != null) {
@@ -82,8 +92,7 @@ public class APNGWriter extends AbstractWriter<APNGMetadata> {
     nextSequenceNumber = 0;
     littleEndian = false;
   }
-  
-  // TODO where to call this?  Should it be in the API?
+
   @Override
   public void initialize(int iNo) throws FormatException, IOException {
     super.initialize(iNo);
@@ -92,7 +101,7 @@ public class APNGWriter extends AbstractWriter<APNGMetadata> {
       int height = metadata.getSizeY(iNo);
       int bytesPerPixel =
         FormatTools.getBytesPerPixel(metadata.getPixelType(iNo));
-      int nChannels = metadata.getEffectiveSizeC(iNo);
+      int nChannels = metadata.getSizeC(iNo);
       boolean indexed =
         getColorModel() != null && (getColorModel() instanceof IndexColorModel);
       littleEndian = metadata.isLittleEndian(iNo);
@@ -101,7 +110,6 @@ public class APNGWriter extends AbstractWriter<APNGMetadata> {
       out.write(PNG_SIG);
 
       // write IHDR chunk
-
       out.writeInt(13);
       byte[] b = new byte[17];
       b[0] = 'I';
@@ -135,7 +143,7 @@ public class APNGWriter extends AbstractWriter<APNGMetadata> {
       out.writeInt(0); // save a place for the CRC
     }
   }
-  
+
   private int crc(byte[] buf) {
     return crc(buf, 0, buf.length);
   }
@@ -146,8 +154,7 @@ public class APNGWriter extends AbstractWriter<APNGMetadata> {
     return (int) crc.getValue();
   }
 
-  private void writeFCTL() throws IOException {
-    APNGfcTLChunk fctlChunk = (APNGfcTLChunk) metadata.getBlocks().get(nextSequenceNumber);
+  private void writeFCTL(int width, int height) throws IOException {
     out.writeInt(26);
     byte[] b = new byte[30];
     b[0] = 'f';
@@ -156,18 +163,46 @@ public class APNGWriter extends AbstractWriter<APNGMetadata> {
     b[3] = 'L';
 
     DataTools.unpackBytes(nextSequenceNumber++, b, 4, 4, false);
-    DataTools.unpackBytes(fctlChunk.width, b, 8, 4, false);
-    DataTools.unpackBytes(fctlChunk.height, b, 12, 4, false);
-    DataTools.unpackBytes(fctlChunk.xOffset, b, 16, 4, false);
-    DataTools.unpackBytes(fctlChunk.yOffset, b, 20, 4, false);
-    DataTools.unpackBytes(fctlChunk.delayNum, b, 24, 2, false);
-    DataTools.unpackBytes(fctlChunk.delayDen, b, 26, 2, false);
-    b[28] = (byte) fctlChunk.disposeOp;
-    b[29] = (byte) fctlChunk.blendOp;
+    DataTools.unpackBytes(width, b, 8, 4, false);
+    DataTools.unpackBytes(height, b, 12, 4, false);
+    DataTools.unpackBytes(0, b, 16, 4, false);
+    DataTools.unpackBytes(0, b, 20, 4, false);
+    DataTools.unpackBytes(1, b, 24, 2, false);
+    DataTools.unpackBytes(fps, b, 26, 2, false);
+    b[28] = (byte) 1;
+    b[29] = (byte) 0;
 
     out.write(b);
     out.writeInt(crc(b));
   }
+
+  /* TODO: explore how chunks are preserved from source to destination
+  private void writeFCTL() throws IOException {
+    for(APNGChunk chunk : metadata.getBlocks()) {
+      if(chunk instanceof APNGfcTLChunk) {
+        APNGfcTLChunk fctlChunk = (APNGfcTLChunk) chunk;
+        out.writeInt(26);
+        byte[] b = new byte[30];
+        b[0] = 'f';
+        b[1] = 'c';
+        b[2] = 'T';
+        b[3] = 'L';
+
+        DataTools.unpackBytes(nextSequenceNumber++, b, 4, 4, false);
+        DataTools.unpackBytes(fctlChunk.width, b, 8, 4, false);
+        DataTools.unpackBytes(fctlChunk.height, b, 12, 4, false);
+        DataTools.unpackBytes(fctlChunk.xOffset, b, 16, 4, false);
+        DataTools.unpackBytes(fctlChunk.yOffset, b, 20, 4, false);
+        DataTools.unpackBytes(fctlChunk.delayNum, b, 24, 2, false);
+        DataTools.unpackBytes(fctlChunk.delayDen, b, 26, 2, false);
+        b[28] = (byte) fctlChunk.disposeOp;
+        b[29] = (byte) fctlChunk.blendOp;
+
+        out.write(b);
+      }
+    }
+  }
+  */
 
   private void writePLTE() throws IOException {
     if (!(getColorModel() instanceof IndexColorModel)) return;
@@ -185,9 +220,9 @@ public class APNGWriter extends AbstractWriter<APNGMetadata> {
     b[2] = 'T';
     b[3] = 'E';
 
-    for (int i=0; i<lut[0].length; i++) {
-      for (int j=0; j<lut.length; j++) {
-        b[i*lut.length + j + 4] = lut[j][i];
+    for (int i = 0; i < lut[0].length; i++) {
+      for (int j = 0; j < lut.length; j++) {
+        b[i * lut.length + j + 4] = lut[j][i];
       }
     }
 
@@ -198,7 +233,7 @@ public class APNGWriter extends AbstractWriter<APNGMetadata> {
   private void writePixels(int iNo, String chunk, byte[] stream, int x, int y,
     int width, int height) throws FormatException, IOException
   {
-    int sizeC = metadata.getEffectiveSizeC(iNo);
+    int sizeC = metadata.getSizeC(iNo);
     String type = FormatTools.getPixelTypeString(metadata.getPixelType(iNo));
     int pixelType = FormatTools.pixelTypeFromString(type);
     boolean signed = FormatTools.isSigned(pixelType);
@@ -217,27 +252,27 @@ public class APNGWriter extends AbstractWriter<APNGMetadata> {
     int rowLen = stream.length / height;
     int bytesPerPixel = stream.length / (width * height * sizeC);
     byte[] rowBuf = new byte[rowLen];
-    for (int i=0; i<height; i++) {
+    for (int i = 0; i < height; i++) {
       deflater.write(0);
       if (interleaved) {
         if (littleEndian) {
-          for (int col=0; col<width*sizeC; col++) {
+          for (int col = 0; col < width * sizeC; col++) {
             int offset = (i * sizeC * width + col) * bytesPerPixel;
-            int pixel = DataTools.bytesToInt(stream, offset,
-              bytesPerPixel, littleEndian);
-            DataTools.unpackBytes(pixel, rowBuf, col * bytesPerPixel,
-              bytesPerPixel, false);
+            int pixel =
+              DataTools.bytesToInt(stream, offset, bytesPerPixel, littleEndian);
+            DataTools.unpackBytes(
+              pixel, rowBuf, col * bytesPerPixel, bytesPerPixel, false);
           }
         }
         else System.arraycopy(stream, i * rowLen, rowBuf, 0, rowLen);
       }
       else {
         int max = (int) Math.pow(2, bytesPerPixel * 8 - 1);
-        for (int col=0; col<width; col++) {
-          for (int c=0; c<sizeC; c++) {
+        for (int col = 0; col < width; col++) {
+          for (int c = 0; c < sizeC; c++) {
             int offset = c * planeSize + (i * width + col) * bytesPerPixel;
-            int pixel = DataTools.bytesToInt(stream, offset, bytesPerPixel,
-              littleEndian);
+            int pixel =
+              DataTools.bytesToInt(stream, offset, bytesPerPixel, littleEndian);
             if (signed) {
               if (pixel < max) pixel += max;
               else pixel -= max;
