@@ -39,4 +39,5 @@ package loci.formats.meta;
  *
  * @author Curtis Rueden ctrueden at wisc.edu
  */
-public interface IMetadata extends MetadataRetrieve, MetadataStore { }
+public interface IMetadata extends MetadataRetrieve, MetadataStore {
+}

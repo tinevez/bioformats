@@ -75,2207 +75,2271 @@ import ome.xml.model.primitives.*;
  */
 public interface MetadataRetrieve {
 
-	// -- Entity counting (manual definitions) --
+  // -- SCIFIO deference methods --
 
-	int getPixelsBinDataCount(int imageIndex);
+  ome.scifio.Metadata getSCIFIOMeta();
 
-	String getLightSourceType(int instrumentIndex, int lightSourceIndex);
+  // -- Entity counting (manual definitions) --
 
-	// -- Entity counting (code generated definitions) --
+  int getPixelsBinDataCount(int imageIndex);
 
-	// AnnotationRef entity counting
-	int getROIAnnotationRefCount(int ROIIndex);
+  String getLightSourceType(int instrumentIndex, int lightSourceIndex);
 
-	int getPlateAcquisitionAnnotationRefCount(int plateIndex, int plateAcquisitionIndex);
+  // -- Entity counting (code generated definitions) --
 
-	int getPlateAnnotationRefCount(int plateIndex);
+  // AnnotationRef entity counting
+  int getROIAnnotationRefCount(int ROIIndex);
 
-	int getImageAnnotationRefCount(int imageIndex);
+  int getPlateAcquisitionAnnotationRefCount(int plateIndex,
+    int plateAcquisitionIndex);
 
-	int getScreenAnnotationRefCount(int screenIndex);
+  int getPlateAnnotationRefCount(int plateIndex);
 
-	int getWellAnnotationRefCount(int plateIndex, int wellIndex);
+  int getImageAnnotationRefCount(int imageIndex);
 
-	int getDatasetAnnotationRefCount(int datasetIndex);
+  int getScreenAnnotationRefCount(int screenIndex);
 
-	int getProjectAnnotationRefCount(int projectIndex);
+  int getWellAnnotationRefCount(int plateIndex, int wellIndex);
 
-	int getReagentAnnotationRefCount(int screenIndex, int reagentIndex);
+  int getDatasetAnnotationRefCount(int datasetIndex);
 
-	int getPlaneAnnotationRefCount(int imageIndex, int planeIndex);
+  int getProjectAnnotationRefCount(int projectIndex);
 
-	int getExperimenterAnnotationRefCount(int experimenterIndex);
+  int getReagentAnnotationRefCount(int screenIndex, int reagentIndex);
 
-	int getWellSampleAnnotationRefCount(int plateIndex, int wellIndex, int wellSampleIndex);
+  int getPlaneAnnotationRefCount(int imageIndex, int planeIndex);
 
-	int getPixelsAnnotationRefCount(int imageIndex);
+  int getExperimenterAnnotationRefCount(int experimenterIndex);
 
-	int getChannelAnnotationRefCount(int imageIndex, int channelIndex);
+  int getWellSampleAnnotationRefCount(int plateIndex, int wellIndex,
+    int wellSampleIndex);
 
-	// Arc entity counting
-	// BinaryFile entity counting
-	// BinaryOnly entity counting
-	// BooleanAnnotation entity counting
-	int getBooleanAnnotationCount();
+  int getPixelsAnnotationRefCount(int imageIndex);
 
-	// Channel entity counting
-	int getChannelCount(int imageIndex);
+  int getChannelAnnotationRefCount(int imageIndex, int channelIndex);
 
-	// CommentAnnotation entity counting
-	int getCommentAnnotationCount();
+  // Arc entity counting
+  // BinaryFile entity counting
+  // BinaryOnly entity counting
+  // BooleanAnnotation entity counting
+  int getBooleanAnnotationCount();
 
-	// Contact entity counting
-	// Dataset entity counting
-	int getDatasetCount();
+  // Channel entity counting
+  int getChannelCount(int imageIndex);
 
-	// DatasetRef entity counting
-	int getDatasetRefCount(int imageIndex);
+  // CommentAnnotation entity counting
+  int getCommentAnnotationCount();
 
-	// Detector entity counting
-	int getDetectorCount(int instrumentIndex);
+  // Contact entity counting
+  // Dataset entity counting
+  int getDatasetCount();
 
-	// DetectorSettings entity counting
-	// Dichroic entity counting
-	int getDichroicCount(int instrumentIndex);
+  // DatasetRef entity counting
+  int getDatasetRefCount(int imageIndex);
 
-	// DichroicRef entity counting
-	// DoubleAnnotation entity counting
-	int getDoubleAnnotationCount();
+  // Detector entity counting
+  int getDetectorCount(int instrumentIndex);
 
-	// Ellipse entity counting
-	// EmissionFilterRef entity counting
-	int getLightPathEmissionFilterRefCount(int imageIndex, int channelIndex);
+  // DetectorSettings entity counting
+  // Dichroic entity counting
+  int getDichroicCount(int instrumentIndex);
 
-	int getFilterSetEmissionFilterRefCount(int instrumentIndex, int filterSetIndex);
+  // DichroicRef entity counting
+  // DoubleAnnotation entity counting
+  int getDoubleAnnotationCount();
 
-	// ExcitationFilterRef entity counting
-	int getLightPathExcitationFilterRefCount(int imageIndex, int channelIndex);
+  // Ellipse entity counting
+  // EmissionFilterRef entity counting
+  int getLightPathEmissionFilterRefCount(int imageIndex, int channelIndex);
 
-	int getFilterSetExcitationFilterRefCount(int instrumentIndex, int filterSetIndex);
+  int getFilterSetEmissionFilterRefCount(int instrumentIndex, int filterSetIndex);
 
-	// Experiment entity counting
-	int getExperimentCount();
+  // ExcitationFilterRef entity counting
+  int getLightPathExcitationFilterRefCount(int imageIndex, int channelIndex);
 
-	// ExperimentRef entity counting
-	// Experimenter entity counting
-	int getExperimenterCount();
+  int getFilterSetExcitationFilterRefCount(int instrumentIndex,
+    int filterSetIndex);
 
-	// ExperimenterRef entity counting
-	// Filament entity counting
-	// FileAnnotation entity counting
-	int getFileAnnotationCount();
+  // Experiment entity counting
+  int getExperimentCount();
 
-	// Filter entity counting
-	int getFilterCount(int instrumentIndex);
+  // ExperimentRef entity counting
+  // Experimenter entity counting
+  int getExperimenterCount();
 
-	// FilterSet entity counting
-	int getFilterSetCount(int instrumentIndex);
+  // ExperimenterRef entity counting
+  // Filament entity counting
+  // FileAnnotation entity counting
+  int getFileAnnotationCount();
 
-	// FilterSetRef entity counting
-	// Group entity counting
-	int getGroupCount();
+  // Filter entity counting
+  int getFilterCount(int instrumentIndex);
 
-	// GroupRef entity counting
-	int getExperimenterGroupRefCount(int experimenterIndex);
+  // FilterSet entity counting
+  int getFilterSetCount(int instrumentIndex);
 
-	// Image entity counting
-	int getImageCount();
+  // FilterSetRef entity counting
+  // Group entity counting
+  int getGroupCount();
 
-	// ImageRef entity counting
-	// ImagingEnvironment entity counting
-	// Instrument entity counting
-	int getInstrumentCount();
+  // GroupRef entity counting
+  int getExperimenterGroupRefCount(int experimenterIndex);
 
-	// InstrumentRef entity counting
-	// Laser entity counting
-	// Leader entity counting
-	// LightEmittingDiode entity counting
-	// LightPath entity counting
-	// LightSource entity counting
-	int getLightSourceCount(int instrumentIndex);
+  // Image entity counting
+  int getImageCount();
 
-	// LightSourceSettings entity counting
-	int getMicrobeamManipulationLightSourceSettingsCount(int experimentIndex, int microbeamManipulationIndex);
+  // ImageRef entity counting
+  // ImagingEnvironment entity counting
+  // Instrument entity counting
+  int getInstrumentCount();
 
-	// Line entity counting
-	// ListAnnotation entity counting
-	int getListAnnotationCount();
+  // InstrumentRef entity counting
+  // Laser entity counting
+  // Leader entity counting
+  // LightEmittingDiode entity counting
+  // LightPath entity counting
+  // LightSource entity counting
+  int getLightSourceCount(int instrumentIndex);
 
-	// LongAnnotation entity counting
-	int getLongAnnotationCount();
+  // LightSourceSettings entity counting
+  int getMicrobeamManipulationLightSourceSettingsCount(int experimentIndex,
+    int microbeamManipulationIndex);
 
-	// Mask entity counting
-	// MetadataOnly entity counting
-	// MicrobeamManipulation entity counting
-	int getMicrobeamManipulationCount(int experimentIndex);
+  // Line entity counting
+  // ListAnnotation entity counting
+  int getListAnnotationCount();
 
-	// MicrobeamManipulationRef entity counting
-	int getMicrobeamManipulationRefCount(int imageIndex);
+  // LongAnnotation entity counting
+  int getLongAnnotationCount();
 
-	// Microscope entity counting
-	// OTF entity counting
-	int getOTFCount(int instrumentIndex);
+  // Mask entity counting
+  // MetadataOnly entity counting
+  // MicrobeamManipulation entity counting
+  int getMicrobeamManipulationCount(int experimentIndex);
 
-	// OTFRef entity counting
-	// Objective entity counting
-	int getObjectiveCount(int instrumentIndex);
+  // MicrobeamManipulationRef entity counting
+  int getMicrobeamManipulationRefCount(int imageIndex);
 
-	// ObjectiveSettings entity counting
-	// Path entity counting
-	// Pixels entity counting
-	// Plane entity counting
-	int getPlaneCount(int imageIndex);
+  // Microscope entity counting
+  // OTF entity counting
+  int getOTFCount(int instrumentIndex);
 
-	// Plate entity counting
-	int getPlateCount();
+  // OTFRef entity counting
+  // Objective entity counting
+  int getObjectiveCount(int instrumentIndex);
 
-	// PlateAcquisition entity counting
-	int getPlateAcquisitionCount(int plateIndex);
+  // ObjectiveSettings entity counting
+  // Path entity counting
+  // Pixels entity counting
+  // Plane entity counting
+  int getPlaneCount(int imageIndex);
 
-	// PlateRef entity counting
-	int getPlateRefCount(int screenIndex);
+  // Plate entity counting
+  int getPlateCount();
 
-	// Point entity counting
-	// Polyline entity counting
-	// Project entity counting
-	int getProjectCount();
+  // PlateAcquisition entity counting
+  int getPlateAcquisitionCount(int plateIndex);
 
-	// ProjectRef entity counting
-	int getProjectRefCount(int datasetIndex);
+  // PlateRef entity counting
+  int getPlateRefCount(int screenIndex);
 
-	// Pump entity counting
-	// ROI entity counting
-	int getROICount();
+  // Point entity counting
+  // Polyline entity counting
+  // Project entity counting
+  int getProjectCount();
 
-	// ROIRef entity counting
-	int getImageROIRefCount(int imageIndex);
+  // ProjectRef entity counting
+  int getProjectRefCount(int datasetIndex);
 
-	int getMicrobeamManipulationROIRefCount(int experimentIndex, int microbeamManipulationIndex);
+  // Pump entity counting
+  // ROI entity counting
+  int getROICount();
 
-	// Reagent entity counting
-	int getReagentCount(int screenIndex);
+  // ROIRef entity counting
+  int getImageROIRefCount(int imageIndex);
 
-	// ReagentRef entity counting
-	// Rectangle entity counting
-	// Screen entity counting
-	int getScreenCount();
+  int getMicrobeamManipulationROIRefCount(int experimentIndex,
+    int microbeamManipulationIndex);
 
-	// ScreenRef entity counting
-	int getScreenRefCount(int plateIndex);
+  // Reagent entity counting
+  int getReagentCount(int screenIndex);
 
-	// Shape entity counting
-	int getShapeCount(int ROIIndex);
+  // ReagentRef entity counting
+  // Rectangle entity counting
+  // Screen entity counting
+  int getScreenCount();
 
-	// StageLabel entity counting
-	// StructuredAnnotations entity counting
-	// TagAnnotation entity counting
-	int getTagAnnotationCount();
+  // ScreenRef entity counting
+  int getScreenRefCount(int plateIndex);
 
-	// TermAnnotation entity counting
-	int getTermAnnotationCount();
+  // Shape entity counting
+  int getShapeCount(int ROIIndex);
 
-	// Text entity counting
-	// TiffData entity counting
-	int getTiffDataCount(int imageIndex);
+  // StageLabel entity counting
+  // StructuredAnnotations entity counting
+  // TagAnnotation entity counting
+  int getTagAnnotationCount();
 
-	// TimestampAnnotation entity counting
-	int getTimestampAnnotationCount();
+  // TermAnnotation entity counting
+  int getTermAnnotationCount();
 
-	// TransmittanceRange entity counting
-	// Element's text data
-	// {u'TiffData': [u'int imageIndex', u'int tiffDataIndex']}
-	String getUUIDValue(int imageIndex, int tiffDataIndex);
+  // Text entity counting
+  // TiffData entity counting
+  int getTiffDataCount(int imageIndex);
 
-	// UUID entity counting
-	// Union entity counting
-	// Well entity counting
-	int getWellCount(int plateIndex);
+  // TimestampAnnotation entity counting
+  int getTimestampAnnotationCount();
 
-	// WellSample entity counting
-	int getWellSampleCount(int plateIndex, int wellIndex);
+  // TransmittanceRange entity counting
+  // Element's text data
+  // {u'TiffData': [u'int imageIndex', u'int tiffDataIndex']}
+  String getUUIDValue(int imageIndex, int tiffDataIndex);
 
-	// WellSampleRef entity counting
-	int getWellSampleRefCount(int plateIndex, int plateAcquisitionIndex);
+  // UUID entity counting
+  // Union entity counting
+  // Well entity counting
+  int getWellCount(int plateIndex);
 
-	// XMLAnnotation entity counting
-	int getXMLAnnotationCount();
+  // WellSample entity counting
+  int getWellSampleCount(int plateIndex, int wellIndex);
 
+  // WellSampleRef entity counting
+  int getWellSampleRefCount(int plateIndex, int plateAcquisitionIndex);
 
-	// -- Entity retrieval (manual definitions) --
+  // XMLAnnotation entity counting
+  int getXMLAnnotationCount();
 
-	Boolean getPixelsBinDataBigEndian(int imageIndex, int binDataIndex);
+  // -- Entity retrieval (manual definitions) --
 
-	// -- Entity retrieval (code generated definitions) --
+  Boolean getPixelsBinDataBigEndian(int imageIndex, int binDataIndex);
 
-	/** Gets the UUID associated with this collection of metadata. */
-	String getUUID();
+  // -- Entity retrieval (code generated definitions) --
 
-	//
-	// AnnotationRef property storage
-	//
-	// {u'ROI': {u'OME': None}, u'PlateAcquisition': {u'Plate': {u'OME': None}}, u'Plate': {u'OME': None}, u'Image': {u'OME': None}, u'Screen': {u'OME': None}, u'Well': {u'Plate': {u'OME': None}}, u'Dataset': {u'OME': None}, u'Project': {u'OME': None}, u'Reagent': {u'Screen': {u'OME': None}}, u'Plane': {u'Pixels': {u'Image': {u'OME': None}}}, u'Experimenter': {u'OME': None}, u'Annotation': None, u'WellSample': {u'Well': {u'Plate': {u'OME': None}}}, u'Pixels': {u'Image': {u'OME': None}}, u'Channel': {u'Pixels': {u'Image': {u'OME': None}}}}
-	// Is multi path? True
+  /** Gets the UUID associated with this collection of metadata. */
+  String getUUID();
 
-	// 1:1
-	// Is multi path? True
-	// Ignoring ID property of reference AnnotationRef
+  //
+  // AnnotationRef property storage
+  //
+  // {u'ROI': {u'OME': None}, u'PlateAcquisition': {u'Plate': {u'OME': None}}, u'Plate': {u'OME': None}, u'Image': {u'OME': None}, u'Screen': {u'OME': None}, u'Well': {u'Plate': {u'OME': None}}, u'Dataset': {u'OME': None}, u'Project': {u'OME': None}, u'Reagent': {u'Screen': {u'OME': None}}, u'Plane': {u'Pixels': {u'Image': {u'OME': None}}}, u'Experimenter': {u'OME': None}, u'Annotation': None, u'WellSample': {u'Well': {u'Plate': {u'OME': None}}}, u'Pixels': {u'Image': {u'OME': None}}, u'Channel': {u'Pixels': {u'Image': {u'OME': None}}}}
+  // Is multi path? True
 
-	//
-	// Arc property storage
-	//
-	// {u'LightSource': {u'Instrument': {u'OME': None}}}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? True
+  // Ignoring ID property of reference AnnotationRef
 
-	// Ignoring Arc of parent abstract type
-	// Ignoring Filament of parent abstract type
-	// ID accessor from parent LightSource
-	String getArcID(int instrumentIndex, int lightSourceIndex);
+  //
+  // Arc property storage
+  //
+  // {u'LightSource': {u'Instrument': {u'OME': None}}}
+  // Is multi path? False
 
-	// Ignoring Laser of parent abstract type
-	// Ignoring LightEmittingDiode of parent abstract type
-	// LotNumber accessor from parent LightSource
-	String getArcLotNumber(int instrumentIndex, int lightSourceIndex);
+  // Ignoring Arc of parent abstract type
+  // Ignoring Filament of parent abstract type
+  // ID accessor from parent LightSource
+  String getArcID(int instrumentIndex, int lightSourceIndex);
 
-	// Manufacturer accessor from parent LightSource
-	String getArcManufacturer(int instrumentIndex, int lightSourceIndex);
+  // Ignoring Laser of parent abstract type
+  // Ignoring LightEmittingDiode of parent abstract type
+  // LotNumber accessor from parent LightSource
+  String getArcLotNumber(int instrumentIndex, int lightSourceIndex);
 
-	// Model accessor from parent LightSource
-	String getArcModel(int instrumentIndex, int lightSourceIndex);
+  // Manufacturer accessor from parent LightSource
+  String getArcManufacturer(int instrumentIndex, int lightSourceIndex);
 
-	// Power accessor from parent LightSource
-	Double getArcPower(int instrumentIndex, int lightSourceIndex);
+  // Model accessor from parent LightSource
+  String getArcModel(int instrumentIndex, int lightSourceIndex);
 
-	// SerialNumber accessor from parent LightSource
-	String getArcSerialNumber(int instrumentIndex, int lightSourceIndex);
+  // Power accessor from parent LightSource
+  Double getArcPower(int instrumentIndex, int lightSourceIndex);
 
-	ArcType getArcType(int instrumentIndex, int lightSourceIndex);
+  // SerialNumber accessor from parent LightSource
+  String getArcSerialNumber(int instrumentIndex, int lightSourceIndex);
 
-	//
-	// BinaryFile property storage
-	//
-	// {u'FileAnnotation': {u'StructuredAnnotations': {u'OME': None}}, u'OTF': {u'Instrument': {u'OME': None}}}
-	// Is multi path? True
+  ArcType getArcType(int instrumentIndex, int lightSourceIndex);
 
-	// Ignoring BinData element, complex property
-	// Ignoring External element, complex property
-	String getFileAnnotationBinaryFileFileName(int fileAnnotationIndex);
+  //
+  // BinaryFile property storage
+  //
+  // {u'FileAnnotation': {u'StructuredAnnotations': {u'OME': None}}, u'OTF': {u'Instrument': {u'OME': None}}}
+  // Is multi path? True
 
-	String getOTFBinaryFileFileName(int instrumentIndex, int OTFIndex);
+  // Ignoring BinData element, complex property
+  // Ignoring External element, complex property
+  String getFileAnnotationBinaryFileFileName(int fileAnnotationIndex);
 
-	String getFileAnnotationBinaryFileMIMEType(int fileAnnotationIndex);
+  String getOTFBinaryFileFileName(int instrumentIndex, int OTFIndex);
 
-	String getOTFBinaryFileMIMEType(int instrumentIndex, int OTFIndex);
+  String getFileAnnotationBinaryFileMIMEType(int fileAnnotationIndex);
 
-	NonNegativeLong getFileAnnotationBinaryFileSize(int fileAnnotationIndex);
+  String getOTFBinaryFileMIMEType(int instrumentIndex, int OTFIndex);
 
-	NonNegativeLong getOTFBinaryFileSize(int instrumentIndex, int OTFIndex);
+  NonNegativeLong getFileAnnotationBinaryFileSize(int fileAnnotationIndex);
 
-	//
-	// BinaryOnly property storage
-	//
-	// {u'OME': None}
-	// Is multi path? False
+  NonNegativeLong getOTFBinaryFileSize(int instrumentIndex, int OTFIndex);
 
-	String getBinaryOnlyMetadataFile(int metadataFileIndex);
+  //
+  // BinaryOnly property storage
+  //
+  // {u'OME': None}
+  // Is multi path? False
 
-	String getBinaryOnlyUUID(int UUIDIndex);
+  String getBinaryOnlyMetadataFile(int metadataFileIndex);
 
-	//
-	// BooleanAnnotation property storage
-	//
-	// {u'StructuredAnnotations': {u'OME': None}}
-	// Is multi path? False
+  String getBinaryOnlyUUID(int UUIDIndex);
 
-	String getBooleanAnnotationAnnotationRef(int booleanAnnotationIndex, int annotationRefIndex);
+  //
+  // BooleanAnnotation property storage
+  //
+  // {u'StructuredAnnotations': {u'OME': None}}
+  // Is multi path? False
 
-	// Ignoring Channel_BackReference back reference
-	// Ignoring Dataset_BackReference back reference
-	String getBooleanAnnotationDescription(int booleanAnnotationIndex);
+  String getBooleanAnnotationAnnotationRef(int booleanAnnotationIndex,
+    int annotationRefIndex);
 
-	// Ignoring Experimenter_BackReference back reference
-	String getBooleanAnnotationID(int booleanAnnotationIndex);
+  // Ignoring Channel_BackReference back reference
+  // Ignoring Dataset_BackReference back reference
+  String getBooleanAnnotationDescription(int booleanAnnotationIndex);
 
-	// Ignoring Image_BackReference back reference
-	String getBooleanAnnotationNamespace(int booleanAnnotationIndex);
+  // Ignoring Experimenter_BackReference back reference
+  String getBooleanAnnotationID(int booleanAnnotationIndex);
 
-	// Ignoring Pixels_BackReference back reference
-	// Ignoring Plane_BackReference back reference
-	// Ignoring PlateAcquisition_BackReference back reference
-	// Ignoring Plate_BackReference back reference
-	// Ignoring Project_BackReference back reference
-	// Ignoring ROI_BackReference back reference
-	// Ignoring Reagent_BackReference back reference
-	// Ignoring Screen_BackReference back reference
-	Boolean getBooleanAnnotationValue(int booleanAnnotationIndex);
+  // Ignoring Image_BackReference back reference
+  String getBooleanAnnotationNamespace(int booleanAnnotationIndex);
 
-	// Ignoring WellSample_BackReference back reference
-	// Ignoring Well_BackReference back reference
-	//
-	// Channel property storage
-	//
-	// {u'Pixels': {u'Image': {u'OME': None}}}
-	// Is multi path? False
+  // Ignoring Pixels_BackReference back reference
+  // Ignoring Plane_BackReference back reference
+  // Ignoring PlateAcquisition_BackReference back reference
+  // Ignoring Plate_BackReference back reference
+  // Ignoring Project_BackReference back reference
+  // Ignoring ROI_BackReference back reference
+  // Ignoring Reagent_BackReference back reference
+  // Ignoring Screen_BackReference back reference
+  Boolean getBooleanAnnotationValue(int booleanAnnotationIndex);
 
-	AcquisitionMode getChannelAcquisitionMode(int imageIndex, int channelIndex);
+  // Ignoring WellSample_BackReference back reference
+  // Ignoring Well_BackReference back reference
+  //
+  // Channel property storage
+  //
+  // {u'Pixels': {u'Image': {u'OME': None}}}
+  // Is multi path? False
 
-	String getChannelAnnotationRef(int imageIndex, int channelIndex, int annotationRefIndex);
+  AcquisitionMode getChannelAcquisitionMode(int imageIndex, int channelIndex);
 
-	Integer getChannelColor(int imageIndex, int channelIndex);
+  String getChannelAnnotationRef(int imageIndex, int channelIndex,
+    int annotationRefIndex);
 
-	ContrastMethod getChannelContrastMethod(int imageIndex, int channelIndex);
+  Integer getChannelColor(int imageIndex, int channelIndex);
 
-	// Ignoring DetectorSettings element, complex property
-	PositiveInteger getChannelEmissionWavelength(int imageIndex, int channelIndex);
+  ContrastMethod getChannelContrastMethod(int imageIndex, int channelIndex);
 
-	PositiveInteger getChannelExcitationWavelength(int imageIndex, int channelIndex);
+  // Ignoring DetectorSettings element, complex property
+  PositiveInteger getChannelEmissionWavelength(int imageIndex, int channelIndex);
 
-	String getChannelFilterSetRef(int imageIndex, int channelIndex);
+  PositiveInteger getChannelExcitationWavelength(int imageIndex,
+    int channelIndex);
 
-	String getChannelFluor(int imageIndex, int channelIndex);
+  String getChannelFilterSetRef(int imageIndex, int channelIndex);
 
-	String getChannelID(int imageIndex, int channelIndex);
+  String getChannelFluor(int imageIndex, int channelIndex);
 
-	IlluminationType getChannelIlluminationType(int imageIndex, int channelIndex);
+  String getChannelID(int imageIndex, int channelIndex);
 
-	// Ignoring LightPath element, complex property
-	// Ignoring LightSourceSettings element, complex property
-	Double getChannelNDFilter(int imageIndex, int channelIndex);
+  IlluminationType getChannelIlluminationType(int imageIndex, int channelIndex);
 
-	String getChannelName(int imageIndex, int channelIndex);
+  // Ignoring LightPath element, complex property
+  // Ignoring LightSourceSettings element, complex property
+  Double getChannelNDFilter(int imageIndex, int channelIndex);
 
-	String getChannelOTFRef(int imageIndex, int channelIndex);
+  String getChannelName(int imageIndex, int channelIndex);
 
-	Double getChannelPinholeSize(int imageIndex, int channelIndex);
+  String getChannelOTFRef(int imageIndex, int channelIndex);
 
-	Integer getChannelPockelCellSetting(int imageIndex, int channelIndex);
+  Double getChannelPinholeSize(int imageIndex, int channelIndex);
 
-	PositiveInteger getChannelSamplesPerPixel(int imageIndex, int channelIndex);
+  Integer getChannelPockelCellSetting(int imageIndex, int channelIndex);
 
-	//
-	// CommentAnnotation property storage
-	//
-	// {u'StructuredAnnotations': {u'OME': None}}
-	// Is multi path? False
+  PositiveInteger getChannelSamplesPerPixel(int imageIndex, int channelIndex);
 
-	String getCommentAnnotationAnnotationRef(int commentAnnotationIndex, int annotationRefIndex);
+  //
+  // CommentAnnotation property storage
+  //
+  // {u'StructuredAnnotations': {u'OME': None}}
+  // Is multi path? False
 
-	// Ignoring Channel_BackReference back reference
-	// Ignoring Dataset_BackReference back reference
-	String getCommentAnnotationDescription(int commentAnnotationIndex);
+  String getCommentAnnotationAnnotationRef(int commentAnnotationIndex,
+    int annotationRefIndex);
 
-	// Ignoring Experimenter_BackReference back reference
-	String getCommentAnnotationID(int commentAnnotationIndex);
+  // Ignoring Channel_BackReference back reference
+  // Ignoring Dataset_BackReference back reference
+  String getCommentAnnotationDescription(int commentAnnotationIndex);
 
-	// Ignoring Image_BackReference back reference
-	String getCommentAnnotationNamespace(int commentAnnotationIndex);
+  // Ignoring Experimenter_BackReference back reference
+  String getCommentAnnotationID(int commentAnnotationIndex);
 
-	// Ignoring Pixels_BackReference back reference
-	// Ignoring Plane_BackReference back reference
-	// Ignoring PlateAcquisition_BackReference back reference
-	// Ignoring Plate_BackReference back reference
-	// Ignoring Project_BackReference back reference
-	// Ignoring ROI_BackReference back reference
-	// Ignoring Reagent_BackReference back reference
-	// Ignoring Screen_BackReference back reference
-	String getCommentAnnotationValue(int commentAnnotationIndex);
+  // Ignoring Image_BackReference back reference
+  String getCommentAnnotationNamespace(int commentAnnotationIndex);
 
-	// Ignoring WellSample_BackReference back reference
-	// Ignoring Well_BackReference back reference
-	//
-	// Contact property storage
-	//
-	// {u'Group': {u'OME': None}}
-	// Is multi path? False
+  // Ignoring Pixels_BackReference back reference
+  // Ignoring Plane_BackReference back reference
+  // Ignoring PlateAcquisition_BackReference back reference
+  // Ignoring Plate_BackReference back reference
+  // Ignoring Project_BackReference back reference
+  // Ignoring ROI_BackReference back reference
+  // Ignoring Reagent_BackReference back reference
+  // Ignoring Screen_BackReference back reference
+  String getCommentAnnotationValue(int commentAnnotationIndex);
 
-	// 1:1
-	// Is multi path? False
-	// Ignoring ID property of reference Contact
+  // Ignoring WellSample_BackReference back reference
+  // Ignoring Well_BackReference back reference
+  //
+  // Contact property storage
+  //
+  // {u'Group': {u'OME': None}}
+  // Is multi path? False
 
-	//
-	// Dataset property storage
-	//
-	// {u'OME': None}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? False
+  // Ignoring ID property of reference Contact
 
-	String getDatasetAnnotationRef(int datasetIndex, int annotationRefIndex);
+  //
+  // Dataset property storage
+  //
+  // {u'OME': None}
+  // Is multi path? False
 
-	String getDatasetDescription(int datasetIndex);
+  String getDatasetAnnotationRef(int datasetIndex, int annotationRefIndex);
 
-	String getDatasetExperimenterRef(int datasetIndex);
+  String getDatasetDescription(int datasetIndex);
 
-	String getDatasetGroupRef(int datasetIndex);
+  String getDatasetExperimenterRef(int datasetIndex);
 
-	String getDatasetID(int datasetIndex);
+  String getDatasetGroupRef(int datasetIndex);
 
-	// Ignoring Image_BackReference back reference
-	String getDatasetName(int datasetIndex);
+  String getDatasetID(int datasetIndex);
 
-	String getDatasetProjectRef(int datasetIndex, int projectRefIndex);
+  // Ignoring Image_BackReference back reference
+  String getDatasetName(int datasetIndex);
 
-	//
-	// DatasetRef property storage
-	//
-	// {u'Image': {u'OME': None}}
-	// Is multi path? False
+  String getDatasetProjectRef(int datasetIndex, int projectRefIndex);
 
-	// 1:1
-	// Is multi path? False
-	// Ignoring ID property of reference DatasetRef
+  //
+  // DatasetRef property storage
+  //
+  // {u'Image': {u'OME': None}}
+  // Is multi path? False
 
-	//
-	// Detector property storage
-	//
-	// {u'Instrument': {u'OME': None}}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? False
+  // Ignoring ID property of reference DatasetRef
 
-	Double getDetectorAmplificationGain(int instrumentIndex, int detectorIndex);
+  //
+  // Detector property storage
+  //
+  // {u'Instrument': {u'OME': None}}
+  // Is multi path? False
 
-	Double getDetectorGain(int instrumentIndex, int detectorIndex);
+  Double getDetectorAmplificationGain(int instrumentIndex, int detectorIndex);
 
-	String getDetectorID(int instrumentIndex, int detectorIndex);
+  Double getDetectorGain(int instrumentIndex, int detectorIndex);
 
-	String getDetectorLotNumber(int instrumentIndex, int detectorIndex);
+  String getDetectorID(int instrumentIndex, int detectorIndex);
 
-	String getDetectorManufacturer(int instrumentIndex, int detectorIndex);
+  String getDetectorLotNumber(int instrumentIndex, int detectorIndex);
 
-	String getDetectorModel(int instrumentIndex, int detectorIndex);
+  String getDetectorManufacturer(int instrumentIndex, int detectorIndex);
 
-	Double getDetectorOffset(int instrumentIndex, int detectorIndex);
+  String getDetectorModel(int instrumentIndex, int detectorIndex);
 
-	String getDetectorSerialNumber(int instrumentIndex, int detectorIndex);
+  Double getDetectorOffset(int instrumentIndex, int detectorIndex);
 
-	DetectorType getDetectorType(int instrumentIndex, int detectorIndex);
+  String getDetectorSerialNumber(int instrumentIndex, int detectorIndex);
 
-	Double getDetectorVoltage(int instrumentIndex, int detectorIndex);
+  DetectorType getDetectorType(int instrumentIndex, int detectorIndex);
 
-	Double getDetectorZoom(int instrumentIndex, int detectorIndex);
+  Double getDetectorVoltage(int instrumentIndex, int detectorIndex);
 
-	//
-	// DetectorSettings property storage
-	//
-	// {u'Channel': {u'Pixels': {u'Image': {u'OME': None}}}}
-	// Is multi path? False
+  Double getDetectorZoom(int instrumentIndex, int detectorIndex);
 
-	Binning getDetectorSettingsBinning(int imageIndex, int channelIndex);
+  //
+  // DetectorSettings property storage
+  //
+  // {u'Channel': {u'Pixels': {u'Image': {u'OME': None}}}}
+  // Is multi path? False
 
-	Double getDetectorSettingsGain(int imageIndex, int channelIndex);
+  Binning getDetectorSettingsBinning(int imageIndex, int channelIndex);
 
-	String getDetectorSettingsID(int imageIndex, int channelIndex);
+  Double getDetectorSettingsGain(int imageIndex, int channelIndex);
 
-	Double getDetectorSettingsOffset(int imageIndex, int channelIndex);
+  String getDetectorSettingsID(int imageIndex, int channelIndex);
 
-	Double getDetectorSettingsReadOutRate(int imageIndex, int channelIndex);
+  Double getDetectorSettingsOffset(int imageIndex, int channelIndex);
 
-	Double getDetectorSettingsVoltage(int imageIndex, int channelIndex);
+  Double getDetectorSettingsReadOutRate(int imageIndex, int channelIndex);
 
-	//
-	// Dichroic property storage
-	//
-	// {u'Instrument': {u'OME': None}}
-	// Is multi path? False
+  Double getDetectorSettingsVoltage(int imageIndex, int channelIndex);
 
-	// Ignoring FilterSet_BackReference back reference
-	String getDichroicID(int instrumentIndex, int dichroicIndex);
+  //
+  // Dichroic property storage
+  //
+  // {u'Instrument': {u'OME': None}}
+  // Is multi path? False
 
-	// Ignoring LightPath_BackReference back reference
-	String getDichroicLotNumber(int instrumentIndex, int dichroicIndex);
+  // Ignoring FilterSet_BackReference back reference
+  String getDichroicID(int instrumentIndex, int dichroicIndex);
 
-	String getDichroicManufacturer(int instrumentIndex, int dichroicIndex);
+  // Ignoring LightPath_BackReference back reference
+  String getDichroicLotNumber(int instrumentIndex, int dichroicIndex);
 
-	String getDichroicModel(int instrumentIndex, int dichroicIndex);
+  String getDichroicManufacturer(int instrumentIndex, int dichroicIndex);
 
-	String getDichroicSerialNumber(int instrumentIndex, int dichroicIndex);
+  String getDichroicModel(int instrumentIndex, int dichroicIndex);
 
-	//
-	// DichroicRef property storage
-	//
-	// {u'LightPath': {u'Channel': {u'Pixels': {u'Image': {u'OME': None}}}}, u'FilterSet': {u'Instrument': {u'OME': None}}}
-	// Is multi path? True
+  String getDichroicSerialNumber(int instrumentIndex, int dichroicIndex);
 
-	// 1:1
-	// Is multi path? True
-	// Ignoring ID property of reference DichroicRef
+  //
+  // DichroicRef property storage
+  //
+  // {u'LightPath': {u'Channel': {u'Pixels': {u'Image': {u'OME': None}}}}, u'FilterSet': {u'Instrument': {u'OME': None}}}
+  // Is multi path? True
 
-	//
-	// DoubleAnnotation property storage
-	//
-	// {u'StructuredAnnotations': {u'OME': None}}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? True
+  // Ignoring ID property of reference DichroicRef
 
-	String getDoubleAnnotationAnnotationRef(int doubleAnnotationIndex, int annotationRefIndex);
+  //
+  // DoubleAnnotation property storage
+  //
+  // {u'StructuredAnnotations': {u'OME': None}}
+  // Is multi path? False
 
-	// Ignoring Channel_BackReference back reference
-	// Ignoring Dataset_BackReference back reference
-	String getDoubleAnnotationDescription(int doubleAnnotationIndex);
+  String getDoubleAnnotationAnnotationRef(int doubleAnnotationIndex,
+    int annotationRefIndex);
 
-	// Ignoring Experimenter_BackReference back reference
-	String getDoubleAnnotationID(int doubleAnnotationIndex);
+  // Ignoring Channel_BackReference back reference
+  // Ignoring Dataset_BackReference back reference
+  String getDoubleAnnotationDescription(int doubleAnnotationIndex);
 
-	// Ignoring Image_BackReference back reference
-	String getDoubleAnnotationNamespace(int doubleAnnotationIndex);
+  // Ignoring Experimenter_BackReference back reference
+  String getDoubleAnnotationID(int doubleAnnotationIndex);
 
-	// Ignoring Pixels_BackReference back reference
-	// Ignoring Plane_BackReference back reference
-	// Ignoring PlateAcquisition_BackReference back reference
-	// Ignoring Plate_BackReference back reference
-	// Ignoring Project_BackReference back reference
-	// Ignoring ROI_BackReference back reference
-	// Ignoring Reagent_BackReference back reference
-	// Ignoring Screen_BackReference back reference
-	Double getDoubleAnnotationValue(int doubleAnnotationIndex);
+  // Ignoring Image_BackReference back reference
+  String getDoubleAnnotationNamespace(int doubleAnnotationIndex);
 
-	// Ignoring WellSample_BackReference back reference
-	// Ignoring Well_BackReference back reference
-	//
-	// Ellipse property storage
-	//
-	// {u'Shape': {u'Union': {u'ROI': {u'OME': None}}}}
-	// Is multi path? False
+  // Ignoring Pixels_BackReference back reference
+  // Ignoring Plane_BackReference back reference
+  // Ignoring PlateAcquisition_BackReference back reference
+  // Ignoring Plate_BackReference back reference
+  // Ignoring Project_BackReference back reference
+  // Ignoring ROI_BackReference back reference
+  // Ignoring Reagent_BackReference back reference
+  // Ignoring Screen_BackReference back reference
+  Double getDoubleAnnotationValue(int doubleAnnotationIndex);
 
-	// Description accessor from parent Shape
-	String getEllipseDescription(int ROIIndex, int shapeIndex);
+  // Ignoring WellSample_BackReference back reference
+  // Ignoring Well_BackReference back reference
+  //
+  // Ellipse property storage
+  //
+  // {u'Shape': {u'Union': {u'ROI': {u'OME': None}}}}
+  // Is multi path? False
 
-	// Ignoring Ellipse of parent abstract type
-	// Fill accessor from parent Shape
-	Integer getEllipseFill(int ROIIndex, int shapeIndex);
+  // Description accessor from parent Shape
+  String getEllipseDescription(int ROIIndex, int shapeIndex);
 
-	// Ignoring FillRule of parent abstract type
-	// Ignoring FontFamily of parent abstract type
-	// FontSize accessor from parent Shape
-	NonNegativeInteger getEllipseFontSize(int ROIIndex, int shapeIndex);
+  // Ignoring Ellipse of parent abstract type
+  // Fill accessor from parent Shape
+  Integer getEllipseFill(int ROIIndex, int shapeIndex);
 
-	// Ignoring FontStyle of parent abstract type
-	// ID accessor from parent Shape
-	String getEllipseID(int ROIIndex, int shapeIndex);
+  // Ignoring FillRule of parent abstract type
+  // Ignoring FontFamily of parent abstract type
+  // FontSize accessor from parent Shape
+  NonNegativeInteger getEllipseFontSize(int ROIIndex, int shapeIndex);
 
-	// Label accessor from parent Shape
-	String getEllipseLabel(int ROIIndex, int shapeIndex);
+  // Ignoring FontStyle of parent abstract type
+  // ID accessor from parent Shape
+  String getEllipseID(int ROIIndex, int shapeIndex);
 
-	// Ignoring Line of parent abstract type
-	// Ignoring LineCap of parent abstract type
-	// Ignoring MarkerEnd of parent abstract type
-	// Ignoring MarkerStart of parent abstract type
-	// Ignoring Mask of parent abstract type
-	// Name accessor from parent Shape
-	String getEllipseName(int ROIIndex, int shapeIndex);
+  // Label accessor from parent Shape
+  String getEllipseLabel(int ROIIndex, int shapeIndex);
 
-	// Ignoring Path of parent abstract type
-	// Ignoring Point of parent abstract type
-	// Ignoring Polyline of parent abstract type
-	// Ignoring Rectangle of parent abstract type
-	// Stroke accessor from parent Shape
-	Integer getEllipseStroke(int ROIIndex, int shapeIndex);
+  // Ignoring Line of parent abstract type
+  // Ignoring LineCap of parent abstract type
+  // Ignoring MarkerEnd of parent abstract type
+  // Ignoring MarkerStart of parent abstract type
+  // Ignoring Mask of parent abstract type
+  // Name accessor from parent Shape
+  String getEllipseName(int ROIIndex, int shapeIndex);
 
-	// StrokeDashArray accessor from parent Shape
-	String getEllipseStrokeDashArray(int ROIIndex, int shapeIndex);
+  // Ignoring Path of parent abstract type
+  // Ignoring Point of parent abstract type
+  // Ignoring Polyline of parent abstract type
+  // Ignoring Rectangle of parent abstract type
+  // Stroke accessor from parent Shape
+  Integer getEllipseStroke(int ROIIndex, int shapeIndex);
 
-	// StrokeWidth accessor from parent Shape
-	Double getEllipseStrokeWidth(int ROIIndex, int shapeIndex);
+  // StrokeDashArray accessor from parent Shape
+  String getEllipseStrokeDashArray(int ROIIndex, int shapeIndex);
 
-	// Ignoring Text of parent abstract type
-	// TheC accessor from parent Shape
-	NonNegativeInteger getEllipseTheC(int ROIIndex, int shapeIndex);
+  // StrokeWidth accessor from parent Shape
+  Double getEllipseStrokeWidth(int ROIIndex, int shapeIndex);
 
-	// TheT accessor from parent Shape
-	NonNegativeInteger getEllipseTheT(int ROIIndex, int shapeIndex);
+  // Ignoring Text of parent abstract type
+  // TheC accessor from parent Shape
+  NonNegativeInteger getEllipseTheC(int ROIIndex, int shapeIndex);
 
-	// TheZ accessor from parent Shape
-	NonNegativeInteger getEllipseTheZ(int ROIIndex, int shapeIndex);
+  // TheT accessor from parent Shape
+  NonNegativeInteger getEllipseTheT(int ROIIndex, int shapeIndex);
 
-	// Transform accessor from parent Shape
-	String getEllipseTransform(int ROIIndex, int shapeIndex);
+  // TheZ accessor from parent Shape
+  NonNegativeInteger getEllipseTheZ(int ROIIndex, int shapeIndex);
 
-	Double getEllipseRadiusX(int ROIIndex, int shapeIndex);
+  // Transform accessor from parent Shape
+  String getEllipseTransform(int ROIIndex, int shapeIndex);
 
-	Double getEllipseRadiusY(int ROIIndex, int shapeIndex);
+  Double getEllipseRadiusX(int ROIIndex, int shapeIndex);
 
-	Double getEllipseX(int ROIIndex, int shapeIndex);
+  Double getEllipseRadiusY(int ROIIndex, int shapeIndex);
 
-	Double getEllipseY(int ROIIndex, int shapeIndex);
+  Double getEllipseX(int ROIIndex, int shapeIndex);
 
-	//
-	// EmissionFilterRef property storage
-	//
-	// {u'LightPath': {u'Channel': {u'Pixels': {u'Image': {u'OME': None}}}}, u'FilterSet': {u'Instrument': {u'OME': None}}}
-	// Is multi path? True
+  Double getEllipseY(int ROIIndex, int shapeIndex);
 
-	//
-	// ExcitationFilterRef property storage
-	//
-	// {u'LightPath': {u'Channel': {u'Pixels': {u'Image': {u'OME': None}}}}, u'FilterSet': {u'Instrument': {u'OME': None}}}
-	// Is multi path? True
+  //
+  // EmissionFilterRef property storage
+  //
+  // {u'LightPath': {u'Channel': {u'Pixels': {u'Image': {u'OME': None}}}}, u'FilterSet': {u'Instrument': {u'OME': None}}}
+  // Is multi path? True
 
-	//
-	// Experiment property storage
-	//
-	// {u'OME': None}
-	// Is multi path? False
+  //
+  // ExcitationFilterRef property storage
+  //
+  // {u'LightPath': {u'Channel': {u'Pixels': {u'Image': {u'OME': None}}}}, u'FilterSet': {u'Instrument': {u'OME': None}}}
+  // Is multi path? True
 
-	String getExperimentDescription(int experimentIndex);
+  //
+  // Experiment property storage
+  //
+  // {u'OME': None}
+  // Is multi path? False
 
-	String getExperimentExperimenterRef(int experimentIndex);
+  String getExperimentDescription(int experimentIndex);
 
-	String getExperimentID(int experimentIndex);
+  String getExperimentExperimenterRef(int experimentIndex);
 
-	// Ignoring Image_BackReference back reference
-	// Ignoring MicrobeamManipulation element, complex property
-	ExperimentType getExperimentType(int experimentIndex);
+  String getExperimentID(int experimentIndex);
 
-	//
-	// ExperimentRef property storage
-	//
-	// {u'Image': {u'OME': None}}
-	// Is multi path? False
+  // Ignoring Image_BackReference back reference
+  // Ignoring MicrobeamManipulation element, complex property
+  ExperimentType getExperimentType(int experimentIndex);
 
-	// 1:1
-	// Is multi path? False
-	// Ignoring ID property of reference ExperimentRef
+  //
+  // ExperimentRef property storage
+  //
+  // {u'Image': {u'OME': None}}
+  // Is multi path? False
 
-	//
-	// Experimenter property storage
-	//
-	// {u'OME': None}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? False
+  // Ignoring ID property of reference ExperimentRef
 
-	String getExperimenterAnnotationRef(int experimenterIndex, int annotationRefIndex);
+  //
+  // Experimenter property storage
+  //
+  // {u'OME': None}
+  // Is multi path? False
 
-	// Ignoring Dataset_BackReference back reference
-	String getExperimenterDisplayName(int experimenterIndex);
+  String getExperimenterAnnotationRef(int experimenterIndex,
+    int annotationRefIndex);
 
-	String getExperimenterEmail(int experimenterIndex);
+  // Ignoring Dataset_BackReference back reference
+  String getExperimenterDisplayName(int experimenterIndex);
 
-	// Ignoring Experiment_BackReference back reference
-	String getExperimenterFirstName(int experimenterIndex);
+  String getExperimenterEmail(int experimenterIndex);
 
-	String getExperimenterGroupRef(int experimenterIndex, int groupRefIndex);
+  // Ignoring Experiment_BackReference back reference
+  String getExperimenterFirstName(int experimenterIndex);
 
-	String getExperimenterID(int experimenterIndex);
+  String getExperimenterGroupRef(int experimenterIndex, int groupRefIndex);
 
-	// Ignoring Image_BackReference back reference
-	String getExperimenterInstitution(int experimenterIndex);
+  String getExperimenterID(int experimenterIndex);
 
-	String getExperimenterLastName(int experimenterIndex);
+  // Ignoring Image_BackReference back reference
+  String getExperimenterInstitution(int experimenterIndex);
 
-	// Ignoring MicrobeamManipulation_BackReference back reference
-	String getExperimenterMiddleName(int experimenterIndex);
+  String getExperimenterLastName(int experimenterIndex);
 
-	// Ignoring Project_BackReference back reference
-	String getExperimenterUserName(int experimenterIndex);
+  // Ignoring MicrobeamManipulation_BackReference back reference
+  String getExperimenterMiddleName(int experimenterIndex);
 
-	//
-	// ExperimenterRef property storage
-	//
-	// {u'Project': {u'OME': None}, u'Image': {u'OME': None}, u'Dataset': {u'OME': None}, u'Experiment': {u'OME': None}, u'MicrobeamManipulation': {u'Experiment': {u'OME': None}}}
-	// Is multi path? True
+  // Ignoring Project_BackReference back reference
+  String getExperimenterUserName(int experimenterIndex);
 
-	// 1:1
-	// Is multi path? True
-	// Ignoring ID property of reference ExperimenterRef
+  //
+  // ExperimenterRef property storage
+  //
+  // {u'Project': {u'OME': None}, u'Image': {u'OME': None}, u'Dataset': {u'OME': None}, u'Experiment': {u'OME': None}, u'MicrobeamManipulation': {u'Experiment': {u'OME': None}}}
+  // Is multi path? True
 
-	//
-	// Filament property storage
-	//
-	// {u'LightSource': {u'Instrument': {u'OME': None}}}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? True
+  // Ignoring ID property of reference ExperimenterRef
 
-	// Ignoring Arc of parent abstract type
-	// Ignoring Filament of parent abstract type
-	// ID accessor from parent LightSource
-	String getFilamentID(int instrumentIndex, int lightSourceIndex);
+  //
+  // Filament property storage
+  //
+  // {u'LightSource': {u'Instrument': {u'OME': None}}}
+  // Is multi path? False
 
-	// Ignoring Laser of parent abstract type
-	// Ignoring LightEmittingDiode of parent abstract type
-	// LotNumber accessor from parent LightSource
-	String getFilamentLotNumber(int instrumentIndex, int lightSourceIndex);
+  // Ignoring Arc of parent abstract type
+  // Ignoring Filament of parent abstract type
+  // ID accessor from parent LightSource
+  String getFilamentID(int instrumentIndex, int lightSourceIndex);
 
-	// Manufacturer accessor from parent LightSource
-	String getFilamentManufacturer(int instrumentIndex, int lightSourceIndex);
+  // Ignoring Laser of parent abstract type
+  // Ignoring LightEmittingDiode of parent abstract type
+  // LotNumber accessor from parent LightSource
+  String getFilamentLotNumber(int instrumentIndex, int lightSourceIndex);
 
-	// Model accessor from parent LightSource
-	String getFilamentModel(int instrumentIndex, int lightSourceIndex);
+  // Manufacturer accessor from parent LightSource
+  String getFilamentManufacturer(int instrumentIndex, int lightSourceIndex);
 
-	// Power accessor from parent LightSource
-	Double getFilamentPower(int instrumentIndex, int lightSourceIndex);
+  // Model accessor from parent LightSource
+  String getFilamentModel(int instrumentIndex, int lightSourceIndex);
 
-	// SerialNumber accessor from parent LightSource
-	String getFilamentSerialNumber(int instrumentIndex, int lightSourceIndex);
+  // Power accessor from parent LightSource
+  Double getFilamentPower(int instrumentIndex, int lightSourceIndex);
 
-	FilamentType getFilamentType(int instrumentIndex, int lightSourceIndex);
+  // SerialNumber accessor from parent LightSource
+  String getFilamentSerialNumber(int instrumentIndex, int lightSourceIndex);
 
-	//
-	// FileAnnotation property storage
-	//
-	// {u'StructuredAnnotations': {u'OME': None}}
-	// Is multi path? False
+  FilamentType getFilamentType(int instrumentIndex, int lightSourceIndex);
 
-	String getFileAnnotationAnnotationRef(int fileAnnotationIndex, int annotationRefIndex);
+  //
+  // FileAnnotation property storage
+  //
+  // {u'StructuredAnnotations': {u'OME': None}}
+  // Is multi path? False
 
-	// Ignoring BinaryFile element, complex property
-	// Ignoring Channel_BackReference back reference
-	// Ignoring Dataset_BackReference back reference
-	String getFileAnnotationDescription(int fileAnnotationIndex);
+  String getFileAnnotationAnnotationRef(int fileAnnotationIndex,
+    int annotationRefIndex);
 
-	// Ignoring Experimenter_BackReference back reference
-	String getFileAnnotationID(int fileAnnotationIndex);
+  // Ignoring BinaryFile element, complex property
+  // Ignoring Channel_BackReference back reference
+  // Ignoring Dataset_BackReference back reference
+  String getFileAnnotationDescription(int fileAnnotationIndex);
 
-	// Ignoring Image_BackReference back reference
-	String getFileAnnotationNamespace(int fileAnnotationIndex);
+  // Ignoring Experimenter_BackReference back reference
+  String getFileAnnotationID(int fileAnnotationIndex);
 
-	// Ignoring Pixels_BackReference back reference
-	// Ignoring Plane_BackReference back reference
-	// Ignoring PlateAcquisition_BackReference back reference
-	// Ignoring Plate_BackReference back reference
-	// Ignoring Project_BackReference back reference
-	// Ignoring ROI_BackReference back reference
-	// Ignoring Reagent_BackReference back reference
-	// Ignoring Screen_BackReference back reference
-	// Ignoring WellSample_BackReference back reference
-	// Ignoring Well_BackReference back reference
-	//
-	// Filter property storage
-	//
-	// {u'Instrument': {u'OME': None}}
-	// Is multi path? False
+  // Ignoring Image_BackReference back reference
+  String getFileAnnotationNamespace(int fileAnnotationIndex);
 
-	// Ignoring FilterSet_BackReference back reference
-	String getFilterFilterWheel(int instrumentIndex, int filterIndex);
+  // Ignoring Pixels_BackReference back reference
+  // Ignoring Plane_BackReference back reference
+  // Ignoring PlateAcquisition_BackReference back reference
+  // Ignoring Plate_BackReference back reference
+  // Ignoring Project_BackReference back reference
+  // Ignoring ROI_BackReference back reference
+  // Ignoring Reagent_BackReference back reference
+  // Ignoring Screen_BackReference back reference
+  // Ignoring WellSample_BackReference back reference
+  // Ignoring Well_BackReference back reference
+  //
+  // Filter property storage
+  //
+  // {u'Instrument': {u'OME': None}}
+  // Is multi path? False
 
-	String getFilterID(int instrumentIndex, int filterIndex);
+  // Ignoring FilterSet_BackReference back reference
+  String getFilterFilterWheel(int instrumentIndex, int filterIndex);
 
-	// Ignoring LightPath_BackReference back reference
-	String getFilterLotNumber(int instrumentIndex, int filterIndex);
+  String getFilterID(int instrumentIndex, int filterIndex);
 
-	String getFilterManufacturer(int instrumentIndex, int filterIndex);
+  // Ignoring LightPath_BackReference back reference
+  String getFilterLotNumber(int instrumentIndex, int filterIndex);
 
-	String getFilterModel(int instrumentIndex, int filterIndex);
+  String getFilterManufacturer(int instrumentIndex, int filterIndex);
 
-	String getFilterSerialNumber(int instrumentIndex, int filterIndex);
+  String getFilterModel(int instrumentIndex, int filterIndex);
 
-	// Ignoring TransmittanceRange element, complex property
-	FilterType getFilterType(int instrumentIndex, int filterIndex);
+  String getFilterSerialNumber(int instrumentIndex, int filterIndex);
 
-	//
-	// FilterSet property storage
-	//
-	// {u'Instrument': {u'OME': None}}
-	// Is multi path? False
+  // Ignoring TransmittanceRange element, complex property
+  FilterType getFilterType(int instrumentIndex, int filterIndex);
 
-	// Ignoring Channel_BackReference back reference
-	String getFilterSetDichroicRef(int instrumentIndex, int filterSetIndex);
+  //
+  // FilterSet property storage
+  //
+  // {u'Instrument': {u'OME': None}}
+  // Is multi path? False
 
-	String getFilterSetEmissionFilterRef(int instrumentIndex, int filterSetIndex, int emissionFilterRefIndex);
+  // Ignoring Channel_BackReference back reference
+  String getFilterSetDichroicRef(int instrumentIndex, int filterSetIndex);
 
-	String getFilterSetExcitationFilterRef(int instrumentIndex, int filterSetIndex, int excitationFilterRefIndex);
+  String getFilterSetEmissionFilterRef(int instrumentIndex, int filterSetIndex,
+    int emissionFilterRefIndex);
 
-	String getFilterSetID(int instrumentIndex, int filterSetIndex);
+  String getFilterSetExcitationFilterRef(int instrumentIndex,
+    int filterSetIndex, int excitationFilterRefIndex);
 
-	String getFilterSetLotNumber(int instrumentIndex, int filterSetIndex);
+  String getFilterSetID(int instrumentIndex, int filterSetIndex);
 
-	String getFilterSetManufacturer(int instrumentIndex, int filterSetIndex);
+  String getFilterSetLotNumber(int instrumentIndex, int filterSetIndex);
 
-	String getFilterSetModel(int instrumentIndex, int filterSetIndex);
+  String getFilterSetManufacturer(int instrumentIndex, int filterSetIndex);
 
-	// Ignoring OTF_BackReference back reference
-	String getFilterSetSerialNumber(int instrumentIndex, int filterSetIndex);
+  String getFilterSetModel(int instrumentIndex, int filterSetIndex);
 
-	//
-	// FilterSetRef property storage
-	//
-	// {u'OTF': {u'Instrument': {u'OME': None}}, u'Channel': {u'Pixels': {u'Image': {u'OME': None}}}}
-	// Is multi path? True
+  // Ignoring OTF_BackReference back reference
+  String getFilterSetSerialNumber(int instrumentIndex, int filterSetIndex);
 
-	// 1:1
-	// Is multi path? True
-	// Ignoring ID property of reference FilterSetRef
+  //
+  // FilterSetRef property storage
+  //
+  // {u'OTF': {u'Instrument': {u'OME': None}}, u'Channel': {u'Pixels': {u'Image': {u'OME': None}}}}
+  // Is multi path? True
 
-	//
-	// Group property storage
-	//
-	// {u'OME': None}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? True
+  // Ignoring ID property of reference FilterSetRef
 
-	String getGroupContact(int groupIndex);
+  //
+  // Group property storage
+  //
+  // {u'OME': None}
+  // Is multi path? False
 
-	// Ignoring Dataset_BackReference back reference
-	String getGroupDescription(int groupIndex);
+  String getGroupContact(int groupIndex);
 
-	// Ignoring Experimenter_BackReference back reference
-	String getGroupID(int groupIndex);
+  // Ignoring Dataset_BackReference back reference
+  String getGroupDescription(int groupIndex);
 
-	// Ignoring Image_BackReference back reference
-	String getGroupLeader(int groupIndex);
+  // Ignoring Experimenter_BackReference back reference
+  String getGroupID(int groupIndex);
 
-	String getGroupName(int groupIndex);
+  // Ignoring Image_BackReference back reference
+  String getGroupLeader(int groupIndex);
 
-	// Ignoring Project_BackReference back reference
-	//
-	// GroupRef property storage
-	//
-	// {u'Project': {u'OME': None}, u'Image': {u'OME': None}, u'Experimenter': {u'OME': None}, u'Dataset': {u'OME': None}}
-	// Is multi path? True
+  String getGroupName(int groupIndex);
 
-	// 1:1
-	// Is multi path? True
-	// Ignoring ID property of reference GroupRef
+  // Ignoring Project_BackReference back reference
+  //
+  // GroupRef property storage
+  //
+  // {u'Project': {u'OME': None}, u'Image': {u'OME': None}, u'Experimenter': {u'OME': None}, u'Dataset': {u'OME': None}}
+  // Is multi path? True
 
-	//
-	// Image property storage
-	//
-	// {u'OME': None}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? True
+  // Ignoring ID property of reference GroupRef
 
-	String getImageAcquiredDate(int imageIndex);
+  //
+  // Image property storage
+  //
+  // {u'OME': None}
+  // Is multi path? False
 
-	String getImageAnnotationRef(int imageIndex, int annotationRefIndex);
+  String getImageAcquiredDate(int imageIndex);
 
-	String getImageDatasetRef(int imageIndex, int datasetRefIndex);
+  String getImageAnnotationRef(int imageIndex, int annotationRefIndex);
 
-	String getImageDescription(int imageIndex);
+  String getImageDatasetRef(int imageIndex, int datasetRefIndex);
 
-	String getImageExperimentRef(int imageIndex);
+  String getImageDescription(int imageIndex);
 
-	String getImageExperimenterRef(int imageIndex);
+  String getImageExperimentRef(int imageIndex);
 
-	String getImageGroupRef(int imageIndex);
+  String getImageExperimenterRef(int imageIndex);
 
-	String getImageID(int imageIndex);
+  String getImageGroupRef(int imageIndex);
 
-	// Ignoring ImagingEnvironment element, complex property
-	String getImageInstrumentRef(int imageIndex);
+  String getImageID(int imageIndex);
 
-	String getImageMicrobeamManipulationRef(int imageIndex, int microbeamManipulationRefIndex);
+  // Ignoring ImagingEnvironment element, complex property
+  String getImageInstrumentRef(int imageIndex);
 
-	String getImageName(int imageIndex);
+  String getImageMicrobeamManipulationRef(int imageIndex,
+    int microbeamManipulationRefIndex);
 
-	// Ignoring ObjectiveSettings element, complex property
-	// Ignoring Pixels element, complex property
-	String getImageROIRef(int imageIndex, int ROIRefIndex);
+  String getImageName(int imageIndex);
 
-	// Ignoring StageLabel element, complex property
-	// Ignoring WellSample_BackReference back reference
-	//
-	// ImageRef property storage
-	//
-	// {u'WellSample': {u'Well': {u'Plate': {u'OME': None}}}}
-	// Is multi path? False
+  // Ignoring ObjectiveSettings element, complex property
+  // Ignoring Pixels element, complex property
+  String getImageROIRef(int imageIndex, int ROIRefIndex);
 
-	// 1:1
-	// Is multi path? False
-	// Ignoring ID property of reference ImageRef
+  // Ignoring StageLabel element, complex property
+  // Ignoring WellSample_BackReference back reference
+  //
+  // ImageRef property storage
+  //
+  // {u'WellSample': {u'Well': {u'Plate': {u'OME': None}}}}
+  // Is multi path? False
 
-	//
-	// ImagingEnvironment property storage
-	//
-	// {u'Image': {u'OME': None}}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? False
+  // Ignoring ID property of reference ImageRef
 
-	Double getImagingEnvironmentAirPressure(int imageIndex);
+  //
+  // ImagingEnvironment property storage
+  //
+  // {u'Image': {u'OME': None}}
+  // Is multi path? False
 
-	PercentFraction getImagingEnvironmentCO2Percent(int imageIndex);
+  Double getImagingEnvironmentAirPressure(int imageIndex);
 
-	PercentFraction getImagingEnvironmentHumidity(int imageIndex);
+  PercentFraction getImagingEnvironmentCO2Percent(int imageIndex);
 
-	Double getImagingEnvironmentTemperature(int imageIndex);
+  PercentFraction getImagingEnvironmentHumidity(int imageIndex);
 
-	//
-	// Instrument property storage
-	//
-	// {u'OME': None}
-	// Is multi path? False
+  Double getImagingEnvironmentTemperature(int imageIndex);
 
-	// Ignoring Detector element, complex property
-	// Ignoring Dichroic element, complex property
-	// Ignoring Filter element, complex property
-	// Ignoring FilterSet element, complex property
-	String getInstrumentID(int instrumentIndex);
+  //
+  // Instrument property storage
+  //
+  // {u'OME': None}
+  // Is multi path? False
 
-	// Ignoring Image_BackReference back reference
-	// Ignoring LightSource element, complex property
-	// Ignoring Microscope element, complex property
-	// Ignoring OTF element, complex property
-	// Ignoring Objective element, complex property
-	//
-	// InstrumentRef property storage
-	//
-	// {u'Image': {u'OME': None}}
-	// Is multi path? False
+  // Ignoring Detector element, complex property
+  // Ignoring Dichroic element, complex property
+  // Ignoring Filter element, complex property
+  // Ignoring FilterSet element, complex property
+  String getInstrumentID(int instrumentIndex);
 
-	// 1:1
-	// Is multi path? False
-	// Ignoring ID property of reference InstrumentRef
+  // Ignoring Image_BackReference back reference
+  // Ignoring LightSource element, complex property
+  // Ignoring Microscope element, complex property
+  // Ignoring OTF element, complex property
+  // Ignoring Objective element, complex property
+  //
+  // InstrumentRef property storage
+  //
+  // {u'Image': {u'OME': None}}
+  // Is multi path? False
 
-	//
-	// Laser property storage
-	//
-	// {u'LightSource': {u'Instrument': {u'OME': None}}}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? False
+  // Ignoring ID property of reference InstrumentRef
 
-	// Ignoring Arc of parent abstract type
-	// Ignoring Filament of parent abstract type
-	// ID accessor from parent LightSource
-	String getLaserID(int instrumentIndex, int lightSourceIndex);
+  //
+  // Laser property storage
+  //
+  // {u'LightSource': {u'Instrument': {u'OME': None}}}
+  // Is multi path? False
 
-	// Ignoring Laser of parent abstract type
-	// Ignoring LightEmittingDiode of parent abstract type
-	// LotNumber accessor from parent LightSource
-	String getLaserLotNumber(int instrumentIndex, int lightSourceIndex);
+  // Ignoring Arc of parent abstract type
+  // Ignoring Filament of parent abstract type
+  // ID accessor from parent LightSource
+  String getLaserID(int instrumentIndex, int lightSourceIndex);
 
-	// Manufacturer accessor from parent LightSource
-	String getLaserManufacturer(int instrumentIndex, int lightSourceIndex);
+  // Ignoring Laser of parent abstract type
+  // Ignoring LightEmittingDiode of parent abstract type
+  // LotNumber accessor from parent LightSource
+  String getLaserLotNumber(int instrumentIndex, int lightSourceIndex);
 
-	// Model accessor from parent LightSource
-	String getLaserModel(int instrumentIndex, int lightSourceIndex);
+  // Manufacturer accessor from parent LightSource
+  String getLaserManufacturer(int instrumentIndex, int lightSourceIndex);
 
-	// Power accessor from parent LightSource
-	Double getLaserPower(int instrumentIndex, int lightSourceIndex);
+  // Model accessor from parent LightSource
+  String getLaserModel(int instrumentIndex, int lightSourceIndex);
 
-	// SerialNumber accessor from parent LightSource
-	String getLaserSerialNumber(int instrumentIndex, int lightSourceIndex);
+  // Power accessor from parent LightSource
+  Double getLaserPower(int instrumentIndex, int lightSourceIndex);
 
-	PositiveInteger getLaserFrequencyMultiplication(int instrumentIndex, int lightSourceIndex);
+  // SerialNumber accessor from parent LightSource
+  String getLaserSerialNumber(int instrumentIndex, int lightSourceIndex);
 
-	LaserMedium getLaserLaserMedium(int instrumentIndex, int lightSourceIndex);
+  PositiveInteger getLaserFrequencyMultiplication(int instrumentIndex,
+    int lightSourceIndex);
 
-	Boolean getLaserPockelCell(int instrumentIndex, int lightSourceIndex);
+  LaserMedium getLaserLaserMedium(int instrumentIndex, int lightSourceIndex);
 
-	Pulse getLaserPulse(int instrumentIndex, int lightSourceIndex);
+  Boolean getLaserPockelCell(int instrumentIndex, int lightSourceIndex);
 
-	String getLaserPump(int instrumentIndex, int lightSourceIndex);
+  Pulse getLaserPulse(int instrumentIndex, int lightSourceIndex);
 
-	Double getLaserRepetitionRate(int instrumentIndex, int lightSourceIndex);
+  String getLaserPump(int instrumentIndex, int lightSourceIndex);
 
-	Boolean getLaserTuneable(int instrumentIndex, int lightSourceIndex);
+  Double getLaserRepetitionRate(int instrumentIndex, int lightSourceIndex);
 
-	LaserType getLaserType(int instrumentIndex, int lightSourceIndex);
+  Boolean getLaserTuneable(int instrumentIndex, int lightSourceIndex);
 
-	PositiveInteger getLaserWavelength(int instrumentIndex, int lightSourceIndex);
+  LaserType getLaserType(int instrumentIndex, int lightSourceIndex);
 
-	//
-	// Leader property storage
-	//
-	// {u'Group': {u'OME': None}}
-	// Is multi path? False
+  PositiveInteger getLaserWavelength(int instrumentIndex, int lightSourceIndex);
 
-	// 1:1
-	// Is multi path? False
-	// Ignoring ID property of reference Leader
+  //
+  // Leader property storage
+  //
+  // {u'Group': {u'OME': None}}
+  // Is multi path? False
 
-	//
-	// LightEmittingDiode property storage
-	//
-	// {u'LightSource': {u'Instrument': {u'OME': None}}}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? False
+  // Ignoring ID property of reference Leader
 
-	// Ignoring Arc of parent abstract type
-	// Ignoring Filament of parent abstract type
-	// ID accessor from parent LightSource
-	String getLightEmittingDiodeID(int instrumentIndex, int lightSourceIndex);
+  //
+  // LightEmittingDiode property storage
+  //
+  // {u'LightSource': {u'Instrument': {u'OME': None}}}
+  // Is multi path? False
 
-	// Ignoring Laser of parent abstract type
-	// Ignoring LightEmittingDiode of parent abstract type
-	// LotNumber accessor from parent LightSource
-	String getLightEmittingDiodeLotNumber(int instrumentIndex, int lightSourceIndex);
+  // Ignoring Arc of parent abstract type
+  // Ignoring Filament of parent abstract type
+  // ID accessor from parent LightSource
+  String getLightEmittingDiodeID(int instrumentIndex, int lightSourceIndex);
 
-	// Manufacturer accessor from parent LightSource
-	String getLightEmittingDiodeManufacturer(int instrumentIndex, int lightSourceIndex);
+  // Ignoring Laser of parent abstract type
+  // Ignoring LightEmittingDiode of parent abstract type
+  // LotNumber accessor from parent LightSource
+  String getLightEmittingDiodeLotNumber(int instrumentIndex,
+    int lightSourceIndex);
 
-	// Model accessor from parent LightSource
-	String getLightEmittingDiodeModel(int instrumentIndex, int lightSourceIndex);
+  // Manufacturer accessor from parent LightSource
+  String getLightEmittingDiodeManufacturer(int instrumentIndex,
+    int lightSourceIndex);
 
-	// Power accessor from parent LightSource
-	Double getLightEmittingDiodePower(int instrumentIndex, int lightSourceIndex);
+  // Model accessor from parent LightSource
+  String getLightEmittingDiodeModel(int instrumentIndex, int lightSourceIndex);
 
-	// SerialNumber accessor from parent LightSource
-	String getLightEmittingDiodeSerialNumber(int instrumentIndex, int lightSourceIndex);
+  // Power accessor from parent LightSource
+  Double getLightEmittingDiodePower(int instrumentIndex, int lightSourceIndex);
 
-	//
-	// LightPath property storage
-	//
-	// {u'Channel': {u'Pixels': {u'Image': {u'OME': None}}}}
-	// Is multi path? False
+  // SerialNumber accessor from parent LightSource
+  String getLightEmittingDiodeSerialNumber(int instrumentIndex,
+    int lightSourceIndex);
 
-	String getLightPathDichroicRef(int imageIndex, int channelIndex);
+  //
+  // LightPath property storage
+  //
+  // {u'Channel': {u'Pixels': {u'Image': {u'OME': None}}}}
+  // Is multi path? False
 
-	String getLightPathEmissionFilterRef(int imageIndex, int channelIndex, int emissionFilterRefIndex);
+  String getLightPathDichroicRef(int imageIndex, int channelIndex);
 
-	String getLightPathExcitationFilterRef(int imageIndex, int channelIndex, int excitationFilterRefIndex);
+  String getLightPathEmissionFilterRef(int imageIndex, int channelIndex,
+    int emissionFilterRefIndex);
 
-	//
-	// LightSourceSettings property storage
-	//
-	// {u'Channel': {u'Pixels': {u'Image': {u'OME': None}}}, u'MicrobeamManipulation': {u'Experiment': {u'OME': None}}}
-	// Is multi path? True
+  String getLightPathExcitationFilterRef(int imageIndex, int channelIndex,
+    int excitationFilterRefIndex);
 
-	PercentFraction getChannelLightSourceSettingsAttenuation(int imageIndex, int channelIndex);
+  //
+  // LightSourceSettings property storage
+  //
+  // {u'Channel': {u'Pixels': {u'Image': {u'OME': None}}}, u'MicrobeamManipulation': {u'Experiment': {u'OME': None}}}
+  // Is multi path? True
 
-	PercentFraction getMicrobeamManipulationLightSourceSettingsAttenuation(int experimentIndex, int microbeamManipulationIndex, int lightSourceSettingsIndex);
+  PercentFraction getChannelLightSourceSettingsAttenuation(int imageIndex,
+    int channelIndex);
 
-	String getChannelLightSourceSettingsID(int imageIndex, int channelIndex);
+  PercentFraction getMicrobeamManipulationLightSourceSettingsAttenuation(
+    int experimentIndex, int microbeamManipulationIndex,
+    int lightSourceSettingsIndex);
 
-	String getMicrobeamManipulationLightSourceSettingsID(int experimentIndex, int microbeamManipulationIndex, int lightSourceSettingsIndex);
+  String getChannelLightSourceSettingsID(int imageIndex, int channelIndex);
 
-	PositiveInteger getChannelLightSourceSettingsWavelength(int imageIndex, int channelIndex);
+  String getMicrobeamManipulationLightSourceSettingsID(int experimentIndex,
+    int microbeamManipulationIndex, int lightSourceSettingsIndex);
 
-	PositiveInteger getMicrobeamManipulationLightSourceSettingsWavelength(int experimentIndex, int microbeamManipulationIndex, int lightSourceSettingsIndex);
+  PositiveInteger getChannelLightSourceSettingsWavelength(int imageIndex,
+    int channelIndex);
 
-	//
-	// Line property storage
-	//
-	// {u'Shape': {u'Union': {u'ROI': {u'OME': None}}}}
-	// Is multi path? False
+  PositiveInteger getMicrobeamManipulationLightSourceSettingsWavelength(
+    int experimentIndex, int microbeamManipulationIndex,
+    int lightSourceSettingsIndex);
 
-	// Description accessor from parent Shape
-	String getLineDescription(int ROIIndex, int shapeIndex);
+  //
+  // Line property storage
+  //
+  // {u'Shape': {u'Union': {u'ROI': {u'OME': None}}}}
+  // Is multi path? False
 
-	// Ignoring Ellipse of parent abstract type
-	// Fill accessor from parent Shape
-	Integer getLineFill(int ROIIndex, int shapeIndex);
+  // Description accessor from parent Shape
+  String getLineDescription(int ROIIndex, int shapeIndex);
 
-	// Ignoring FillRule of parent abstract type
-	// Ignoring FontFamily of parent abstract type
-	// FontSize accessor from parent Shape
-	NonNegativeInteger getLineFontSize(int ROIIndex, int shapeIndex);
+  // Ignoring Ellipse of parent abstract type
+  // Fill accessor from parent Shape
+  Integer getLineFill(int ROIIndex, int shapeIndex);
 
-	// Ignoring FontStyle of parent abstract type
-	// ID accessor from parent Shape
-	String getLineID(int ROIIndex, int shapeIndex);
+  // Ignoring FillRule of parent abstract type
+  // Ignoring FontFamily of parent abstract type
+  // FontSize accessor from parent Shape
+  NonNegativeInteger getLineFontSize(int ROIIndex, int shapeIndex);
 
-	// Label accessor from parent Shape
-	String getLineLabel(int ROIIndex, int shapeIndex);
+  // Ignoring FontStyle of parent abstract type
+  // ID accessor from parent Shape
+  String getLineID(int ROIIndex, int shapeIndex);
 
-	// Ignoring Line of parent abstract type
-	// Ignoring LineCap of parent abstract type
-	// Ignoring MarkerEnd of parent abstract type
-	// Ignoring MarkerStart of parent abstract type
-	// Ignoring Mask of parent abstract type
-	// Name accessor from parent Shape
-	String getLineName(int ROIIndex, int shapeIndex);
+  // Label accessor from parent Shape
+  String getLineLabel(int ROIIndex, int shapeIndex);
 
-	// Ignoring Path of parent abstract type
-	// Ignoring Point of parent abstract type
-	// Ignoring Polyline of parent abstract type
-	// Ignoring Rectangle of parent abstract type
-	// Stroke accessor from parent Shape
-	Integer getLineStroke(int ROIIndex, int shapeIndex);
+  // Ignoring Line of parent abstract type
+  // Ignoring LineCap of parent abstract type
+  // Ignoring MarkerEnd of parent abstract type
+  // Ignoring MarkerStart of parent abstract type
+  // Ignoring Mask of parent abstract type
+  // Name accessor from parent Shape
+  String getLineName(int ROIIndex, int shapeIndex);
 
-	// StrokeDashArray accessor from parent Shape
-	String getLineStrokeDashArray(int ROIIndex, int shapeIndex);
+  // Ignoring Path of parent abstract type
+  // Ignoring Point of parent abstract type
+  // Ignoring Polyline of parent abstract type
+  // Ignoring Rectangle of parent abstract type
+  // Stroke accessor from parent Shape
+  Integer getLineStroke(int ROIIndex, int shapeIndex);
 
-	// StrokeWidth accessor from parent Shape
-	Double getLineStrokeWidth(int ROIIndex, int shapeIndex);
+  // StrokeDashArray accessor from parent Shape
+  String getLineStrokeDashArray(int ROIIndex, int shapeIndex);
 
-	// Ignoring Text of parent abstract type
-	// TheC accessor from parent Shape
-	NonNegativeInteger getLineTheC(int ROIIndex, int shapeIndex);
+  // StrokeWidth accessor from parent Shape
+  Double getLineStrokeWidth(int ROIIndex, int shapeIndex);
 
-	// TheT accessor from parent Shape
-	NonNegativeInteger getLineTheT(int ROIIndex, int shapeIndex);
+  // Ignoring Text of parent abstract type
+  // TheC accessor from parent Shape
+  NonNegativeInteger getLineTheC(int ROIIndex, int shapeIndex);
 
-	// TheZ accessor from parent Shape
-	NonNegativeInteger getLineTheZ(int ROIIndex, int shapeIndex);
+  // TheT accessor from parent Shape
+  NonNegativeInteger getLineTheT(int ROIIndex, int shapeIndex);
 
-	// Transform accessor from parent Shape
-	String getLineTransform(int ROIIndex, int shapeIndex);
+  // TheZ accessor from parent Shape
+  NonNegativeInteger getLineTheZ(int ROIIndex, int shapeIndex);
 
-	Double getLineX1(int ROIIndex, int shapeIndex);
+  // Transform accessor from parent Shape
+  String getLineTransform(int ROIIndex, int shapeIndex);
 
-	Double getLineX2(int ROIIndex, int shapeIndex);
+  Double getLineX1(int ROIIndex, int shapeIndex);
 
-	Double getLineY1(int ROIIndex, int shapeIndex);
+  Double getLineX2(int ROIIndex, int shapeIndex);
 
-	Double getLineY2(int ROIIndex, int shapeIndex);
+  Double getLineY1(int ROIIndex, int shapeIndex);
 
-	//
-	// ListAnnotation property storage
-	//
-	// {u'StructuredAnnotations': {u'OME': None}}
-	// Is multi path? False
+  Double getLineY2(int ROIIndex, int shapeIndex);
 
-	String getListAnnotationAnnotationRef(int listAnnotationIndex, int annotationRefIndex);
+  //
+  // ListAnnotation property storage
+  //
+  // {u'StructuredAnnotations': {u'OME': None}}
+  // Is multi path? False
 
-	// Ignoring Channel_BackReference back reference
-	// Ignoring Dataset_BackReference back reference
-	String getListAnnotationDescription(int listAnnotationIndex);
+  String getListAnnotationAnnotationRef(int listAnnotationIndex,
+    int annotationRefIndex);
 
-	// Ignoring Experimenter_BackReference back reference
-	String getListAnnotationID(int listAnnotationIndex);
+  // Ignoring Channel_BackReference back reference
+  // Ignoring Dataset_BackReference back reference
+  String getListAnnotationDescription(int listAnnotationIndex);
 
-	// Ignoring Image_BackReference back reference
-	String getListAnnotationNamespace(int listAnnotationIndex);
+  // Ignoring Experimenter_BackReference back reference
+  String getListAnnotationID(int listAnnotationIndex);
 
-	// Ignoring Pixels_BackReference back reference
-	// Ignoring Plane_BackReference back reference
-	// Ignoring PlateAcquisition_BackReference back reference
-	// Ignoring Plate_BackReference back reference
-	// Ignoring Project_BackReference back reference
-	// Ignoring ROI_BackReference back reference
-	// Ignoring Reagent_BackReference back reference
-	// Ignoring Screen_BackReference back reference
-	// Ignoring WellSample_BackReference back reference
-	// Ignoring Well_BackReference back reference
-	//
-	// LongAnnotation property storage
-	//
-	// {u'StructuredAnnotations': {u'OME': None}}
-	// Is multi path? False
+  // Ignoring Image_BackReference back reference
+  String getListAnnotationNamespace(int listAnnotationIndex);
 
-	String getLongAnnotationAnnotationRef(int longAnnotationIndex, int annotationRefIndex);
+  // Ignoring Pixels_BackReference back reference
+  // Ignoring Plane_BackReference back reference
+  // Ignoring PlateAcquisition_BackReference back reference
+  // Ignoring Plate_BackReference back reference
+  // Ignoring Project_BackReference back reference
+  // Ignoring ROI_BackReference back reference
+  // Ignoring Reagent_BackReference back reference
+  // Ignoring Screen_BackReference back reference
+  // Ignoring WellSample_BackReference back reference
+  // Ignoring Well_BackReference back reference
+  //
+  // LongAnnotation property storage
+  //
+  // {u'StructuredAnnotations': {u'OME': None}}
+  // Is multi path? False
 
-	// Ignoring Channel_BackReference back reference
-	// Ignoring Dataset_BackReference back reference
-	String getLongAnnotationDescription(int longAnnotationIndex);
+  String getLongAnnotationAnnotationRef(int longAnnotationIndex,
+    int annotationRefIndex);
 
-	// Ignoring Experimenter_BackReference back reference
-	String getLongAnnotationID(int longAnnotationIndex);
+  // Ignoring Channel_BackReference back reference
+  // Ignoring Dataset_BackReference back reference
+  String getLongAnnotationDescription(int longAnnotationIndex);
 
-	// Ignoring Image_BackReference back reference
-	String getLongAnnotationNamespace(int longAnnotationIndex);
+  // Ignoring Experimenter_BackReference back reference
+  String getLongAnnotationID(int longAnnotationIndex);
 
-	// Ignoring Pixels_BackReference back reference
-	// Ignoring Plane_BackReference back reference
-	// Ignoring PlateAcquisition_BackReference back reference
-	// Ignoring Plate_BackReference back reference
-	// Ignoring Project_BackReference back reference
-	// Ignoring ROI_BackReference back reference
-	// Ignoring Reagent_BackReference back reference
-	// Ignoring Screen_BackReference back reference
-	Long getLongAnnotationValue(int longAnnotationIndex);
+  // Ignoring Image_BackReference back reference
+  String getLongAnnotationNamespace(int longAnnotationIndex);
 
-	// Ignoring WellSample_BackReference back reference
-	// Ignoring Well_BackReference back reference
-	//
-	// Mask property storage
-	//
-	// {u'Shape': {u'Union': {u'ROI': {u'OME': None}}}}
-	// Is multi path? False
+  // Ignoring Pixels_BackReference back reference
+  // Ignoring Plane_BackReference back reference
+  // Ignoring PlateAcquisition_BackReference back reference
+  // Ignoring Plate_BackReference back reference
+  // Ignoring Project_BackReference back reference
+  // Ignoring ROI_BackReference back reference
+  // Ignoring Reagent_BackReference back reference
+  // Ignoring Screen_BackReference back reference
+  Long getLongAnnotationValue(int longAnnotationIndex);
 
-	// Description accessor from parent Shape
-	String getMaskDescription(int ROIIndex, int shapeIndex);
+  // Ignoring WellSample_BackReference back reference
+  // Ignoring Well_BackReference back reference
+  //
+  // Mask property storage
+  //
+  // {u'Shape': {u'Union': {u'ROI': {u'OME': None}}}}
+  // Is multi path? False
 
-	// Ignoring Ellipse of parent abstract type
-	// Fill accessor from parent Shape
-	Integer getMaskFill(int ROIIndex, int shapeIndex);
+  // Description accessor from parent Shape
+  String getMaskDescription(int ROIIndex, int shapeIndex);
 
-	// Ignoring FillRule of parent abstract type
-	// Ignoring FontFamily of parent abstract type
-	// FontSize accessor from parent Shape
-	NonNegativeInteger getMaskFontSize(int ROIIndex, int shapeIndex);
+  // Ignoring Ellipse of parent abstract type
+  // Fill accessor from parent Shape
+  Integer getMaskFill(int ROIIndex, int shapeIndex);
 
-	// Ignoring FontStyle of parent abstract type
-	// ID accessor from parent Shape
-	String getMaskID(int ROIIndex, int shapeIndex);
+  // Ignoring FillRule of parent abstract type
+  // Ignoring FontFamily of parent abstract type
+  // FontSize accessor from parent Shape
+  NonNegativeInteger getMaskFontSize(int ROIIndex, int shapeIndex);
 
-	// Label accessor from parent Shape
-	String getMaskLabel(int ROIIndex, int shapeIndex);
+  // Ignoring FontStyle of parent abstract type
+  // ID accessor from parent Shape
+  String getMaskID(int ROIIndex, int shapeIndex);
 
-	// Ignoring Line of parent abstract type
-	// Ignoring LineCap of parent abstract type
-	// Ignoring MarkerEnd of parent abstract type
-	// Ignoring MarkerStart of parent abstract type
-	// Ignoring Mask of parent abstract type
-	// Name accessor from parent Shape
-	String getMaskName(int ROIIndex, int shapeIndex);
+  // Label accessor from parent Shape
+  String getMaskLabel(int ROIIndex, int shapeIndex);
 
-	// Ignoring Path of parent abstract type
-	// Ignoring Point of parent abstract type
-	// Ignoring Polyline of parent abstract type
-	// Ignoring Rectangle of parent abstract type
-	// Stroke accessor from parent Shape
-	Integer getMaskStroke(int ROIIndex, int shapeIndex);
+  // Ignoring Line of parent abstract type
+  // Ignoring LineCap of parent abstract type
+  // Ignoring MarkerEnd of parent abstract type
+  // Ignoring MarkerStart of parent abstract type
+  // Ignoring Mask of parent abstract type
+  // Name accessor from parent Shape
+  String getMaskName(int ROIIndex, int shapeIndex);
 
-	// StrokeDashArray accessor from parent Shape
-	String getMaskStrokeDashArray(int ROIIndex, int shapeIndex);
+  // Ignoring Path of parent abstract type
+  // Ignoring Point of parent abstract type
+  // Ignoring Polyline of parent abstract type
+  // Ignoring Rectangle of parent abstract type
+  // Stroke accessor from parent Shape
+  Integer getMaskStroke(int ROIIndex, int shapeIndex);
 
-	// StrokeWidth accessor from parent Shape
-	Double getMaskStrokeWidth(int ROIIndex, int shapeIndex);
+  // StrokeDashArray accessor from parent Shape
+  String getMaskStrokeDashArray(int ROIIndex, int shapeIndex);
 
-	// Ignoring Text of parent abstract type
-	// TheC accessor from parent Shape
-	NonNegativeInteger getMaskTheC(int ROIIndex, int shapeIndex);
+  // StrokeWidth accessor from parent Shape
+  Double getMaskStrokeWidth(int ROIIndex, int shapeIndex);
 
-	// TheT accessor from parent Shape
-	NonNegativeInteger getMaskTheT(int ROIIndex, int shapeIndex);
+  // Ignoring Text of parent abstract type
+  // TheC accessor from parent Shape
+  NonNegativeInteger getMaskTheC(int ROIIndex, int shapeIndex);
 
-	// TheZ accessor from parent Shape
-	NonNegativeInteger getMaskTheZ(int ROIIndex, int shapeIndex);
+  // TheT accessor from parent Shape
+  NonNegativeInteger getMaskTheT(int ROIIndex, int shapeIndex);
 
-	// Transform accessor from parent Shape
-	String getMaskTransform(int ROIIndex, int shapeIndex);
+  // TheZ accessor from parent Shape
+  NonNegativeInteger getMaskTheZ(int ROIIndex, int shapeIndex);
 
-	// Ignoring BinData element, complex property
-	Double getMaskHeight(int ROIIndex, int shapeIndex);
+  // Transform accessor from parent Shape
+  String getMaskTransform(int ROIIndex, int shapeIndex);
 
-	Double getMaskWidth(int ROIIndex, int shapeIndex);
+  // Ignoring BinData element, complex property
+  Double getMaskHeight(int ROIIndex, int shapeIndex);
 
-	Double getMaskX(int ROIIndex, int shapeIndex);
+  Double getMaskWidth(int ROIIndex, int shapeIndex);
 
-	Double getMaskY(int ROIIndex, int shapeIndex);
+  Double getMaskX(int ROIIndex, int shapeIndex);
 
-	//
-	// MetadataOnly property storage
-	//
-	// {u'Pixels': {u'Image': {u'OME': None}}}
-	// Is multi path? False
+  Double getMaskY(int ROIIndex, int shapeIndex);
 
-	//
-	// MicrobeamManipulation property storage
-	//
-	// {u'Experiment': {u'OME': None}}
-	// Is multi path? False
+  //
+  // MetadataOnly property storage
+  //
+  // {u'Pixels': {u'Image': {u'OME': None}}}
+  // Is multi path? False
 
-	String getMicrobeamManipulationDescription(int experimentIndex, int microbeamManipulationIndex);
+  //
+  // MicrobeamManipulation property storage
+  //
+  // {u'Experiment': {u'OME': None}}
+  // Is multi path? False
 
-	String getMicrobeamManipulationExperimenterRef(int experimentIndex, int microbeamManipulationIndex);
+  String getMicrobeamManipulationDescription(int experimentIndex,
+    int microbeamManipulationIndex);
 
-	String getMicrobeamManipulationID(int experimentIndex, int microbeamManipulationIndex);
+  String getMicrobeamManipulationExperimenterRef(int experimentIndex,
+    int microbeamManipulationIndex);
 
-	// Ignoring Image_BackReference back reference
-	// Ignoring LightSourceSettings element, complex property
-	String getMicrobeamManipulationROIRef(int experimentIndex, int microbeamManipulationIndex, int ROIRefIndex);
+  String getMicrobeamManipulationID(int experimentIndex,
+    int microbeamManipulationIndex);
 
-	MicrobeamManipulationType getMicrobeamManipulationType(int experimentIndex, int microbeamManipulationIndex);
+  // Ignoring Image_BackReference back reference
+  // Ignoring LightSourceSettings element, complex property
+  String getMicrobeamManipulationROIRef(int experimentIndex,
+    int microbeamManipulationIndex, int ROIRefIndex);
 
-	//
-	// MicrobeamManipulationRef property storage
-	//
-	// {u'Image': {u'OME': None}}
-	// Is multi path? False
+  MicrobeamManipulationType getMicrobeamManipulationType(int experimentIndex,
+    int microbeamManipulationIndex);
 
-	// 1:1
-	// Is multi path? False
-	// Ignoring ID property of reference MicrobeamManipulationRef
+  //
+  // MicrobeamManipulationRef property storage
+  //
+  // {u'Image': {u'OME': None}}
+  // Is multi path? False
 
-	//
-	// Microscope property storage
-	//
-	// {u'Instrument': {u'OME': None}}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? False
+  // Ignoring ID property of reference MicrobeamManipulationRef
 
-	String getMicroscopeLotNumber(int instrumentIndex);
+  //
+  // Microscope property storage
+  //
+  // {u'Instrument': {u'OME': None}}
+  // Is multi path? False
 
-	String getMicroscopeManufacturer(int instrumentIndex);
+  String getMicroscopeLotNumber(int instrumentIndex);
 
-	String getMicroscopeModel(int instrumentIndex);
+  String getMicroscopeManufacturer(int instrumentIndex);
 
-	String getMicroscopeSerialNumber(int instrumentIndex);
+  String getMicroscopeModel(int instrumentIndex);
 
-	MicroscopeType getMicroscopeType(int instrumentIndex);
+  String getMicroscopeSerialNumber(int instrumentIndex);
 
-	//
-	// OTF property storage
-	//
-	// {u'Instrument': {u'OME': None}}
-	// Is multi path? False
+  MicroscopeType getMicroscopeType(int instrumentIndex);
 
-	// Ignoring BinaryFile element, complex property
-	// Ignoring Channel_BackReference back reference
-	String getOTFFilterSetRef(int instrumentIndex, int OTFIndex);
+  //
+  // OTF property storage
+  //
+  // {u'Instrument': {u'OME': None}}
+  // Is multi path? False
 
-	String getOTFID(int instrumentIndex, int OTFIndex);
+  // Ignoring BinaryFile element, complex property
+  // Ignoring Channel_BackReference back reference
+  String getOTFFilterSetRef(int instrumentIndex, int OTFIndex);
 
-	// Ignoring ObjectiveSettings element, complex property
-	Boolean getOTFOpticalAxisAveraged(int instrumentIndex, int OTFIndex);
+  String getOTFID(int instrumentIndex, int OTFIndex);
 
-	PositiveInteger getOTFSizeX(int instrumentIndex, int OTFIndex);
+  // Ignoring ObjectiveSettings element, complex property
+  Boolean getOTFOpticalAxisAveraged(int instrumentIndex, int OTFIndex);
 
-	PositiveInteger getOTFSizeY(int instrumentIndex, int OTFIndex);
+  PositiveInteger getOTFSizeX(int instrumentIndex, int OTFIndex);
 
-	PixelType getOTFType(int instrumentIndex, int OTFIndex);
+  PositiveInteger getOTFSizeY(int instrumentIndex, int OTFIndex);
 
-	//
-	// OTFRef property storage
-	//
-	// {u'Channel': {u'Pixels': {u'Image': {u'OME': None}}}}
-	// Is multi path? False
+  PixelType getOTFType(int instrumentIndex, int OTFIndex);
 
-	// 1:1
-	// Is multi path? False
-	// Ignoring ID property of reference OTFRef
+  //
+  // OTFRef property storage
+  //
+  // {u'Channel': {u'Pixels': {u'Image': {u'OME': None}}}}
+  // Is multi path? False
 
-	//
-	// Objective property storage
-	//
-	// {u'Instrument': {u'OME': None}}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? False
+  // Ignoring ID property of reference OTFRef
 
-	Double getObjectiveCalibratedMagnification(int instrumentIndex, int objectiveIndex);
+  //
+  // Objective property storage
+  //
+  // {u'Instrument': {u'OME': None}}
+  // Is multi path? False
 
-	Correction getObjectiveCorrection(int instrumentIndex, int objectiveIndex);
+  Double getObjectiveCalibratedMagnification(int instrumentIndex,
+    int objectiveIndex);
 
-	String getObjectiveID(int instrumentIndex, int objectiveIndex);
+  Correction getObjectiveCorrection(int instrumentIndex, int objectiveIndex);
 
-	Immersion getObjectiveImmersion(int instrumentIndex, int objectiveIndex);
+  String getObjectiveID(int instrumentIndex, int objectiveIndex);
 
-	Boolean getObjectiveIris(int instrumentIndex, int objectiveIndex);
+  Immersion getObjectiveImmersion(int instrumentIndex, int objectiveIndex);
 
-	Double getObjectiveLensNA(int instrumentIndex, int objectiveIndex);
+  Boolean getObjectiveIris(int instrumentIndex, int objectiveIndex);
 
-	String getObjectiveLotNumber(int instrumentIndex, int objectiveIndex);
+  Double getObjectiveLensNA(int instrumentIndex, int objectiveIndex);
 
-	String getObjectiveManufacturer(int instrumentIndex, int objectiveIndex);
+  String getObjectiveLotNumber(int instrumentIndex, int objectiveIndex);
 
-	String getObjectiveModel(int instrumentIndex, int objectiveIndex);
+  String getObjectiveManufacturer(int instrumentIndex, int objectiveIndex);
 
-	PositiveInteger getObjectiveNominalMagnification(int instrumentIndex, int objectiveIndex);
+  String getObjectiveModel(int instrumentIndex, int objectiveIndex);
 
-	String getObjectiveSerialNumber(int instrumentIndex, int objectiveIndex);
+  PositiveInteger getObjectiveNominalMagnification(int instrumentIndex,
+    int objectiveIndex);
 
-	Double getObjectiveWorkingDistance(int instrumentIndex, int objectiveIndex);
+  String getObjectiveSerialNumber(int instrumentIndex, int objectiveIndex);
 
-	//
-	// ObjectiveSettings property storage
-	//
-	// {u'Image': {u'OME': None}, u'OTF': {u'Instrument': {u'OME': None}}}
-	// Is multi path? True
+  Double getObjectiveWorkingDistance(int instrumentIndex, int objectiveIndex);
 
-	Double getImageObjectiveSettingsCorrectionCollar(int imageIndex);
+  //
+  // ObjectiveSettings property storage
+  //
+  // {u'Image': {u'OME': None}, u'OTF': {u'Instrument': {u'OME': None}}}
+  // Is multi path? True
 
-	Double getOTFObjectiveSettingsCorrectionCollar(int instrumentIndex, int OTFIndex);
+  Double getImageObjectiveSettingsCorrectionCollar(int imageIndex);
 
-	String getImageObjectiveSettingsID(int imageIndex);
+  Double getOTFObjectiveSettingsCorrectionCollar(int instrumentIndex,
+    int OTFIndex);
 
-	String getOTFObjectiveSettingsID(int instrumentIndex, int OTFIndex);
+  String getImageObjectiveSettingsID(int imageIndex);
 
-	Medium getImageObjectiveSettingsMedium(int imageIndex);
+  String getOTFObjectiveSettingsID(int instrumentIndex, int OTFIndex);
 
-	Medium getOTFObjectiveSettingsMedium(int instrumentIndex, int OTFIndex);
+  Medium getImageObjectiveSettingsMedium(int imageIndex);
 
-	Double getImageObjectiveSettingsRefractiveIndex(int imageIndex);
+  Medium getOTFObjectiveSettingsMedium(int instrumentIndex, int OTFIndex);
 
-	Double getOTFObjectiveSettingsRefractiveIndex(int instrumentIndex, int OTFIndex);
+  Double getImageObjectiveSettingsRefractiveIndex(int imageIndex);
 
-	//
-	// Path property storage
-	//
-	// {u'Shape': {u'Union': {u'ROI': {u'OME': None}}}}
-	// Is multi path? False
+  Double getOTFObjectiveSettingsRefractiveIndex(int instrumentIndex,
+    int OTFIndex);
 
-	// Description accessor from parent Shape
-	String getPathDescription(int ROIIndex, int shapeIndex);
+  //
+  // Path property storage
+  //
+  // {u'Shape': {u'Union': {u'ROI': {u'OME': None}}}}
+  // Is multi path? False
 
-	// Ignoring Ellipse of parent abstract type
-	// Fill accessor from parent Shape
-	Integer getPathFill(int ROIIndex, int shapeIndex);
+  // Description accessor from parent Shape
+  String getPathDescription(int ROIIndex, int shapeIndex);
 
-	// Ignoring FillRule of parent abstract type
-	// Ignoring FontFamily of parent abstract type
-	// FontSize accessor from parent Shape
-	NonNegativeInteger getPathFontSize(int ROIIndex, int shapeIndex);
+  // Ignoring Ellipse of parent abstract type
+  // Fill accessor from parent Shape
+  Integer getPathFill(int ROIIndex, int shapeIndex);
 
-	// Ignoring FontStyle of parent abstract type
-	// ID accessor from parent Shape
-	String getPathID(int ROIIndex, int shapeIndex);
+  // Ignoring FillRule of parent abstract type
+  // Ignoring FontFamily of parent abstract type
+  // FontSize accessor from parent Shape
+  NonNegativeInteger getPathFontSize(int ROIIndex, int shapeIndex);
 
-	// Label accessor from parent Shape
-	String getPathLabel(int ROIIndex, int shapeIndex);
+  // Ignoring FontStyle of parent abstract type
+  // ID accessor from parent Shape
+  String getPathID(int ROIIndex, int shapeIndex);
 
-	// Ignoring Line of parent abstract type
-	// Ignoring LineCap of parent abstract type
-	// Ignoring MarkerEnd of parent abstract type
-	// Ignoring MarkerStart of parent abstract type
-	// Ignoring Mask of parent abstract type
-	// Name accessor from parent Shape
-	String getPathName(int ROIIndex, int shapeIndex);
+  // Label accessor from parent Shape
+  String getPathLabel(int ROIIndex, int shapeIndex);
 
-	// Ignoring Path of parent abstract type
-	// Ignoring Point of parent abstract type
-	// Ignoring Polyline of parent abstract type
-	// Ignoring Rectangle of parent abstract type
-	// Stroke accessor from parent Shape
-	Integer getPathStroke(int ROIIndex, int shapeIndex);
+  // Ignoring Line of parent abstract type
+  // Ignoring LineCap of parent abstract type
+  // Ignoring MarkerEnd of parent abstract type
+  // Ignoring MarkerStart of parent abstract type
+  // Ignoring Mask of parent abstract type
+  // Name accessor from parent Shape
+  String getPathName(int ROIIndex, int shapeIndex);
 
-	// StrokeDashArray accessor from parent Shape
-	String getPathStrokeDashArray(int ROIIndex, int shapeIndex);
+  // Ignoring Path of parent abstract type
+  // Ignoring Point of parent abstract type
+  // Ignoring Polyline of parent abstract type
+  // Ignoring Rectangle of parent abstract type
+  // Stroke accessor from parent Shape
+  Integer getPathStroke(int ROIIndex, int shapeIndex);
 
-	// StrokeWidth accessor from parent Shape
-	Double getPathStrokeWidth(int ROIIndex, int shapeIndex);
+  // StrokeDashArray accessor from parent Shape
+  String getPathStrokeDashArray(int ROIIndex, int shapeIndex);
 
-	// Ignoring Text of parent abstract type
-	// TheC accessor from parent Shape
-	NonNegativeInteger getPathTheC(int ROIIndex, int shapeIndex);
+  // StrokeWidth accessor from parent Shape
+  Double getPathStrokeWidth(int ROIIndex, int shapeIndex);
 
-	// TheT accessor from parent Shape
-	NonNegativeInteger getPathTheT(int ROIIndex, int shapeIndex);
+  // Ignoring Text of parent abstract type
+  // TheC accessor from parent Shape
+  NonNegativeInteger getPathTheC(int ROIIndex, int shapeIndex);
 
-	// TheZ accessor from parent Shape
-	NonNegativeInteger getPathTheZ(int ROIIndex, int shapeIndex);
+  // TheT accessor from parent Shape
+  NonNegativeInteger getPathTheT(int ROIIndex, int shapeIndex);
 
-	// Transform accessor from parent Shape
-	String getPathTransform(int ROIIndex, int shapeIndex);
+  // TheZ accessor from parent Shape
+  NonNegativeInteger getPathTheZ(int ROIIndex, int shapeIndex);
 
-	String getPathDefinition(int ROIIndex, int shapeIndex);
+  // Transform accessor from parent Shape
+  String getPathTransform(int ROIIndex, int shapeIndex);
 
-	//
-	// Pixels property storage
-	//
-	// {u'Image': {u'OME': None}}
-	// Is multi path? False
+  String getPathDefinition(int ROIIndex, int shapeIndex);
 
-	String getPixelsAnnotationRef(int imageIndex, int annotationRefIndex);
+  //
+  // Pixels property storage
+  //
+  // {u'Image': {u'OME': None}}
+  // Is multi path? False
 
-	// Ignoring BinData element, complex property
-	// Ignoring Channel element, complex property
-	DimensionOrder getPixelsDimensionOrder(int imageIndex);
+  String getPixelsAnnotationRef(int imageIndex, int annotationRefIndex);
 
-	String getPixelsID(int imageIndex);
+  // Ignoring BinData element, complex property
+  // Ignoring Channel element, complex property
+  DimensionOrder getPixelsDimensionOrder(int imageIndex);
 
-	// Ignoring MetadataOnly element, complex property
-	PositiveFloat getPixelsPhysicalSizeX(int imageIndex);
+  String getPixelsID(int imageIndex);
 
-	PositiveFloat getPixelsPhysicalSizeY(int imageIndex);
+  // Ignoring MetadataOnly element, complex property
+  PositiveFloat getPixelsPhysicalSizeX(int imageIndex);
 
-	PositiveFloat getPixelsPhysicalSizeZ(int imageIndex);
+  PositiveFloat getPixelsPhysicalSizeY(int imageIndex);
 
-	// Ignoring Plane element, complex property
-	PositiveInteger getPixelsSizeC(int imageIndex);
+  PositiveFloat getPixelsPhysicalSizeZ(int imageIndex);
 
-	PositiveInteger getPixelsSizeT(int imageIndex);
+  // Ignoring Plane element, complex property
+  PositiveInteger getPixelsSizeC(int imageIndex);
 
-	PositiveInteger getPixelsSizeX(int imageIndex);
+  PositiveInteger getPixelsSizeT(int imageIndex);
 
-	PositiveInteger getPixelsSizeY(int imageIndex);
+  PositiveInteger getPixelsSizeX(int imageIndex);
 
-	PositiveInteger getPixelsSizeZ(int imageIndex);
+  PositiveInteger getPixelsSizeY(int imageIndex);
 
-	// Ignoring TiffData element, complex property
-	Double getPixelsTimeIncrement(int imageIndex);
+  PositiveInteger getPixelsSizeZ(int imageIndex);
 
-	PixelType getPixelsType(int imageIndex);
+  // Ignoring TiffData element, complex property
+  Double getPixelsTimeIncrement(int imageIndex);
 
-	//
-	// Plane property storage
-	//
-	// {u'Pixels': {u'Image': {u'OME': None}}}
-	// Is multi path? False
+  PixelType getPixelsType(int imageIndex);
 
-	String getPlaneAnnotationRef(int imageIndex, int planeIndex, int annotationRefIndex);
+  //
+  // Plane property storage
+  //
+  // {u'Pixels': {u'Image': {u'OME': None}}}
+  // Is multi path? False
 
-	Double getPlaneDeltaT(int imageIndex, int planeIndex);
+  String getPlaneAnnotationRef(int imageIndex, int planeIndex,
+    int annotationRefIndex);
 
-	Double getPlaneExposureTime(int imageIndex, int planeIndex);
+  Double getPlaneDeltaT(int imageIndex, int planeIndex);
 
-	String getPlaneHashSHA1(int imageIndex, int planeIndex);
+  Double getPlaneExposureTime(int imageIndex, int planeIndex);
 
-	Double getPlanePositionX(int imageIndex, int planeIndex);
+  String getPlaneHashSHA1(int imageIndex, int planeIndex);
 
-	Double getPlanePositionY(int imageIndex, int planeIndex);
+  Double getPlanePositionX(int imageIndex, int planeIndex);
 
-	Double getPlanePositionZ(int imageIndex, int planeIndex);
+  Double getPlanePositionY(int imageIndex, int planeIndex);
 
-	NonNegativeInteger getPlaneTheC(int imageIndex, int planeIndex);
+  Double getPlanePositionZ(int imageIndex, int planeIndex);
 
-	NonNegativeInteger getPlaneTheT(int imageIndex, int planeIndex);
+  NonNegativeInteger getPlaneTheC(int imageIndex, int planeIndex);
 
-	NonNegativeInteger getPlaneTheZ(int imageIndex, int planeIndex);
+  NonNegativeInteger getPlaneTheT(int imageIndex, int planeIndex);
 
-	//
-	// Plate property storage
-	//
-	// {u'OME': None}
-	// Is multi path? False
+  NonNegativeInteger getPlaneTheZ(int imageIndex, int planeIndex);
 
-	String getPlateAnnotationRef(int plateIndex, int annotationRefIndex);
+  //
+  // Plate property storage
+  //
+  // {u'OME': None}
+  // Is multi path? False
 
-	NamingConvention getPlateColumnNamingConvention(int plateIndex);
+  String getPlateAnnotationRef(int plateIndex, int annotationRefIndex);
 
-	PositiveInteger getPlateColumns(int plateIndex);
+  NamingConvention getPlateColumnNamingConvention(int plateIndex);
 
-	String getPlateDescription(int plateIndex);
+  PositiveInteger getPlateColumns(int plateIndex);
 
-	String getPlateExternalIdentifier(int plateIndex);
+  String getPlateDescription(int plateIndex);
 
-	String getPlateID(int plateIndex);
+  String getPlateExternalIdentifier(int plateIndex);
 
-	String getPlateName(int plateIndex);
+  String getPlateID(int plateIndex);
 
-	// Ignoring PlateAcquisition element, complex property
-	NamingConvention getPlateRowNamingConvention(int plateIndex);
+  String getPlateName(int plateIndex);
 
-	PositiveInteger getPlateRows(int plateIndex);
+  // Ignoring PlateAcquisition element, complex property
+  NamingConvention getPlateRowNamingConvention(int plateIndex);
 
-	String getPlateScreenRef(int plateIndex, int screenRefIndex);
+  PositiveInteger getPlateRows(int plateIndex);
 
-	String getPlateStatus(int plateIndex);
+  String getPlateScreenRef(int plateIndex, int screenRefIndex);
 
-	// Ignoring Well element, complex property
-	Double getPlateWellOriginX(int plateIndex);
+  String getPlateStatus(int plateIndex);
 
-	Double getPlateWellOriginY(int plateIndex);
+  // Ignoring Well element, complex property
+  Double getPlateWellOriginX(int plateIndex);
 
-	//
-	// PlateAcquisition property storage
-	//
-	// {u'Plate': {u'OME': None}}
-	// Is multi path? False
+  Double getPlateWellOriginY(int plateIndex);
 
-	String getPlateAcquisitionAnnotationRef(int plateIndex, int plateAcquisitionIndex, int annotationRefIndex);
+  //
+  // PlateAcquisition property storage
+  //
+  // {u'Plate': {u'OME': None}}
+  // Is multi path? False
 
-	String getPlateAcquisitionDescription(int plateIndex, int plateAcquisitionIndex);
+  String getPlateAcquisitionAnnotationRef(int plateIndex,
+    int plateAcquisitionIndex, int annotationRefIndex);
 
-	String getPlateAcquisitionEndTime(int plateIndex, int plateAcquisitionIndex);
+  String getPlateAcquisitionDescription(int plateIndex,
+    int plateAcquisitionIndex);
 
-	String getPlateAcquisitionID(int plateIndex, int plateAcquisitionIndex);
+  String getPlateAcquisitionEndTime(int plateIndex, int plateAcquisitionIndex);
 
-	PositiveInteger getPlateAcquisitionMaximumFieldCount(int plateIndex, int plateAcquisitionIndex);
+  String getPlateAcquisitionID(int plateIndex, int plateAcquisitionIndex);
 
-	String getPlateAcquisitionName(int plateIndex, int plateAcquisitionIndex);
+  PositiveInteger getPlateAcquisitionMaximumFieldCount(int plateIndex,
+    int plateAcquisitionIndex);
 
-	String getPlateAcquisitionStartTime(int plateIndex, int plateAcquisitionIndex);
+  String getPlateAcquisitionName(int plateIndex, int plateAcquisitionIndex);
 
-	String getPlateAcquisitionWellSampleRef(int plateIndex, int plateAcquisitionIndex, int wellSampleRefIndex);
+  String getPlateAcquisitionStartTime(int plateIndex, int plateAcquisitionIndex);
 
-	//
-	// PlateRef property storage
-	//
-	// {u'Screen': {u'OME': None}}
-	// Is multi path? False
+  String getPlateAcquisitionWellSampleRef(int plateIndex,
+    int plateAcquisitionIndex, int wellSampleRefIndex);
 
-	// 1:1
-	// Is multi path? False
-	// Ignoring ID property of reference PlateRef
+  //
+  // PlateRef property storage
+  //
+  // {u'Screen': {u'OME': None}}
+  // Is multi path? False
 
-	//
-	// Point property storage
-	//
-	// {u'Shape': {u'Union': {u'ROI': {u'OME': None}}}}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? False
+  // Ignoring ID property of reference PlateRef
 
-	// Description accessor from parent Shape
-	String getPointDescription(int ROIIndex, int shapeIndex);
+  //
+  // Point property storage
+  //
+  // {u'Shape': {u'Union': {u'ROI': {u'OME': None}}}}
+  // Is multi path? False
 
-	// Ignoring Ellipse of parent abstract type
-	// Fill accessor from parent Shape
-	Integer getPointFill(int ROIIndex, int shapeIndex);
+  // Description accessor from parent Shape
+  String getPointDescription(int ROIIndex, int shapeIndex);
 
-	// Ignoring FillRule of parent abstract type
-	// Ignoring FontFamily of parent abstract type
-	// FontSize accessor from parent Shape
-	NonNegativeInteger getPointFontSize(int ROIIndex, int shapeIndex);
+  // Ignoring Ellipse of parent abstract type
+  // Fill accessor from parent Shape
+  Integer getPointFill(int ROIIndex, int shapeIndex);
 
-	// Ignoring FontStyle of parent abstract type
-	// ID accessor from parent Shape
-	String getPointID(int ROIIndex, int shapeIndex);
+  // Ignoring FillRule of parent abstract type
+  // Ignoring FontFamily of parent abstract type
+  // FontSize accessor from parent Shape
+  NonNegativeInteger getPointFontSize(int ROIIndex, int shapeIndex);
 
-	// Label accessor from parent Shape
-	String getPointLabel(int ROIIndex, int shapeIndex);
+  // Ignoring FontStyle of parent abstract type
+  // ID accessor from parent Shape
+  String getPointID(int ROIIndex, int shapeIndex);
 
-	// Ignoring Line of parent abstract type
-	// Ignoring LineCap of parent abstract type
-	// Ignoring MarkerEnd of parent abstract type
-	// Ignoring MarkerStart of parent abstract type
-	// Ignoring Mask of parent abstract type
-	// Name accessor from parent Shape
-	String getPointName(int ROIIndex, int shapeIndex);
+  // Label accessor from parent Shape
+  String getPointLabel(int ROIIndex, int shapeIndex);
 
-	// Ignoring Path of parent abstract type
-	// Ignoring Point of parent abstract type
-	// Ignoring Polyline of parent abstract type
-	// Ignoring Rectangle of parent abstract type
-	// Stroke accessor from parent Shape
-	Integer getPointStroke(int ROIIndex, int shapeIndex);
+  // Ignoring Line of parent abstract type
+  // Ignoring LineCap of parent abstract type
+  // Ignoring MarkerEnd of parent abstract type
+  // Ignoring MarkerStart of parent abstract type
+  // Ignoring Mask of parent abstract type
+  // Name accessor from parent Shape
+  String getPointName(int ROIIndex, int shapeIndex);
 
-	// StrokeDashArray accessor from parent Shape
-	String getPointStrokeDashArray(int ROIIndex, int shapeIndex);
+  // Ignoring Path of parent abstract type
+  // Ignoring Point of parent abstract type
+  // Ignoring Polyline of parent abstract type
+  // Ignoring Rectangle of parent abstract type
+  // Stroke accessor from parent Shape
+  Integer getPointStroke(int ROIIndex, int shapeIndex);
 
-	// StrokeWidth accessor from parent Shape
-	Double getPointStrokeWidth(int ROIIndex, int shapeIndex);
+  // StrokeDashArray accessor from parent Shape
+  String getPointStrokeDashArray(int ROIIndex, int shapeIndex);
 
-	// Ignoring Text of parent abstract type
-	// TheC accessor from parent Shape
-	NonNegativeInteger getPointTheC(int ROIIndex, int shapeIndex);
+  // StrokeWidth accessor from parent Shape
+  Double getPointStrokeWidth(int ROIIndex, int shapeIndex);
 
-	// TheT accessor from parent Shape
-	NonNegativeInteger getPointTheT(int ROIIndex, int shapeIndex);
+  // Ignoring Text of parent abstract type
+  // TheC accessor from parent Shape
+  NonNegativeInteger getPointTheC(int ROIIndex, int shapeIndex);
 
-	// TheZ accessor from parent Shape
-	NonNegativeInteger getPointTheZ(int ROIIndex, int shapeIndex);
+  // TheT accessor from parent Shape
+  NonNegativeInteger getPointTheT(int ROIIndex, int shapeIndex);
 
-	// Transform accessor from parent Shape
-	String getPointTransform(int ROIIndex, int shapeIndex);
+  // TheZ accessor from parent Shape
+  NonNegativeInteger getPointTheZ(int ROIIndex, int shapeIndex);
 
-	Double getPointX(int ROIIndex, int shapeIndex);
+  // Transform accessor from parent Shape
+  String getPointTransform(int ROIIndex, int shapeIndex);
 
-	Double getPointY(int ROIIndex, int shapeIndex);
+  Double getPointX(int ROIIndex, int shapeIndex);
 
-	//
-	// Polyline property storage
-	//
-	// {u'Shape': {u'Union': {u'ROI': {u'OME': None}}}}
-	// Is multi path? False
+  Double getPointY(int ROIIndex, int shapeIndex);
 
-	// Description accessor from parent Shape
-	String getPolylineDescription(int ROIIndex, int shapeIndex);
+  //
+  // Polyline property storage
+  //
+  // {u'Shape': {u'Union': {u'ROI': {u'OME': None}}}}
+  // Is multi path? False
 
-	// Ignoring Ellipse of parent abstract type
-	// Fill accessor from parent Shape
-	Integer getPolylineFill(int ROIIndex, int shapeIndex);
+  // Description accessor from parent Shape
+  String getPolylineDescription(int ROIIndex, int shapeIndex);
 
-	// Ignoring FillRule of parent abstract type
-	// Ignoring FontFamily of parent abstract type
-	// FontSize accessor from parent Shape
-	NonNegativeInteger getPolylineFontSize(int ROIIndex, int shapeIndex);
+  // Ignoring Ellipse of parent abstract type
+  // Fill accessor from parent Shape
+  Integer getPolylineFill(int ROIIndex, int shapeIndex);
 
-	// Ignoring FontStyle of parent abstract type
-	// ID accessor from parent Shape
-	String getPolylineID(int ROIIndex, int shapeIndex);
+  // Ignoring FillRule of parent abstract type
+  // Ignoring FontFamily of parent abstract type
+  // FontSize accessor from parent Shape
+  NonNegativeInteger getPolylineFontSize(int ROIIndex, int shapeIndex);
 
-	// Label accessor from parent Shape
-	String getPolylineLabel(int ROIIndex, int shapeIndex);
+  // Ignoring FontStyle of parent abstract type
+  // ID accessor from parent Shape
+  String getPolylineID(int ROIIndex, int shapeIndex);
 
-	// Ignoring Line of parent abstract type
-	// Ignoring LineCap of parent abstract type
-	// Ignoring MarkerEnd of parent abstract type
-	// Ignoring MarkerStart of parent abstract type
-	// Ignoring Mask of parent abstract type
-	// Name accessor from parent Shape
-	String getPolylineName(int ROIIndex, int shapeIndex);
+  // Label accessor from parent Shape
+  String getPolylineLabel(int ROIIndex, int shapeIndex);
 
-	// Ignoring Path of parent abstract type
-	// Ignoring Point of parent abstract type
-	// Ignoring Polyline of parent abstract type
-	// Ignoring Rectangle of parent abstract type
-	// Stroke accessor from parent Shape
-	Integer getPolylineStroke(int ROIIndex, int shapeIndex);
+  // Ignoring Line of parent abstract type
+  // Ignoring LineCap of parent abstract type
+  // Ignoring MarkerEnd of parent abstract type
+  // Ignoring MarkerStart of parent abstract type
+  // Ignoring Mask of parent abstract type
+  // Name accessor from parent Shape
+  String getPolylineName(int ROIIndex, int shapeIndex);
 
-	// StrokeDashArray accessor from parent Shape
-	String getPolylineStrokeDashArray(int ROIIndex, int shapeIndex);
+  // Ignoring Path of parent abstract type
+  // Ignoring Point of parent abstract type
+  // Ignoring Polyline of parent abstract type
+  // Ignoring Rectangle of parent abstract type
+  // Stroke accessor from parent Shape
+  Integer getPolylineStroke(int ROIIndex, int shapeIndex);
 
-	// StrokeWidth accessor from parent Shape
-	Double getPolylineStrokeWidth(int ROIIndex, int shapeIndex);
+  // StrokeDashArray accessor from parent Shape
+  String getPolylineStrokeDashArray(int ROIIndex, int shapeIndex);
 
-	// Ignoring Text of parent abstract type
-	// TheC accessor from parent Shape
-	NonNegativeInteger getPolylineTheC(int ROIIndex, int shapeIndex);
+  // StrokeWidth accessor from parent Shape
+  Double getPolylineStrokeWidth(int ROIIndex, int shapeIndex);
 
-	// TheT accessor from parent Shape
-	NonNegativeInteger getPolylineTheT(int ROIIndex, int shapeIndex);
+  // Ignoring Text of parent abstract type
+  // TheC accessor from parent Shape
+  NonNegativeInteger getPolylineTheC(int ROIIndex, int shapeIndex);
 
-	// TheZ accessor from parent Shape
-	NonNegativeInteger getPolylineTheZ(int ROIIndex, int shapeIndex);
+  // TheT accessor from parent Shape
+  NonNegativeInteger getPolylineTheT(int ROIIndex, int shapeIndex);
 
-	// Transform accessor from parent Shape
-	String getPolylineTransform(int ROIIndex, int shapeIndex);
+  // TheZ accessor from parent Shape
+  NonNegativeInteger getPolylineTheZ(int ROIIndex, int shapeIndex);
 
-	Boolean getPolylineClosed(int ROIIndex, int shapeIndex);
+  // Transform accessor from parent Shape
+  String getPolylineTransform(int ROIIndex, int shapeIndex);
 
-	String getPolylinePoints(int ROIIndex, int shapeIndex);
+  Boolean getPolylineClosed(int ROIIndex, int shapeIndex);
 
-	//
-	// Project property storage
-	//
-	// {u'OME': None}
-	// Is multi path? False
+  String getPolylinePoints(int ROIIndex, int shapeIndex);
 
-	String getProjectAnnotationRef(int projectIndex, int annotationRefIndex);
+  //
+  // Project property storage
+  //
+  // {u'OME': None}
+  // Is multi path? False
 
-	// Ignoring Dataset_BackReference back reference
-	String getProjectDescription(int projectIndex);
+  String getProjectAnnotationRef(int projectIndex, int annotationRefIndex);
 
-	String getProjectExperimenterRef(int projectIndex);
+  // Ignoring Dataset_BackReference back reference
+  String getProjectDescription(int projectIndex);
 
-	String getProjectGroupRef(int projectIndex);
+  String getProjectExperimenterRef(int projectIndex);
 
-	String getProjectID(int projectIndex);
+  String getProjectGroupRef(int projectIndex);
 
-	String getProjectName(int projectIndex);
+  String getProjectID(int projectIndex);
 
-	//
-	// ProjectRef property storage
-	//
-	// {u'Dataset': {u'OME': None}}
-	// Is multi path? False
+  String getProjectName(int projectIndex);
 
-	// 1:1
-	// Is multi path? False
-	// Ignoring ID property of reference ProjectRef
+  //
+  // ProjectRef property storage
+  //
+  // {u'Dataset': {u'OME': None}}
+  // Is multi path? False
 
-	//
-	// Pump property storage
-	//
-	// {u'Laser': {u'LightSource': {u'Instrument': {u'OME': None}}}}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? False
+  // Ignoring ID property of reference ProjectRef
 
-	// 1:1
-	// Is multi path? False
-	// Ignoring ID property of reference Pump
+  //
+  // Pump property storage
+  //
+  // {u'Laser': {u'LightSource': {u'Instrument': {u'OME': None}}}}
+  // Is multi path? False
 
-	//
-	// ROI property storage
-	//
-	// {u'OME': None}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? False
+  // Ignoring ID property of reference Pump
 
-	String getROIAnnotationRef(int ROIIndex, int annotationRefIndex);
+  //
+  // ROI property storage
+  //
+  // {u'OME': None}
+  // Is multi path? False
 
-	String getROIDescription(int ROIIndex);
+  String getROIAnnotationRef(int ROIIndex, int annotationRefIndex);
 
-	String getROIID(int ROIIndex);
+  String getROIDescription(int ROIIndex);
 
-	// Ignoring Image_BackReference back reference
-	// Ignoring MicrobeamManipulation_BackReference back reference
-	String getROIName(int ROIIndex);
+  String getROIID(int ROIIndex);
 
-	String getROINamespace(int ROIIndex);
+  // Ignoring Image_BackReference back reference
+  // Ignoring MicrobeamManipulation_BackReference back reference
+  String getROIName(int ROIIndex);
 
-	// Ignoring Union element, complex property
-	//
-	// ROIRef property storage
-	//
-	// {u'Image': {u'OME': None}, u'MicrobeamManipulation': {u'Experiment': {u'OME': None}}}
-	// Is multi path? True
+  String getROINamespace(int ROIIndex);
 
-	// 1:1
-	// Is multi path? True
-	// Ignoring ID property of reference ROIRef
+  // Ignoring Union element, complex property
+  //
+  // ROIRef property storage
+  //
+  // {u'Image': {u'OME': None}, u'MicrobeamManipulation': {u'Experiment': {u'OME': None}}}
+  // Is multi path? True
 
-	//
-	// Reagent property storage
-	//
-	// {u'Screen': {u'OME': None}}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? True
+  // Ignoring ID property of reference ROIRef
 
-	String getReagentAnnotationRef(int screenIndex, int reagentIndex, int annotationRefIndex);
+  //
+  // Reagent property storage
+  //
+  // {u'Screen': {u'OME': None}}
+  // Is multi path? False
 
-	String getReagentDescription(int screenIndex, int reagentIndex);
+  String getReagentAnnotationRef(int screenIndex, int reagentIndex,
+    int annotationRefIndex);
 
-	String getReagentID(int screenIndex, int reagentIndex);
+  String getReagentDescription(int screenIndex, int reagentIndex);
 
-	String getReagentName(int screenIndex, int reagentIndex);
+  String getReagentID(int screenIndex, int reagentIndex);
 
-	String getReagentReagentIdentifier(int screenIndex, int reagentIndex);
+  String getReagentName(int screenIndex, int reagentIndex);
 
-	// Ignoring Well_BackReference back reference
-	//
-	// ReagentRef property storage
-	//
-	// {u'Well': {u'Plate': {u'OME': None}}}
-	// Is multi path? False
+  String getReagentReagentIdentifier(int screenIndex, int reagentIndex);
 
-	// 1:1
-	// Is multi path? False
-	// Ignoring ID property of reference ReagentRef
+  // Ignoring Well_BackReference back reference
+  //
+  // ReagentRef property storage
+  //
+  // {u'Well': {u'Plate': {u'OME': None}}}
+  // Is multi path? False
 
-	//
-	// Rectangle property storage
-	//
-	// {u'Shape': {u'Union': {u'ROI': {u'OME': None}}}}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? False
+  // Ignoring ID property of reference ReagentRef
 
-	// Description accessor from parent Shape
-	String getRectangleDescription(int ROIIndex, int shapeIndex);
+  //
+  // Rectangle property storage
+  //
+  // {u'Shape': {u'Union': {u'ROI': {u'OME': None}}}}
+  // Is multi path? False
 
-	// Ignoring Ellipse of parent abstract type
-	// Fill accessor from parent Shape
-	Integer getRectangleFill(int ROIIndex, int shapeIndex);
+  // Description accessor from parent Shape
+  String getRectangleDescription(int ROIIndex, int shapeIndex);
 
-	// Ignoring FillRule of parent abstract type
-	// Ignoring FontFamily of parent abstract type
-	// FontSize accessor from parent Shape
-	NonNegativeInteger getRectangleFontSize(int ROIIndex, int shapeIndex);
+  // Ignoring Ellipse of parent abstract type
+  // Fill accessor from parent Shape
+  Integer getRectangleFill(int ROIIndex, int shapeIndex);
 
-	// Ignoring FontStyle of parent abstract type
-	// ID accessor from parent Shape
-	String getRectangleID(int ROIIndex, int shapeIndex);
+  // Ignoring FillRule of parent abstract type
+  // Ignoring FontFamily of parent abstract type
+  // FontSize accessor from parent Shape
+  NonNegativeInteger getRectangleFontSize(int ROIIndex, int shapeIndex);
 
-	// Label accessor from parent Shape
-	String getRectangleLabel(int ROIIndex, int shapeIndex);
+  // Ignoring FontStyle of parent abstract type
+  // ID accessor from parent Shape
+  String getRectangleID(int ROIIndex, int shapeIndex);
 
-	// Ignoring Line of parent abstract type
-	// Ignoring LineCap of parent abstract type
-	// Ignoring MarkerEnd of parent abstract type
-	// Ignoring MarkerStart of parent abstract type
-	// Ignoring Mask of parent abstract type
-	// Name accessor from parent Shape
-	String getRectangleName(int ROIIndex, int shapeIndex);
+  // Label accessor from parent Shape
+  String getRectangleLabel(int ROIIndex, int shapeIndex);
 
-	// Ignoring Path of parent abstract type
-	// Ignoring Point of parent abstract type
-	// Ignoring Polyline of parent abstract type
-	// Ignoring Rectangle of parent abstract type
-	// Stroke accessor from parent Shape
-	Integer getRectangleStroke(int ROIIndex, int shapeIndex);
+  // Ignoring Line of parent abstract type
+  // Ignoring LineCap of parent abstract type
+  // Ignoring MarkerEnd of parent abstract type
+  // Ignoring MarkerStart of parent abstract type
+  // Ignoring Mask of parent abstract type
+  // Name accessor from parent Shape
+  String getRectangleName(int ROIIndex, int shapeIndex);
 
-	// StrokeDashArray accessor from parent Shape
-	String getRectangleStrokeDashArray(int ROIIndex, int shapeIndex);
+  // Ignoring Path of parent abstract type
+  // Ignoring Point of parent abstract type
+  // Ignoring Polyline of parent abstract type
+  // Ignoring Rectangle of parent abstract type
+  // Stroke accessor from parent Shape
+  Integer getRectangleStroke(int ROIIndex, int shapeIndex);
 
-	// StrokeWidth accessor from parent Shape
-	Double getRectangleStrokeWidth(int ROIIndex, int shapeIndex);
+  // StrokeDashArray accessor from parent Shape
+  String getRectangleStrokeDashArray(int ROIIndex, int shapeIndex);
 
-	// Ignoring Text of parent abstract type
-	// TheC accessor from parent Shape
-	NonNegativeInteger getRectangleTheC(int ROIIndex, int shapeIndex);
+  // StrokeWidth accessor from parent Shape
+  Double getRectangleStrokeWidth(int ROIIndex, int shapeIndex);
 
-	// TheT accessor from parent Shape
-	NonNegativeInteger getRectangleTheT(int ROIIndex, int shapeIndex);
+  // Ignoring Text of parent abstract type
+  // TheC accessor from parent Shape
+  NonNegativeInteger getRectangleTheC(int ROIIndex, int shapeIndex);
 
-	// TheZ accessor from parent Shape
-	NonNegativeInteger getRectangleTheZ(int ROIIndex, int shapeIndex);
+  // TheT accessor from parent Shape
+  NonNegativeInteger getRectangleTheT(int ROIIndex, int shapeIndex);
 
-	// Transform accessor from parent Shape
-	String getRectangleTransform(int ROIIndex, int shapeIndex);
+  // TheZ accessor from parent Shape
+  NonNegativeInteger getRectangleTheZ(int ROIIndex, int shapeIndex);
 
-	Double getRectangleHeight(int ROIIndex, int shapeIndex);
+  // Transform accessor from parent Shape
+  String getRectangleTransform(int ROIIndex, int shapeIndex);
 
-	Double getRectangleWidth(int ROIIndex, int shapeIndex);
+  Double getRectangleHeight(int ROIIndex, int shapeIndex);
 
-	Double getRectangleX(int ROIIndex, int shapeIndex);
+  Double getRectangleWidth(int ROIIndex, int shapeIndex);
 
-	Double getRectangleY(int ROIIndex, int shapeIndex);
+  Double getRectangleX(int ROIIndex, int shapeIndex);
 
-	//
-	// Screen property storage
-	//
-	// {u'OME': None}
-	// Is multi path? False
+  Double getRectangleY(int ROIIndex, int shapeIndex);
 
-	String getScreenAnnotationRef(int screenIndex, int annotationRefIndex);
+  //
+  // Screen property storage
+  //
+  // {u'OME': None}
+  // Is multi path? False
 
-	String getScreenDescription(int screenIndex);
+  String getScreenAnnotationRef(int screenIndex, int annotationRefIndex);
 
-	String getScreenID(int screenIndex);
+  String getScreenDescription(int screenIndex);
 
-	String getScreenName(int screenIndex);
+  String getScreenID(int screenIndex);
 
-	String getScreenPlateRef(int screenIndex, int plateRefIndex);
+  String getScreenName(int screenIndex);
 
-	String getScreenProtocolDescription(int screenIndex);
+  String getScreenPlateRef(int screenIndex, int plateRefIndex);
 
-	String getScreenProtocolIdentifier(int screenIndex);
+  String getScreenProtocolDescription(int screenIndex);
 
-	// Ignoring Reagent element, complex property
-	String getScreenReagentSetDescription(int screenIndex);
+  String getScreenProtocolIdentifier(int screenIndex);
 
-	String getScreenReagentSetIdentifier(int screenIndex);
+  // Ignoring Reagent element, complex property
+  String getScreenReagentSetDescription(int screenIndex);
 
-	String getScreenType(int screenIndex);
+  String getScreenReagentSetIdentifier(int screenIndex);
 
-	//
-	// ScreenRef property storage
-	//
-	// {u'Plate': {u'OME': None}}
-	// Is multi path? False
+  String getScreenType(int screenIndex);
 
-	// 1:1
-	// Is multi path? False
-	// Ignoring ID property of reference ScreenRef
+  //
+  // ScreenRef property storage
+  //
+  // {u'Plate': {u'OME': None}}
+  // Is multi path? False
 
-	//
-	// StageLabel property storage
-	//
-	// {u'Image': {u'OME': None}}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? False
+  // Ignoring ID property of reference ScreenRef
 
-	String getStageLabelName(int imageIndex);
+  //
+  // StageLabel property storage
+  //
+  // {u'Image': {u'OME': None}}
+  // Is multi path? False
 
-	Double getStageLabelX(int imageIndex);
+  String getStageLabelName(int imageIndex);
 
-	Double getStageLabelY(int imageIndex);
+  Double getStageLabelX(int imageIndex);
 
-	Double getStageLabelZ(int imageIndex);
+  Double getStageLabelY(int imageIndex);
 
-	//
-	// StructuredAnnotations property storage
-	//
-	// {u'OME': None}
-	// Is multi path? False
+  Double getStageLabelZ(int imageIndex);
 
-	// Ignoring BooleanAnnotation element, complex property
-	// Ignoring CommentAnnotation element, complex property
-	// Ignoring DoubleAnnotation element, complex property
-	// Ignoring FileAnnotation element, complex property
-	// Ignoring ListAnnotation element, complex property
-	// Ignoring LongAnnotation element, complex property
-	// Ignoring TagAnnotation element, complex property
-	// Ignoring TermAnnotation element, complex property
-	// Ignoring TimestampAnnotation element, complex property
-	// Ignoring XMLAnnotation element, complex property
-	//
-	// TagAnnotation property storage
-	//
-	// {u'StructuredAnnotations': {u'OME': None}}
-	// Is multi path? False
+  //
+  // StructuredAnnotations property storage
+  //
+  // {u'OME': None}
+  // Is multi path? False
 
-	String getTagAnnotationAnnotationRef(int tagAnnotationIndex, int annotationRefIndex);
+  // Ignoring BooleanAnnotation element, complex property
+  // Ignoring CommentAnnotation element, complex property
+  // Ignoring DoubleAnnotation element, complex property
+  // Ignoring FileAnnotation element, complex property
+  // Ignoring ListAnnotation element, complex property
+  // Ignoring LongAnnotation element, complex property
+  // Ignoring TagAnnotation element, complex property
+  // Ignoring TermAnnotation element, complex property
+  // Ignoring TimestampAnnotation element, complex property
+  // Ignoring XMLAnnotation element, complex property
+  //
+  // TagAnnotation property storage
+  //
+  // {u'StructuredAnnotations': {u'OME': None}}
+  // Is multi path? False
 
-	// Ignoring Channel_BackReference back reference
-	// Ignoring Dataset_BackReference back reference
-	String getTagAnnotationDescription(int tagAnnotationIndex);
+  String getTagAnnotationAnnotationRef(int tagAnnotationIndex,
+    int annotationRefIndex);
 
-	// Ignoring Experimenter_BackReference back reference
-	String getTagAnnotationID(int tagAnnotationIndex);
+  // Ignoring Channel_BackReference back reference
+  // Ignoring Dataset_BackReference back reference
+  String getTagAnnotationDescription(int tagAnnotationIndex);
 
-	// Ignoring Image_BackReference back reference
-	String getTagAnnotationNamespace(int tagAnnotationIndex);
+  // Ignoring Experimenter_BackReference back reference
+  String getTagAnnotationID(int tagAnnotationIndex);
 
-	// Ignoring Pixels_BackReference back reference
-	// Ignoring Plane_BackReference back reference
-	// Ignoring PlateAcquisition_BackReference back reference
-	// Ignoring Plate_BackReference back reference
-	// Ignoring Project_BackReference back reference
-	// Ignoring ROI_BackReference back reference
-	// Ignoring Reagent_BackReference back reference
-	// Ignoring Screen_BackReference back reference
-	String getTagAnnotationValue(int tagAnnotationIndex);
+  // Ignoring Image_BackReference back reference
+  String getTagAnnotationNamespace(int tagAnnotationIndex);
 
-	// Ignoring WellSample_BackReference back reference
-	// Ignoring Well_BackReference back reference
-	//
-	// TermAnnotation property storage
-	//
-	// {u'StructuredAnnotations': {u'OME': None}}
-	// Is multi path? False
+  // Ignoring Pixels_BackReference back reference
+  // Ignoring Plane_BackReference back reference
+  // Ignoring PlateAcquisition_BackReference back reference
+  // Ignoring Plate_BackReference back reference
+  // Ignoring Project_BackReference back reference
+  // Ignoring ROI_BackReference back reference
+  // Ignoring Reagent_BackReference back reference
+  // Ignoring Screen_BackReference back reference
+  String getTagAnnotationValue(int tagAnnotationIndex);
 
-	String getTermAnnotationAnnotationRef(int termAnnotationIndex, int annotationRefIndex);
+  // Ignoring WellSample_BackReference back reference
+  // Ignoring Well_BackReference back reference
+  //
+  // TermAnnotation property storage
+  //
+  // {u'StructuredAnnotations': {u'OME': None}}
+  // Is multi path? False
 
-	// Ignoring Channel_BackReference back reference
-	// Ignoring Dataset_BackReference back reference
-	String getTermAnnotationDescription(int termAnnotationIndex);
+  String getTermAnnotationAnnotationRef(int termAnnotationIndex,
+    int annotationRefIndex);
 
-	// Ignoring Experimenter_BackReference back reference
-	String getTermAnnotationID(int termAnnotationIndex);
+  // Ignoring Channel_BackReference back reference
+  // Ignoring Dataset_BackReference back reference
+  String getTermAnnotationDescription(int termAnnotationIndex);
 
-	// Ignoring Image_BackReference back reference
-	String getTermAnnotationNamespace(int termAnnotationIndex);
+  // Ignoring Experimenter_BackReference back reference
+  String getTermAnnotationID(int termAnnotationIndex);
 
-	// Ignoring Pixels_BackReference back reference
-	// Ignoring Plane_BackReference back reference
-	// Ignoring PlateAcquisition_BackReference back reference
-	// Ignoring Plate_BackReference back reference
-	// Ignoring Project_BackReference back reference
-	// Ignoring ROI_BackReference back reference
-	// Ignoring Reagent_BackReference back reference
-	// Ignoring Screen_BackReference back reference
-	String getTermAnnotationValue(int termAnnotationIndex);
+  // Ignoring Image_BackReference back reference
+  String getTermAnnotationNamespace(int termAnnotationIndex);
 
-	// Ignoring WellSample_BackReference back reference
-	// Ignoring Well_BackReference back reference
-	//
-	// Text property storage
-	//
-	// {u'Shape': {u'Union': {u'ROI': {u'OME': None}}}}
-	// Is multi path? False
+  // Ignoring Pixels_BackReference back reference
+  // Ignoring Plane_BackReference back reference
+  // Ignoring PlateAcquisition_BackReference back reference
+  // Ignoring Plate_BackReference back reference
+  // Ignoring Project_BackReference back reference
+  // Ignoring ROI_BackReference back reference
+  // Ignoring Reagent_BackReference back reference
+  // Ignoring Screen_BackReference back reference
+  String getTermAnnotationValue(int termAnnotationIndex);
 
-	// Description accessor from parent Shape
-	String getTextDescription(int ROIIndex, int shapeIndex);
+  // Ignoring WellSample_BackReference back reference
+  // Ignoring Well_BackReference back reference
+  //
+  // Text property storage
+  //
+  // {u'Shape': {u'Union': {u'ROI': {u'OME': None}}}}
+  // Is multi path? False
 
-	// Ignoring Ellipse of parent abstract type
-	// Fill accessor from parent Shape
-	Integer getTextFill(int ROIIndex, int shapeIndex);
+  // Description accessor from parent Shape
+  String getTextDescription(int ROIIndex, int shapeIndex);
 
-	// Ignoring FillRule of parent abstract type
-	// Ignoring FontFamily of parent abstract type
-	// FontSize accessor from parent Shape
-	NonNegativeInteger getTextFontSize(int ROIIndex, int shapeIndex);
+  // Ignoring Ellipse of parent abstract type
+  // Fill accessor from parent Shape
+  Integer getTextFill(int ROIIndex, int shapeIndex);
 
-	// Ignoring FontStyle of parent abstract type
-	// ID accessor from parent Shape
-	String getTextID(int ROIIndex, int shapeIndex);
+  // Ignoring FillRule of parent abstract type
+  // Ignoring FontFamily of parent abstract type
+  // FontSize accessor from parent Shape
+  NonNegativeInteger getTextFontSize(int ROIIndex, int shapeIndex);
 
-	// Label accessor from parent Shape
-	String getTextLabel(int ROIIndex, int shapeIndex);
+  // Ignoring FontStyle of parent abstract type
+  // ID accessor from parent Shape
+  String getTextID(int ROIIndex, int shapeIndex);
 
-	// Ignoring Line of parent abstract type
-	// Ignoring LineCap of parent abstract type
-	// Ignoring MarkerEnd of parent abstract type
-	// Ignoring MarkerStart of parent abstract type
-	// Ignoring Mask of parent abstract type
-	// Name accessor from parent Shape
-	String getTextName(int ROIIndex, int shapeIndex);
+  // Label accessor from parent Shape
+  String getTextLabel(int ROIIndex, int shapeIndex);
 
-	// Ignoring Path of parent abstract type
-	// Ignoring Point of parent abstract type
-	// Ignoring Polyline of parent abstract type
-	// Ignoring Rectangle of parent abstract type
-	// Stroke accessor from parent Shape
-	Integer getTextStroke(int ROIIndex, int shapeIndex);
+  // Ignoring Line of parent abstract type
+  // Ignoring LineCap of parent abstract type
+  // Ignoring MarkerEnd of parent abstract type
+  // Ignoring MarkerStart of parent abstract type
+  // Ignoring Mask of parent abstract type
+  // Name accessor from parent Shape
+  String getTextName(int ROIIndex, int shapeIndex);
 
-	// StrokeDashArray accessor from parent Shape
-	String getTextStrokeDashArray(int ROIIndex, int shapeIndex);
+  // Ignoring Path of parent abstract type
+  // Ignoring Point of parent abstract type
+  // Ignoring Polyline of parent abstract type
+  // Ignoring Rectangle of parent abstract type
+  // Stroke accessor from parent Shape
+  Integer getTextStroke(int ROIIndex, int shapeIndex);
 
-	// StrokeWidth accessor from parent Shape
-	Double getTextStrokeWidth(int ROIIndex, int shapeIndex);
+  // StrokeDashArray accessor from parent Shape
+  String getTextStrokeDashArray(int ROIIndex, int shapeIndex);
 
-	// Ignoring Text of parent abstract type
-	// TheC accessor from parent Shape
-	NonNegativeInteger getTextTheC(int ROIIndex, int shapeIndex);
+  // StrokeWidth accessor from parent Shape
+  Double getTextStrokeWidth(int ROIIndex, int shapeIndex);
 
-	// TheT accessor from parent Shape
-	NonNegativeInteger getTextTheT(int ROIIndex, int shapeIndex);
+  // Ignoring Text of parent abstract type
+  // TheC accessor from parent Shape
+  NonNegativeInteger getTextTheC(int ROIIndex, int shapeIndex);
 
-	// TheZ accessor from parent Shape
-	NonNegativeInteger getTextTheZ(int ROIIndex, int shapeIndex);
+  // TheT accessor from parent Shape
+  NonNegativeInteger getTextTheT(int ROIIndex, int shapeIndex);
 
-	// Transform accessor from parent Shape
-	String getTextTransform(int ROIIndex, int shapeIndex);
+  // TheZ accessor from parent Shape
+  NonNegativeInteger getTextTheZ(int ROIIndex, int shapeIndex);
 
-	String getTextValue(int ROIIndex, int shapeIndex);
+  // Transform accessor from parent Shape
+  String getTextTransform(int ROIIndex, int shapeIndex);
 
-	Double getTextX(int ROIIndex, int shapeIndex);
+  String getTextValue(int ROIIndex, int shapeIndex);
 
-	Double getTextY(int ROIIndex, int shapeIndex);
+  Double getTextX(int ROIIndex, int shapeIndex);
 
-	//
-	// TiffData property storage
-	//
-	// {u'Pixels': {u'Image': {u'OME': None}}}
-	// Is multi path? False
+  Double getTextY(int ROIIndex, int shapeIndex);
 
-	NonNegativeInteger getTiffDataFirstC(int imageIndex, int tiffDataIndex);
+  //
+  // TiffData property storage
+  //
+  // {u'Pixels': {u'Image': {u'OME': None}}}
+  // Is multi path? False
 
-	NonNegativeInteger getTiffDataFirstT(int imageIndex, int tiffDataIndex);
+  NonNegativeInteger getTiffDataFirstC(int imageIndex, int tiffDataIndex);
 
-	NonNegativeInteger getTiffDataFirstZ(int imageIndex, int tiffDataIndex);
+  NonNegativeInteger getTiffDataFirstT(int imageIndex, int tiffDataIndex);
 
-	NonNegativeInteger getTiffDataIFD(int imageIndex, int tiffDataIndex);
+  NonNegativeInteger getTiffDataFirstZ(int imageIndex, int tiffDataIndex);
 
-	NonNegativeInteger getTiffDataPlaneCount(int imageIndex, int tiffDataIndex);
+  NonNegativeInteger getTiffDataIFD(int imageIndex, int tiffDataIndex);
 
-	// Ignoring UUID element, complex property
-	//
-	// TimestampAnnotation property storage
-	//
-	// {u'StructuredAnnotations': {u'OME': None}}
-	// Is multi path? False
+  NonNegativeInteger getTiffDataPlaneCount(int imageIndex, int tiffDataIndex);
 
-	String getTimestampAnnotationAnnotationRef(int timestampAnnotationIndex, int annotationRefIndex);
+  // Ignoring UUID element, complex property
+  //
+  // TimestampAnnotation property storage
+  //
+  // {u'StructuredAnnotations': {u'OME': None}}
+  // Is multi path? False
 
-	// Ignoring Channel_BackReference back reference
-	// Ignoring Dataset_BackReference back reference
-	String getTimestampAnnotationDescription(int timestampAnnotationIndex);
+  String getTimestampAnnotationAnnotationRef(int timestampAnnotationIndex,
+    int annotationRefIndex);
 
-	// Ignoring Experimenter_BackReference back reference
-	String getTimestampAnnotationID(int timestampAnnotationIndex);
+  // Ignoring Channel_BackReference back reference
+  // Ignoring Dataset_BackReference back reference
+  String getTimestampAnnotationDescription(int timestampAnnotationIndex);
 
-	// Ignoring Image_BackReference back reference
-	String getTimestampAnnotationNamespace(int timestampAnnotationIndex);
+  // Ignoring Experimenter_BackReference back reference
+  String getTimestampAnnotationID(int timestampAnnotationIndex);
 
-	// Ignoring Pixels_BackReference back reference
-	// Ignoring Plane_BackReference back reference
-	// Ignoring PlateAcquisition_BackReference back reference
-	// Ignoring Plate_BackReference back reference
-	// Ignoring Project_BackReference back reference
-	// Ignoring ROI_BackReference back reference
-	// Ignoring Reagent_BackReference back reference
-	// Ignoring Screen_BackReference back reference
-	String getTimestampAnnotationValue(int timestampAnnotationIndex);
+  // Ignoring Image_BackReference back reference
+  String getTimestampAnnotationNamespace(int timestampAnnotationIndex);
 
-	// Ignoring WellSample_BackReference back reference
-	// Ignoring Well_BackReference back reference
-	//
-	// TransmittanceRange property storage
-	//
-	// {u'Filter': {u'Instrument': {u'OME': None}}}
-	// Is multi path? False
+  // Ignoring Pixels_BackReference back reference
+  // Ignoring Plane_BackReference back reference
+  // Ignoring PlateAcquisition_BackReference back reference
+  // Ignoring Plate_BackReference back reference
+  // Ignoring Project_BackReference back reference
+  // Ignoring ROI_BackReference back reference
+  // Ignoring Reagent_BackReference back reference
+  // Ignoring Screen_BackReference back reference
+  String getTimestampAnnotationValue(int timestampAnnotationIndex);
 
-	PositiveInteger getTransmittanceRangeCutIn(int instrumentIndex, int filterIndex);
+  // Ignoring WellSample_BackReference back reference
+  // Ignoring Well_BackReference back reference
+  //
+  // TransmittanceRange property storage
+  //
+  // {u'Filter': {u'Instrument': {u'OME': None}}}
+  // Is multi path? False
 
-	NonNegativeInteger getTransmittanceRangeCutInTolerance(int instrumentIndex, int filterIndex);
+  PositiveInteger getTransmittanceRangeCutIn(int instrumentIndex,
+    int filterIndex);
 
-	PositiveInteger getTransmittanceRangeCutOut(int instrumentIndex, int filterIndex);
+  NonNegativeInteger getTransmittanceRangeCutInTolerance(int instrumentIndex,
+    int filterIndex);
 
-	NonNegativeInteger getTransmittanceRangeCutOutTolerance(int instrumentIndex, int filterIndex);
+  PositiveInteger getTransmittanceRangeCutOut(int instrumentIndex,
+    int filterIndex);
 
-	PercentFraction getTransmittanceRangeTransmittance(int instrumentIndex, int filterIndex);
+  NonNegativeInteger getTransmittanceRangeCutOutTolerance(int instrumentIndex,
+    int filterIndex);
 
-	//
-	// UUID property storage
-	//
-	// {u'TiffData': {u'Pixels': {u'Image': {u'OME': None}}}}
-	// Is multi path? False
+  PercentFraction getTransmittanceRangeTransmittance(int instrumentIndex,
+    int filterIndex);
 
-	String getUUIDFileName(int imageIndex, int tiffDataIndex);
+  //
+  // UUID property storage
+  //
+  // {u'TiffData': {u'Pixels': {u'Image': {u'OME': None}}}}
+  // Is multi path? False
 
-	//
-	// Union property storage
-	//
-	// {u'ROI': {u'OME': None}}
-	// Is multi path? False
+  String getUUIDFileName(int imageIndex, int tiffDataIndex);
 
-	// Ignoring Shape element, complex property
-	//
-	// Well property storage
-	//
-	// {u'Plate': {u'OME': None}}
-	// Is multi path? False
+  //
+  // Union property storage
+  //
+  // {u'ROI': {u'OME': None}}
+  // Is multi path? False
 
-	String getWellAnnotationRef(int plateIndex, int wellIndex, int annotationRefIndex);
+  // Ignoring Shape element, complex property
+  //
+  // Well property storage
+  //
+  // {u'Plate': {u'OME': None}}
+  // Is multi path? False
 
-	Integer getWellColor(int plateIndex, int wellIndex);
+  String getWellAnnotationRef(int plateIndex, int wellIndex,
+    int annotationRefIndex);
 
-	NonNegativeInteger getWellColumn(int plateIndex, int wellIndex);
+  Integer getWellColor(int plateIndex, int wellIndex);
 
-	String getWellExternalDescription(int plateIndex, int wellIndex);
+  NonNegativeInteger getWellColumn(int plateIndex, int wellIndex);
 
-	String getWellExternalIdentifier(int plateIndex, int wellIndex);
+  String getWellExternalDescription(int plateIndex, int wellIndex);
 
-	String getWellID(int plateIndex, int wellIndex);
+  String getWellExternalIdentifier(int plateIndex, int wellIndex);
 
-	String getWellReagentRef(int plateIndex, int wellIndex);
+  String getWellID(int plateIndex, int wellIndex);
 
-	NonNegativeInteger getWellRow(int plateIndex, int wellIndex);
+  String getWellReagentRef(int plateIndex, int wellIndex);
 
-	String getWellStatus(int plateIndex, int wellIndex);
+  NonNegativeInteger getWellRow(int plateIndex, int wellIndex);
 
-	// Ignoring WellSample element, complex property
-	//
-	// WellSample property storage
-	//
-	// {u'Well': {u'Plate': {u'OME': None}}}
-	// Is multi path? False
+  String getWellStatus(int plateIndex, int wellIndex);
 
-	String getWellSampleAnnotationRef(int plateIndex, int wellIndex, int wellSampleIndex, int annotationRefIndex);
+  // Ignoring WellSample element, complex property
+  //
+  // WellSample property storage
+  //
+  // {u'Well': {u'Plate': {u'OME': None}}}
+  // Is multi path? False
 
-	String getWellSampleID(int plateIndex, int wellIndex, int wellSampleIndex);
+  String getWellSampleAnnotationRef(int plateIndex, int wellIndex,
+    int wellSampleIndex, int annotationRefIndex);
 
-	String getWellSampleImageRef(int plateIndex, int wellIndex, int wellSampleIndex);
+  String getWellSampleID(int plateIndex, int wellIndex, int wellSampleIndex);
 
-	NonNegativeInteger getWellSampleIndex(int plateIndex, int wellIndex, int wellSampleIndex);
+  String getWellSampleImageRef(int plateIndex, int wellIndex,
+    int wellSampleIndex);
 
-	// Ignoring PlateAcquisition_BackReference back reference
-	Double getWellSamplePositionX(int plateIndex, int wellIndex, int wellSampleIndex);
+  NonNegativeInteger getWellSampleIndex(int plateIndex, int wellIndex,
+    int wellSampleIndex);
 
-	Double getWellSamplePositionY(int plateIndex, int wellIndex, int wellSampleIndex);
+  // Ignoring PlateAcquisition_BackReference back reference
+  Double getWellSamplePositionX(int plateIndex, int wellIndex,
+    int wellSampleIndex);
 
-	String getWellSampleTimepoint(int plateIndex, int wellIndex, int wellSampleIndex);
+  Double getWellSamplePositionY(int plateIndex, int wellIndex,
+    int wellSampleIndex);
 
-	//
-	// WellSampleRef property storage
-	//
-	// {u'PlateAcquisition': {u'Plate': {u'OME': None}}}
-	// Is multi path? False
+  String getWellSampleTimepoint(int plateIndex, int wellIndex,
+    int wellSampleIndex);
 
-	// 1:1
-	// Is multi path? False
-	// Ignoring ID property of reference WellSampleRef
+  //
+  // WellSampleRef property storage
+  //
+  // {u'PlateAcquisition': {u'Plate': {u'OME': None}}}
+  // Is multi path? False
 
-	//
-	// XMLAnnotation property storage
-	//
-	// {u'StructuredAnnotations': {u'OME': None}}
-	// Is multi path? False
+  // 1:1
+  // Is multi path? False
+  // Ignoring ID property of reference WellSampleRef
 
-	String getXMLAnnotationAnnotationRef(int XMLAnnotationIndex, int annotationRefIndex);
+  //
+  // XMLAnnotation property storage
+  //
+  // {u'StructuredAnnotations': {u'OME': None}}
+  // Is multi path? False
 
-	// Ignoring Channel_BackReference back reference
-	// Ignoring Dataset_BackReference back reference
-	String getXMLAnnotationDescription(int XMLAnnotationIndex);
+  String getXMLAnnotationAnnotationRef(int XMLAnnotationIndex,
+    int annotationRefIndex);
 
-	// Ignoring Experimenter_BackReference back reference
-	String getXMLAnnotationID(int XMLAnnotationIndex);
+  // Ignoring Channel_BackReference back reference
+  // Ignoring Dataset_BackReference back reference
+  String getXMLAnnotationDescription(int XMLAnnotationIndex);
 
-	// Ignoring Image_BackReference back reference
-	String getXMLAnnotationNamespace(int XMLAnnotationIndex);
+  // Ignoring Experimenter_BackReference back reference
+  String getXMLAnnotationID(int XMLAnnotationIndex);
 
-	// Ignoring Pixels_BackReference back reference
-	// Ignoring Plane_BackReference back reference
-	// Ignoring PlateAcquisition_BackReference back reference
-	// Ignoring Plate_BackReference back reference
-	// Ignoring Project_BackReference back reference
-	// Ignoring ROI_BackReference back reference
-	// Ignoring Reagent_BackReference back reference
-	// Ignoring Screen_BackReference back reference
-	String getXMLAnnotationValue(int XMLAnnotationIndex);
+  // Ignoring Image_BackReference back reference
+  String getXMLAnnotationNamespace(int XMLAnnotationIndex);
 
-	// Ignoring WellSample_BackReference back reference
-	// Ignoring Well_BackReference back reference
+  // Ignoring Pixels_BackReference back reference
+  // Ignoring Plane_BackReference back reference
+  // Ignoring PlateAcquisition_BackReference back reference
+  // Ignoring Plate_BackReference back reference
+  // Ignoring Project_BackReference back reference
+  // Ignoring ROI_BackReference back reference
+  // Ignoring Reagent_BackReference back reference
+  // Ignoring Screen_BackReference back reference
+  String getXMLAnnotationValue(int XMLAnnotationIndex);
+
+  // Ignoring WellSample_BackReference back reference
+  // Ignoring Well_BackReference back reference
 }
