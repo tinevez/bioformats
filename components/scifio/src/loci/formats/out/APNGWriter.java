@@ -26,7 +26,7 @@ package loci.formats.out;
 import java.io.IOException;
 
 import loci.formats.FormatException;
-import loci.formats.FormatWriter;
+import loci.formats.SCIFIOFormatWriter;
 import loci.formats.meta.MetadataRetrieve;
 
 /**
@@ -36,7 +36,7 @@ import loci.formats.meta.MetadataRetrieve;
  * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/bio-formats/src/loci/formats/out/APNGWriter.java">Trac</a>,
  * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/bio-formats/src/loci/formats/out/APNGWriter.java;hb=HEAD">Gitweb</a></dd></dl>
  */
-public class APNGWriter extends FormatWriter {
+public class APNGWriter extends SCIFIOFormatWriter {
 
   // -- Constants --
 

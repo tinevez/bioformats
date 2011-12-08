@@ -1,112 +1,37 @@
-//
-// FormatWriter.java
-//
-
-/*
-OME Bio-Formats package for reading and converting biological file formats.
-Copyright (C) 2005-@year@ UW-Madison LOCI and Glencoe Software, Inc.
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-
 package loci.formats;
 
 import java.awt.image.ColorModel;
 import java.io.IOException;
-import java.util.HashMap;
-
-import ome.xml.model.primitives.PositiveInteger;
 
 import loci.common.DataTools;
 import loci.common.RandomAccessOutputStream;
 import loci.formats.codec.CodecOptions;
-import loci.formats.meta.DummyMetadata;
 import loci.formats.meta.MetadataRetrieve;
+import ome.scifio.Writer;
+import ome.xml.model.primitives.PositiveInteger;
 
 /**
  * Abstract superclass of all biological file format writers.
+ * Defers to ome.scifio.Writer 
  *
- * <dl><dt><b>Source code:</b></dt>
- * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/bio-formats/src/loci/formats/FormatWriter.java">Trac</a>,
- * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/bio-formats/src/loci/formats/FormatWriter.java;hb=HEAD">Gitweb</a></dd></dl>
  */
-public abstract class FormatWriter extends FormatHandler
-  implements IFormatWriter
-{
+public abstract class SCIFIOFormatWriter extends FormatWriter {
 
   // -- Fields --
 
-  /** Frame rate to use when writing in frames per second, if applicable. */
-  protected int fps = 10;
+  /** Scifio Writer for deference */
+  protected Writer writer;
+  
+  // -- Constructor --
 
-  /** Default color model. */
-  protected ColorModel cm;
-
-  /** Available compression types. */
-  protected String[] compressionTypes;
-
-  /** Current compression type. */
-  protected String compression;
-
-  /** The options if required. */
-  protected CodecOptions options;
-
-  /**
-   * Whether each plane in each series of the current file has been
-   * prepped for writing.
-   */
-  protected boolean[][] initialized;
-
-  /** Whether the channels in an RGB image are interleaved. */
-  protected boolean interleaved;
-
-  /** The number of valid bits per pixel. */
-  protected int validBits;
-
-  /** Current series. */
-  protected int series;
-
-  /** Whether or not we are writing planes sequentially. */
-  protected boolean sequential;
-
-  /**
-   * Current metadata retrieval object. Should <b>never</b> be accessed
-   * directly as the semantics of {@link #getMetadataRetrieve()}
-   * prevent "null" access.
-   */
-  protected MetadataRetrieve metadataRetrieve = new DummyMetadata();
-
-  /**
-   * Next plane index for each series.  This is only used by deprecated methods.
-   */
-  private HashMap<Integer, Integer> planeIndices =
-    new HashMap<Integer, Integer>();
-
-  /** Current file. */
-  protected RandomAccessOutputStream out;
-
-  // -- Constructors --
-
-  /** Constructs a format writer with the given name and default suffix. */
-  public FormatWriter(String format, String suffix) { super(format, suffix); }
-
-  /** Constructs a format writer with the given name and default suffixes. */
-  public FormatWriter(String format, String[] suffixes) {
+  public SCIFIOFormatWriter(String format, String suffix) {
+    super(format, suffix);
+  }
+  
+  public SCIFIOFormatWriter(String format, String[] suffixes) {
     super(format, suffixes);
   }
-
+  
   // -- IFormatWriter API methods --
 
   /* @see IFormatWriter#changeOutputFile(String) */
@@ -273,11 +198,6 @@ public abstract class FormatWriter extends FormatHandler
     boolean last) throws FormatException, IOException
   {
     setSeries(series);
-    Integer planeIndex = planeIndices.get(series);
-    if (planeIndex == null) planeIndex = 0;
-    saveBytes(planeIndex, bytes);
-    planeIndex++;
-    planeIndices.put(series, planeIndex);
   }
 
   /**

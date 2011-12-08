@@ -42,7 +42,7 @@ import loci.formats.FormatException;
  *
  * @author Melissa Linkert melissa at glencoesoftware.com
  */
-public class APNGReader extends BIFormatReader {
+public class APNGReader extends SCIFIOBIFormatReader {
 
   // -- Constants --
 

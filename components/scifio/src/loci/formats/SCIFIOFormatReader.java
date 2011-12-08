@@ -1,26 +1,3 @@
-//
-// FormatReader.java
-//
-
-/*
-OME Bio-Formats package for reading and converting biological file formats.
-Copyright (C) 2005-@year@ UW-Madison LOCI and Glencoe Software, Inc.
-
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-*/
-
 package loci.formats;
 
 import java.io.IOException;
@@ -37,13 +14,15 @@ import loci.common.services.ServiceFactory;
 import loci.formats.in.DefaultMetadataOptions;
 import loci.formats.in.MetadataLevel;
 import loci.formats.in.MetadataOptions;
-import loci.formats.meta.DummyMetadata;
 import loci.formats.meta.FilterMetadata;
 import loci.formats.meta.IMetadata;
 import loci.formats.meta.MetadataStore;
 import loci.formats.ome.OMEXMLMetadata;
 import loci.formats.services.OMEXMLService;
-
+import ome.scifio.Checker;
+import ome.scifio.Parser;
+import ome.scifio.Reader;
+import ome.scifio.Translator;
 import ome.xml.model.enums.AcquisitionMode;
 import ome.xml.model.enums.ArcType;
 import ome.xml.model.enums.Binning;
@@ -99,90 +78,36 @@ import ome.xml.model.enums.handlers.PixelTypeEnumHandler;
 import ome.xml.model.enums.handlers.PulseEnumHandler;
 
 /**
- * Abstract superclass of all biological file format readers.
+ * Abstract superclass of all biological file format writers.
+ * Defers to ome.scifio.Reader
  *
- * <dl><dt><b>Source code:</b></dt>
- * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/bio-formats/src/loci/formats/FormatReader.java">Trac</a>,
- * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/bio-formats/src/loci/formats/FormatReader.java;hb=HEAD">Gitweb</a></dd></dl>
  */
-public abstract class FormatReader extends FormatHandler
-  implements IFormatReader
-{
-
-  // -- Constants --
-
-  /** Default thumbnail width and height. */
-  protected static final int THUMBNAIL_DIMENSION = 128;
+public abstract class SCIFIOFormatReader extends FormatReader {
 
   // -- Fields --
+  
+  /** Scifio Checker for deference */
+  protected Checker checker;
+  
+  /** Scifio Parser for deference */
+  protected Parser parser;
+  
+  /** Scifio Reader for deference */
+  protected Reader reader;
 
-  /** Current file. */
-  protected RandomAccessInputStream in;
-
-  /** Hashtable containing metadata key/value pairs. */
-  protected Hashtable<String, Object> metadata;
-
-  /** The number of the current series. */
-  protected int series = 0;
-
-  /** Core metadata values. */
-  protected CoreMetadata[] core;
-
-  /**
-   * Whether the file extension matching one of the reader's suffixes
-   * is necessary to identify the file as an instance of this format.
-   */
-  protected boolean suffixNecessary = true;
-
-  /**
-   * Whether the file extension matching one of the reader's suffixes
-   * is sufficient to identify the file as an instance of this format.
-   */
-  protected boolean suffixSufficient = true;
-
-  /** Whether this format supports multi-file datasets. */
-  protected boolean hasCompanionFiles = false;
-
-  /** Whether or not to normalize float data. */
-  protected boolean normalizeData;
-
-  /** Whether or not to filter out invalid metadata. */
-  protected boolean filterMetadata;
-
-  /** Whether or not to save proprietary metadata in the MetadataStore. */
-  protected boolean saveOriginalMetadata = false;
-
-  /** Whether or not MetadataStore sets C = 3 for indexed color images. */
-  protected boolean indexedAsRGB = false;
-
-  /** Whether or not to group multi-file formats. */
-  protected boolean group = true;
-
-  /** List of domains in which this format is used. */
-  protected String[] domains = new String[0];
-
-  /**
-   * Current metadata store. Should never be accessed directly as the
-   * semantics of {@link #getMetadataStore()} prevent "null" access.
-   */
-  protected MetadataStore metadataStore = new DummyMetadata();
-
-  /** Metadata parsing options. */
-  protected MetadataOptions metadataOptions = new DefaultMetadataOptions();
-
-  private ServiceFactory factory;
-  private OMEXMLService service;
-
+  /** Scifio Translator for deference */
+  protected Translator translator;
+  
   // -- Constructors --
 
-  /** Constructs a format reader with the given name and default suffix. */
-  public FormatReader(String format, String suffix) { super(format, suffix); }
-
-  /** Constructs a format reader with the given name and default suffixes. */
-  public FormatReader(String format, String[] suffixes) {
+  public SCIFIOFormatReader(String format, String suffix) {
+    super(format, suffix);
+  }
+  
+  public SCIFIOFormatReader(String format, String[] suffixes) {
     super(format, suffixes);
   }
-
+  
   // -- Internal FormatReader API methods --
 
   /**
@@ -474,13 +399,6 @@ public abstract class FormatReader extends FormatHandler
    */
   public MetadataOptions getMetadataOptions() {
     return metadataOptions;
-  }
-
-  /* (non-Javadoc)
-   * @see loci.formats.IMetadataConfigurable#setMetadataOptions(loci.formats.in.MetadataOptions)
-   */
-  public void setMetadataOptions(MetadataOptions options) {
-    this.metadataOptions = options;
   }
 
   // -- IFormatReader API methods --
@@ -1069,43 +987,6 @@ public abstract class FormatReader extends FormatHandler
   /* @see IFormatHandler#setId(String) */
   public void setId(String id) throws FormatException, IOException {
     if (!id.equals(currentId)) {
-      initFile(id);
-
-      if (saveOriginalMetadata) {
-        MetadataStore store = getMetadataStore();
-        if (store instanceof OMEXMLMetadata) {
-          try {
-            if (factory == null) factory = new ServiceFactory();
-            if (service == null) {
-              service = factory.getInstance(OMEXMLService.class);
-            }
-
-            Hashtable<String, Object> allMetadata =
-              new Hashtable<String, Object>();
-            allMetadata.putAll(metadata);
-
-            for (int series=0; series<getSeriesCount(); series++) {
-              String name = "Series " + series;
-              try {
-                String realName = ((IMetadata) store).getImageName(series);
-                if (realName != null && realName.trim().length() != 0) {
-                  name = realName;
-                }
-              }
-              catch (Exception e) { }
-              setSeries(series);
-              MetadataTools.merge(getSeriesMetadata(), allMetadata, name + " ");
-            }
-            setSeries(0);
-
-            service.populateOriginalMetadata(
-              (OMEXMLMetadata) store, allMetadata);
-          }
-          catch (DependencyException e) {
-            LOGGER.warn("OMEXMLService not available.", e);
-          }
-        }
-      }
     }
   }
 
