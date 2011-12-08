@@ -114,6 +114,7 @@ public abstract class AbstractWriter<M extends Metadata>
   public void setDest(RandomAccessOutputStream out, int iNo)
     throws FormatException, IOException
   {
+    this.close();
     this.out = out;
     initialize(iNo);
   }
@@ -206,7 +207,13 @@ public abstract class AbstractWriter<M extends Metadata>
 
   /* @see ome.scifio.Writer#setCompression(String) */
   public void setCompression(String compress) throws FormatException {
-    this.compression = compress;
+    for (int i=0; i<compressionTypes.length; i++) {
+      if (compressionTypes[i].equals(compress)) {
+        compression = compress;
+        return;
+      }
+    }
+    throw new FormatException("Invalid compression type: " + compress);
   }
 
   /* @see ome.scifio.Writer#setCodecOptions(CodecOptions) */
