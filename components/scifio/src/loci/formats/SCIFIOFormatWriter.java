@@ -32,6 +32,7 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   // -- IFormatWriter API methods --
 
   /* @see IFormatWriter#changeOutputFile(String) */
+  @Override
   public void changeOutputFile(String id) throws FormatException, IOException {
     try {
       writer.changeOutputFile(id);
@@ -42,6 +43,7 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   }
 
   /* @see IFormatWriter#saveBytes(int, byte[]) */
+  @Override
   public void saveBytes(int no, byte[] buf) throws FormatException, IOException
   {
     try {
@@ -53,6 +55,7 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   }
 
   /* @see IFormatWriter#savePlane(int, Object) */
+  @Override
   public void savePlane(int no, Object plane)
     throws FormatException, IOException
   {
@@ -65,6 +68,7 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   }
 
   /* @see IFormatWriter#savePlane(int, Object, int, int, int, int) */
+  @Override
   public void savePlane(int no, Object plane, int x, int y, int w, int h)
     throws FormatException, IOException
   {
@@ -81,6 +85,7 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   }
 
   /* @see IFormatWriter#setSeries(int) */
+  @Override
   public void setSeries(int series) throws FormatException {
     if (series < 0) throw new FormatException("Series must be > 0.");
     if (series >= writer.getMetadata().getImageCount()) {
@@ -92,29 +97,35 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   }
 
   /* @see IFormatWriter#getSeries() */
+  @Override
   public int getSeries() {
     return series;
   }
 
   /* @see IFormatWriter#setInterleaved(boolean) */
+  @Override
   public void setInterleaved(boolean interleaved) {
     //TODO need setters
   }
 
   /* @see IFormatWriter#isInterleaved() */
+  @Override
   public boolean isInterleaved() {
     return writer.getMetadata().isInterleaved(getSeries());
   }
 
   /* @see IFormatWriter#setValidBitsPerPixel(int) */
+  @Override
   public void setValidBitsPerPixel(int bits) {
     //TODO need setters
   }
 
   /* @see IFormatWriter#canDoStacks() */
+  @Override
   public boolean canDoStacks() { return false; }
 
   /* @see IFormatWriter#setMetadataRetrieve(MetadataRetrieve) */
+  @Override
   public void setMetadataRetrieve(MetadataRetrieve retrieve) {
     FormatTools.assertId(currentId, false, 1);
     if (retrieve == null) {
@@ -125,26 +136,33 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   }
 
   /* @see IFormatWriter#getMetadataRetrieve() */
+  @Override
   public MetadataRetrieve getMetadataRetrieve() {
     return metadataRetrieve;
   }
 
   /* @see IFormatWriter#setColorModel(ColorModel) */
+  @Override
   public void setColorModel(ColorModel model) { writer.setColorModel(model); }
 
   /* @see IFormatWriter#getColorModel() */
+  @Override
   public ColorModel getColorModel() { return writer.getColorModel(); }
 
   /* @see IFormatWriter#setFramesPerSecond(int) */
+  @Override
   public void setFramesPerSecond(int rate) { writer.setFramesPerSecond(rate); }
 
   /* @see IFormatWriter#getFramesPerSecond() */
+  @Override
   public int getFramesPerSecond() { return writer.getFramesPerSecond(); }
 
   /* @see IFormatWriter#getCompressionTypes() */
+  @Override
   public String[] getCompressionTypes() { return writer.getCompressionTypes(); }
 
   /* @see IFormatWriter#setCompression(compress) */
+  @Override
   public void setCompression(String compress) throws FormatException {
     // check that this is a valid type
     try {
@@ -156,31 +174,37 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   }
 
   /* @see IFormatWriter#setCodecOptions(CodecOptions) */
+  @Override
   public void setCodecOptions(CodecOptions options) {
     //TODO writer.setCodecOptions(options);
   }
 
   /* @see IFormatWriter#getCompression() */
+  @Override
   public String getCompression() {
     return writer.getCompression();
   }
 
   /* @see IFormatWriter#getPixelTypes() */
+  @Override
   public int[] getPixelTypes() {
     return writer.getPixelTypes(getCompression());
   }
 
   /* @see IFormatWriter#getPixelTypes(String) */
+  @Override
   public int[] getPixelTypes(String codec) {
     return writer.getPixelTypes(codec);
   }
 
   /* @see IFormatWriter#isSupportedType(int) */
+  @Override
   public boolean isSupportedType(int type) {
     return writer.isSupportedType(type);
   }
 
   /* @see IFormatWriter#setWriteSequentially(boolean) */
+  @Override
   public void setWriteSequentially(boolean sequential) {
     writer.setWriteSequentially(sequential);
   }
@@ -189,6 +213,7 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
 
   /**
    * @deprecated
+   * @Override
    * @see IFormatWriter#saveBytes(byte[], boolean)
    */
   public void saveBytes(byte[] bytes, boolean last)
@@ -204,6 +229,7 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
 
   /**
    * @deprecated
+   * @Override
    * @see IFormatWriter#saveBytes(byte[], int, boolean, boolean)
    */
   public void saveBytes(byte[] bytes, int series, boolean lastInSeries,
@@ -219,6 +245,7 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
 
   /**
    * @deprecated
+   * @Override
    * @see IFormatWriter#savePlane(Object, boolean)
    */
   public void savePlane(Object plane, boolean last)
@@ -234,6 +261,7 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
 
   /**
    * @deprecated
+   * @Override
    * @see IFormatWriter#savePlane(Object, int, boolean, boolean)
    */
   public void savePlane(Object plane, int series, boolean lastInSeries,
@@ -254,6 +282,7 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   // -- IFormatHandler API methods --
 
   /* @see IFormatHandler#setId(String) */
+  @Override
   public void setId(String id) throws FormatException, IOException {
     if (id.equals(currentId)) return;
     writer.close();
@@ -267,6 +296,7 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   }
 
   /* @see IFormatHandler#close() */
+  @Override
   public void close() throws IOException {
     writer.close();
   }
