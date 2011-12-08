@@ -66,27 +66,6 @@ public class APNGWriter extends SCIFIOFormatWriter {
     }
   }
 
-  // TODO remove this once loci.formats.FormatWriter is fully deferring to ome.scifio.AbstractWriter
-  @Override
-  @Deprecated
-  public void saveBytes(int no, byte[] buf) throws FormatException, IOException
-  {
-    try {
-      writer.saveBytes(getSeries(), no, buf);
-    }
-    catch (ome.scifio.FormatException e) {
-      throw new FormatException(e);
-    }
-  }
-
-  // TODO remove this once loci.formats.FormatWriter is fully deferring to ome.scifio.AbstractWriter
-  @Override
-  @Deprecated
-  public void setMetadataRetrieve(MetadataRetrieve retrieve) {
-    super.setMetadataRetrieve(retrieve);
-    writer.setMetadata(getMetadataRetrieve().getSCIFIOMeta());
-  }
-
   /* @see loci.formats.IFormatWriter#canDoStacks() */
   @Deprecated
   public boolean canDoStacks() {
