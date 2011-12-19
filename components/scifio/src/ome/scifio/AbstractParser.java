@@ -142,57 +142,57 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
   // -- AbstractParser Methods --
 
   /** Adds an entry to the global metadata table. */
-  protected void addGlobalMeta(String key, Object value) {
+  public void addGlobalMeta(String key, Object value) {
     addMeta(key, value, metadata.getGlobalMetadata());
   }
 
   /** Adds an entry to the global metadata table. */
-  protected void addGlobalMeta(String key, boolean value) {
+  public void addGlobalMeta(String key, boolean value) {
     addGlobalMeta(key, new Boolean(value));
   }
 
   /** Adds an entry to the global metadata table. */
-  protected void addGlobalMeta(String key, byte value) {
+  public void addGlobalMeta(String key, byte value) {
     addGlobalMeta(key, new Byte(value));
   }
 
   /** Adds an entry to the global metadata table. */
-  protected void addGlobalMeta(String key, short value) {
+  public void addGlobalMeta(String key, short value) {
     addGlobalMeta(key, new Short(value));
   }
 
   /** Adds an entry to the global metadata table. */
-  protected void addGlobalMeta(String key, int value) {
+  public void addGlobalMeta(String key, int value) {
     addGlobalMeta(key, new Integer(value));
   }
 
   /** Adds an entry to the global metadata table. */
-  protected void addGlobalMeta(String key, long value) {
+  public void addGlobalMeta(String key, long value) {
     addGlobalMeta(key, new Long(value));
   }
 
   /** Adds an entry to the global metadata table. */
-  protected void addGlobalMeta(String key, float value) {
+  public void addGlobalMeta(String key, float value) {
     addGlobalMeta(key, new Float(value));
   }
 
   /** Adds an entry to the global metadata table. */
-  protected void addGlobalMeta(String key, double value) {
+  public void addGlobalMeta(String key, double value) {
     addGlobalMeta(key, new Double(value));
   }
 
   /** Adds an entry to the global metadata table. */
-  protected void addGlobalMeta(String key, char value) {
+  public void addGlobalMeta(String key, char value) {
     addGlobalMeta(key, new Character(value));
   }
 
   /** Gets a value from the global metadata table. */
-  protected Object getGlobalMeta(String key) {
+  public Object getGlobalMeta(String key) {
     return metadata.getGlobalMetadata().get(key);
   }
 
   /** Adds an entry to the specified Hashtable. */
-  protected void addMeta(String key, Object value,
+  public void addMeta(String key, Object value,
     Hashtable<String, Object> meta)
   {
     if (key == null || value == null /* || TODO !isMetadataCollected() */) {

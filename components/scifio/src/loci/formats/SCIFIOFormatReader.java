@@ -130,12 +130,6 @@ public abstract class SCIFIOFormatReader extends FormatReader {
     series = 0;
     close();
     currentId = id;
-    metadata = new Hashtable<String, Object>();
-
-    core = new CoreMetadata[1];
-    core[0] = new CoreMetadata();
-    core[0].orderCertain = true;
-
     // reinitialize the MetadataStore
     // NB: critical for metadata conversion to work properly!
     getMetadataStore().createRoot();
@@ -413,113 +407,92 @@ public abstract class SCIFIOFormatReader extends FormatReader {
    * @param open If true, and the file extension is insufficient to determine
    *   the file type, the (existing) file is opened for further analysis.
    */
+  @Deprecated
+  @Override
   public boolean isThisType(String name, boolean open) {
-    // if file extension ID is insufficient and we can't open the file, give up
-    if (!suffixSufficient && !open) return false;
-
-    if (suffixNecessary || suffixSufficient) {
-      // it's worth checking the file extension
-      boolean suffixMatch = super.isThisType(name);
-
-      // if suffix match is required but it doesn't match, failure
-      if (suffixNecessary && !suffixMatch) return false;
-
-      // if suffix matches and that's all we need, green light it
-      if (suffixMatch && suffixSufficient) return true;
-    }
-
-    // suffix matching was inconclusive; we need to analyze the file contents
-    if (!open) return false; // not allowed to open any files
-    try {
-      RandomAccessInputStream stream = new RandomAccessInputStream(name);
-      boolean isThisType = isThisType(stream);
-      stream.close();
-      return isThisType;
-    }
-    catch (IOException exc) {
-      LOGGER.debug("", exc);
-      return false;
-    }
+	  return checker.isFormat(name, open);
   }
 
   /* @see IFormatReader#isThisType(byte[]) */
+  @Deprecated
+  @Override
   public boolean isThisType(byte[] block) {
-    try {
-      RandomAccessInputStream stream = new RandomAccessInputStream(block);
-      boolean isThisType = isThisType(stream);
-      stream.close();
-      return isThisType;
-    }
-    catch (IOException e) {
-      LOGGER.debug("", e);
-    }
-    return false;
+    return checker.isFormat(block);
   }
 
   /* @see IFormatReader#isThisType(RandomAccessInputStream) */
+  @Deprecated
+  @Override
   public boolean isThisType(RandomAccessInputStream stream) throws IOException {
-    return false;
+    return checker.isFormat(new ome.scifio.io.RandomAccessInputStream(stream.getFile()));
   }
 
   /* @see IFormatReader#getImageCount() */
+  @Deprecated
+  @Override
   public int getImageCount() {
-    FormatTools.assertId(currentId, true, 1);
-    return core[series].imageCount;
+    return reader.getMetadata().getImageCount();
   }
 
   /* @see IFormatReader#isRGB() */
+  @Deprecated
+  @Override
   public boolean isRGB() {
-    FormatTools.assertId(currentId, true, 1);
-    return core[series].rgb;
+    return reader.getMetadata().isRGB(getSeries());
   }
 
   /* @see IFormatReader#getSizeX() */
+  @Deprecated
+  @Override
   public int getSizeX() {
-    FormatTools.assertId(currentId, true, 1);
-    return core[series].sizeX;
+    return reader.getMetadata().getSizeX(getSeries());
   }
 
   /* @see IFormatReader#getSizeY() */
+  @Deprecated
+  @Override
   public int getSizeY() {
-    FormatTools.assertId(currentId, true, 1);
-    return core[series].sizeY;
+    return reader.getMetadata().getSizeY(getSeries());
   }
 
   /* @see IFormatReader#getSizeZ() */
+  @Deprecated
+  @Override
   public int getSizeZ() {
-    FormatTools.assertId(currentId, true, 1);
-    return core[series].sizeZ;
+    return reader.getMetadata().getSizeZ(getSeries());
   }
 
   /* @see IFormatReader#getSizeC() */
+  @Deprecated
+  @Override
   public int getSizeC() {
-    FormatTools.assertId(currentId, true, 1);
-    return core[series].sizeC;
+    return reader.getMetadata().getSizeC(getSeries());
   }
 
   /* @see IFormatReader#getSizeT() */
+  @Deprecated
+  @Override
   public int getSizeT() {
-    FormatTools.assertId(currentId, true, 1);
-    return core[series].sizeT;
+    return reader.getMetadata().getSizeT(getSeries());
   }
 
   /* @see IFormatReader#getPixelType() */
+  @Deprecated
+  @Override
   public int getPixelType() {
-    FormatTools.assertId(currentId, true, 1);
-    return core[series].pixelType;
+    return reader.getMetadata().getPixelType(getSeries());
   }
 
   /* @see IFormatReader#getBitsPerPixel() */
+  @Deprecated
+  @Override
   public int getBitsPerPixel() {
-    FormatTools.assertId(currentId, true, 1);
-    if (core[series].bitsPerPixel == 0) {
-      core[series].bitsPerPixel =
-        FormatTools.getBytesPerPixel(getPixelType()) * 8;
-    }
-    return core[series].bitsPerPixel;
+    return reader.getMetadata().getBitsPerPixel(getSeries());
   }
 
   /* @see IFormatReader#getEffectiveSizeC() */
+  @Deprecated
+  @Override
   public int getEffectiveSizeC() {
     // NB: by definition, imageCount == effectiveSizeC * sizeZ * sizeT
     int sizeZT = getSizeZ() * getSizeT();
@@ -528,6 +501,8 @@ public abstract class SCIFIOFormatReader extends FormatReader {
   }
 
   /* @see IFormatReader#getRGBChannelCount() */
+  @Deprecated
+  @Override
   public int getRGBChannelCount() {
     int effSizeC = getEffectiveSizeC();
     if (effSizeC == 0) return 0;
@@ -535,9 +510,10 @@ public abstract class SCIFIOFormatReader extends FormatReader {
   }
 
   /* @see IFormatReader#isIndexed() */
+  @Deprecated
+  @Override
   public boolean isIndexed() {
-    FormatTools.assertId(currentId, true, 1);
-    return core[series].indexed;
+    return reader.getMetadata().isIndexed(getSeries());
   }
 
   /* @see IFormatReader#isFalseColor() */

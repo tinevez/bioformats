@@ -183,5 +183,14 @@ public interface Metadata extends Serializable {
    * </ul>
    * @param iNo the index of the desired image within the dataset
    */
-  String getDimensionOrder(int no);
+  String getDimensionOrder(int iNo);
+  
+  /**
+   * Checks if the image planes in the file have more than one channel per
+   * {@link #openBytes} call.
+   * This method returns true if and only if {@link #getRGBChannelCount()}
+   * returns a value greater than 1.
+   * @param iNo the index of the desired image within the dataset
+   */
+  boolean isRGB(int iNo);
 }

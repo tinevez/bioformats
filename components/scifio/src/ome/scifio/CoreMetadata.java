@@ -147,6 +147,11 @@ public class CoreMetadata extends AbstractMetadata {
   public String getDimensionOrder(int no) {
     return imageMeta.get(no).dimensionOrder;
   }
+  
+  /* @see Metadata#isRGB(int) */
+  public boolean isRGB(int no) {
+	return getRGBChannelCount(no) > 1;
+  }
 
   // -- Helper Methods --
 
@@ -163,6 +168,8 @@ public class CoreMetadata extends AbstractMetadata {
   public void add(final CoreImageMetadata meta) {
     imageMeta.add(meta);
   }
+  
+
 
   /* TODO not sure if these are necessary
   public boolean isFalseColor(int no) {
@@ -184,8 +191,6 @@ public class CoreMetadata extends AbstractMetadata {
     return false;
   }
   
-  public boolean isRGB(int no) {
-    return get(no).rgb;
-  }
+
   */
 }

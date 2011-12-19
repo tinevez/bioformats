@@ -236,6 +236,11 @@ public class APNGMetadata extends AbstractMetadata {
   public int getBitsPerPixel(int no) {
     return this.bitsPerPixel;
   }
+  
+  /* @see Metadata#isRGB(int) */
+  public boolean isRGB(int no) {
+	  return getRGBChannelCount(no) > 1;
+  }
 
   /* @see Metadata#get8BitLookupTable(int) */
   public byte[][] get8BitLookupTable(int no)
