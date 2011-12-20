@@ -446,5 +446,11 @@ public class RandomAccessInputStream extends InputStream implements DataInput {
   public boolean markSupported() { return false; }
 
   public void reset() throws IOException { }
+  
+  // -- Helper Methods --
+  
+  public String getFile() {
+    return file;
+  }
 
 }
