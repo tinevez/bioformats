@@ -36,13 +36,11 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
   // -- Parser API Methods --
 
   /* @see Parser#parse(File file) */
-
   public M parse(File file) throws IOException, FormatException {
     return parse(file.getName());
   }
 
   /* @see Parser#parse(String fileName) */
-
   public M parse(String fileName) throws IOException, FormatException {
     return parse(new RandomAccessInputStream(fileName));
   }
@@ -55,7 +53,7 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
       init(stream);
 
       if (saveOriginalMetadata) {
-        //TODO store all metadata in OMEXML store.. or equivalent function? as per setId
+        //TODO store all metadata in OMEXML store.. or equivalent function? as per setId.. or handle via annotations
       }
     }
     return metadata;
@@ -129,14 +127,31 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
 
   /* @see Parser#getAdvancedUsedFiles(boolean) */
   public FileInfo[] getAdvancedUsedFiles(final boolean noPixels) {
-    // TODO Auto-generated method stub
-    return null;
+    String[] files = getUsedFiles(noPixels);
+    if (files == null) return null;
+    FileInfo[] infos = new FileInfo[files.length];
+    for (int i = 0; i < infos.length; i++) {
+      infos[i] = new FileInfo();
+      infos[i].filename = files[i];
+      infos[i].reader = this.getClass();
+      infos[i].usedToInitialize = files[i].endsWith(in.getFileName());
+    }
+    return infos;
   }
 
   /* @see Parser#getAdvancedSeriesUsedFiles(boolean) */
-  public FileInfo[] getAdvancedSeriesUsedFiles(final boolean noPixels) {
-    // TODO Auto-generated method stub
-    return null;
+  public FileInfo[] getAdvancedImageUsedFiles(int image, final boolean noPixels)
+  {
+    String[] files = getImageUsedFiles(image, noPixels);
+    if (files == null) return null;
+    FileInfo[] infos = new FileInfo[files.length];
+    for (int i = 0; i < infos.length; i++) {
+      infos[i] = new FileInfo();
+      infos[i].filename = files[i];
+      infos[i].reader = this.getClass();
+      infos[i].usedToInitialize = files[i].endsWith(in.getFileName());
+    }
+    return infos;
   }
 
   // -- AbstractParser Methods --
@@ -192,8 +207,7 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
   }
 
   /** Adds an entry to the specified Hashtable. */
-  public void addMeta(String key, Object value,
-    Hashtable<String, Object> meta)
+  public void addMeta(String key, Object value, Hashtable<String, Object> meta)
   {
     if (key == null || value == null /* || TODO !isMetadataCollected() */) {
       return;

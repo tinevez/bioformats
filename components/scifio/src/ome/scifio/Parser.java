@@ -2,6 +2,7 @@ package ome.scifio;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Hashtable;
 
 import ome.scifio.io.RandomAccessInputStream;
 
@@ -99,14 +100,14 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
   boolean isMetadataFiltered();
 
   /** Returns an array of filenames needed to open the indicated image index. */
-  String[] getImageUsedFiles(int image);
+  String[] getImageUsedFiles(int iNo);
 
   /**
    * Returns an array of filenames needed to open the indicated image.
    * If the 'noPixels' flag is set, then only files that do not contain
    * pixel data will be returned.
    */
-  String[] getImageUsedFiles(int image, boolean noPixels);
+  String[] getImageUsedFiles(int iNo, boolean noPixels);
 
   /**
    * Returns an array of FileInfo objects representing the files needed
@@ -122,5 +123,8 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
    * If the 'noPixels' flag is set, then only files that do not contain
    * pixel data will be returned.
    */
-  FileInfo[] getAdvancedSeriesUsedFiles(boolean noPixels);
+  FileInfo[] getAdvancedImageUsedFiles(int iNo, boolean noPixels);
+
+  /** Adds an entry to the specified Hashtable */
+  void addMeta(String key, Object value, Hashtable<String, Object> meta);
 }
