@@ -28,6 +28,9 @@ public abstract class AbstractReader<M extends Metadata>
   /** Whether or not to group multi-file formats. */
   protected boolean group = true;
 
+  /** Whether or not to normalize float data. */
+  protected boolean normalizeData;
+
   /** Current file. */
   protected RandomAccessInputStream in;
 
@@ -50,6 +53,21 @@ public abstract class AbstractReader<M extends Metadata>
   }
 
   // -- Reader API Methods --
+
+  /* @see Reader#setSource(File) */
+  public void setSource(File file) throws IOException {
+    setSource(file.getName());
+  }
+
+  /* @see Reader#setSource(String) */
+  public void setSource(String fileName) throws IOException {
+    setSource(new RandomAccessInputStream(fileName));
+  }
+
+  /* @see Reader#setSource(RandomAccessInputStream) */
+  public void setSource(RandomAccessInputStream stream) {
+    this.in = stream;
+  }
 
   /* @see Reader#openBytes(int, int) */
   public byte[] openBytes(final int iNo, final int no)
@@ -147,16 +165,33 @@ public abstract class AbstractReader<M extends Metadata>
     close(false);
   }
 
-  @Override
-  public String[] getDomains() {
-    // TODO Auto-generated method stub
-    return null;
+  /* @see Reader#isNormalized() */
+  public boolean isNormalized() {
+    return normalizeData;
   }
 
-  @Override
-  public int getIndex(final int z, final int c, final int t) {
-    // TODO Auto-generated method stub
-    return 0;
+  /* @see Reader#setNormalized(boolean) */
+  public void setNormalized(final boolean normalize) {
+    normalizeData = normalize;
+  }
+
+  /* @see Reader#getOptimalTileWidth(int) */
+  public int getOptimalTileWidth(int no) {
+    return metadata.getSizeX(no);
+  }
+
+  /* @see Reader#getOptimalTileHeight(int) */
+  public int getOptimalTileHeight(int no) {
+    int bpp = FormatTools.getBytesPerPixel(metadata.getPixelType(no));
+    int maxHeight =
+      (1024 * 1024) /
+        (metadata.getSizeX(no) * metadata.getRGBChannelCount(no) * bpp);
+    return Math.min(maxHeight, metadata.getSizeY(no));
+  }
+
+  /* @see Reader#getDomains() */
+  public String[] getDomains() {
+    return domains;
   }
 
   @Override
@@ -176,30 +211,6 @@ public abstract class AbstractReader<M extends Metadata>
     return null;
   }
 
-  @Override
-  public int getOptimalTileWidth() {
-    // TODO Auto-generated method stub
-    return 0;
-  }
-
-  @Override
-  public int getOptimalTileHeight() {
-    // TODO Auto-generated method stub
-    return 0;
-  }
-
-  @Override
-  public void setNormalized(final boolean normalize) {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public boolean isNormalized() {
-    // TODO Auto-generated method stub
-    return false;
-  }
-
   // -- AbstractReader Methods --
 
   /* TODO seems a bit off... if we write to an output stream, do we need to know if a filename is valid? 
@@ -208,33 +219,71 @@ public abstract class AbstractReader<M extends Metadata>
     return checkSuffix(name, suffixes);
   }
 
-  protected void setIn(RandomAccessInputStream stream) {
-    this.in = stream;
+  public byte[] readPlane(RandomAccessInputStream s, int no, int x, int y,
+    int w, int h, byte[] buf) throws IOException
+  {
+    return readPlane(s, no, x, y, w, h, 0, buf);
   }
 
-  /**
-   * Sets the source for this reader to read from.
-   * @param file
-   * @throws IOException 
-   */
-  public void setSource(File file) throws IOException {
-    setSource(file.getName());
+  public byte[] readPlane(RandomAccessInputStream s, int no, int x, int y,
+    int w, int h, int scanlinePad, byte[] buf) throws IOException
+  {
+    int c = metadata.getRGBChannelCount(no);
+    int bpp = FormatTools.getBytesPerPixel(metadata.getPixelType(no));
+    if (x == 0 && y == 0 && w == metadata.getSizeX(no) &&
+      h == metadata.getSizeY(no) && scanlinePad == 0)
+    {
+      s.read(buf);
+    }
+    else if (x == 0 && w == metadata.getSizeX(no) && scanlinePad == 0) {
+      if (metadata.isInterleaved(no)) {
+        s.skipBytes(y * w * bpp * c);
+        s.read(buf, 0, h * w * bpp * c);
+      }
+      else {
+        int rowLen = w * bpp;
+        for (int channel = 0; channel < c; channel++) {
+          s.skipBytes(y * rowLen);
+          s.read(buf, channel * h * rowLen, h * rowLen);
+          if (channel < c - 1) {
+            // no need to skip bytes after reading final channel
+            s.skipBytes((metadata.getSizeY(no) - y - h) * rowLen);
+          }
+        }
+      }
+    }
+    else {
+      int scanlineWidth = metadata.getSizeX(no) + scanlinePad;
+      if (metadata.isInterleaved(no)) {
+        s.skipBytes(y * scanlineWidth * bpp * c);
+        for (int row = 0; row < h; row++) {
+          s.skipBytes(x * bpp * c);
+          s.read(buf, row * w * bpp * c, w * bpp * c);
+          if (row < h - 1) {
+            // no need to skip bytes after reading final row
+            s.skipBytes(bpp * c * (scanlineWidth - w - x));
+          }
+        }
+      }
+      else {
+        for (int channel = 0; channel < c; channel++) {
+          s.skipBytes(y * scanlineWidth * bpp);
+          for (int row = 0; row < h; row++) {
+            s.skipBytes(x * bpp);
+            s.read(buf, channel * w * h * bpp + row * w * bpp, w * bpp);
+            if (row < h - 1 || channel < c - 1) {
+              // no need to skip bytes after reading final row of final channel
+              s.skipBytes(bpp * (scanlineWidth - w - x));
+            }
+          }
+          if (channel < c - 1) {
+            // no need to skip bytes after reading final channel
+            s.skipBytes(scanlineWidth * bpp * (metadata.getSizeY(no) - y - h));
+          }
+        }
+      }
+    }
+    return buf;
   }
 
-  /**
-   * Sets the source for this reader to read from.
-   * @param fileName
-   * @throws IOException 
-   */
-  public void setSource(String fileName) throws IOException {
-    setSource(new RandomAccessInputStream(fileName));
-  }
-
-  /**
-   * Sets the source for this reader to read from.
-   * @param in
-   */
-  public void setSource(RandomAccessInputStream stream) {
-    this.in = stream;
-  }
 }

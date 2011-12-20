@@ -101,12 +101,6 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
   String[] getDomains();
 
   /**
-   * Gets the rasterized index corresponding
-   * to the given Z, C and T coordinates.
-   */
-  int getIndex(int z, int c, int t);
-
-  /**
    * Gets the Z, C and T coordinates corresponding
    * to the given rasterized index value.
    */
@@ -125,10 +119,10 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
   Reader<Metadata>[] getUnderlyingReaders();
 
   /** Returns the optimal sub-image width for use with openBytes. */
-  int getOptimalTileWidth();
+  int getOptimalTileWidth(int iNo);
 
   /** Returns the optimal sub-image height for use with openBytes. */
-  int getOptimalTileHeight();
+  int getOptimalTileHeight(int iNo);
 
   /** Sets the Metadata for this Reader */
   public void setMetadata(M meta);
@@ -171,4 +165,12 @@ public interface Reader<M extends Metadata> extends MetadataHandler<M> {
 
   /** Closes currently open file(s) and frees allocated memory. */
   public void close() throws IOException;
+
+  /** Reads a raw plane from disk. */
+  byte[] readPlane(RandomAccessInputStream s, int iNo, int x, int y, int w,
+    int h, byte[] buf) throws IOException;
+
+  /** Reads a raw plane from disk. */
+  byte[] readPlane(RandomAccessInputStream s, int iNo, int x, int y, int w,
+    int h, int scanlinePad, byte[] buf) throws IOException;
 }
