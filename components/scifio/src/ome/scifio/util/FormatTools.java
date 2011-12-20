@@ -6,6 +6,11 @@ import ome.scifio.io.RandomAccessInputStream;
 
 public class FormatTools {
 
+  // -- Constants - Thumbnail dimensions --
+
+  /** Default height and width for thumbnails. */
+  public static final int THUMBNAIL_DIMENSION = 128;
+
   // -- Constants - pixel types --
 
   /** Identifies the <i>INT8</i> data type used to store pixel values. */
@@ -265,8 +270,8 @@ public class FormatTools {
     int imageCount = r.getMetadata().getImageCount();
     if (no < 0 || no >= imageCount) {
       throw new FormatException("Invalid image number: " + no + " (" +
-        /* TODO series=" +
-        r.getMetadata().getSeries() + ", */"imageCount=" + imageCount + ")");
+      /* TODO series=" +
+      r.getMetadata().getSeries() + ", */"imageCount=" + imageCount + ")");
     }
   }
 
@@ -459,5 +464,184 @@ public class FormatTools {
       default:
         throw new FormatException("Unsupported byte depth: " + bytes);
     }
+  }
+
+  /**
+   * Gets the Z, C and T coordinates corresponding
+   * to the given rasterized index value.
+   */
+  public static int[] getZCTCoords(Reader reader, int index) {
+    String order = reader.getMetadata().getDimensionOrder(index);
+    int zSize = reader.getMetadata().getSizeZ(index);
+    int cSize = reader.getMetadata().getEffectiveSizeC(index);
+    int tSize = reader.getMetadata().getSizeT(index);
+    int num = reader.getMetadata().getImageCount();
+    return getZCTCoords(order, zSize, cSize, tSize, num, index);
+  }
+
+  /**
+   * Gets the Z, C and T coordinates corresponding to the given rasterized
+   * index value.
+   *
+   * @param order Dimension order.
+   * @param zSize Total number of focal planes.
+   * @param cSize Total number of channels.
+   * @param tSize Total number of time points.
+   * @param num Total number of image planes (zSize * cSize * tSize),
+   *   specified as a consistency check.
+   * @param index 1D (rasterized) index to convert to ZCT coordinate triple.
+   */
+  public static int[] getZCTCoords(String order, int zSize, int cSize,
+    int tSize, int num, int index)
+  {
+    // check DimensionOrder
+    if (order == null) {
+      throw new IllegalArgumentException("Dimension order is null");
+    }
+    if (!order.startsWith("XY") && !order.startsWith("YX")) {
+      throw new IllegalArgumentException("Invalid dimension order: " + order);
+    }
+    int iz = order.indexOf("Z") - 2;
+    int ic = order.indexOf("C") - 2;
+    int it = order.indexOf("T") - 2;
+    if (iz < 0 || iz > 2 || ic < 0 || ic > 2 || it < 0 || it > 2) {
+      throw new IllegalArgumentException("Invalid dimension order: " + order);
+    }
+
+    // check SizeZ
+    if (zSize <= 0) {
+      throw new IllegalArgumentException("Invalid Z size: " + zSize);
+    }
+
+    // check SizeC
+    if (cSize <= 0) {
+      throw new IllegalArgumentException("Invalid C size: " + cSize);
+    }
+
+    // check SizeT
+    if (tSize <= 0) {
+      throw new IllegalArgumentException("Invalid T size: " + tSize);
+    }
+
+    // check image count
+    if (num <= 0) {
+      throw new IllegalArgumentException("Invalid image count: " + num);
+    }
+    if (num != zSize * cSize * tSize) {
+      // if this happens, there is probably a bug in metadata population --
+      // either one of the ZCT sizes, or the total number of images --
+      // or else the input file is invalid
+      throw new IllegalArgumentException("ZCT size vs image count mismatch " +
+        "(sizeZ=" + zSize + ", sizeC=" + cSize + ", sizeT=" + tSize +
+        ", total=" + num + ")");
+    }
+    if (index < 0 || index >= num) {
+      throw new IllegalArgumentException("Invalid image index: " + index + "/" +
+        num);
+    }
+
+    // assign rasterization order
+    int len0 = iz == 0 ? zSize : (ic == 0 ? cSize : tSize);
+    int len1 = iz == 1 ? zSize : (ic == 1 ? cSize : tSize);
+    //int len2 = iz == 2 ? sizeZ : (ic == 2 ? sizeC : sizeT);
+    int v0 = index % len0;
+    int v1 = index / len0 % len1;
+    int v2 = index / len0 / len1;
+    int z = iz == 0 ? v0 : (iz == 1 ? v1 : v2);
+    int c = ic == 0 ? v0 : (ic == 1 ? v1 : v2);
+    int t = it == 0 ? v0 : (it == 1 ? v1 : v2);
+
+    return new int[] {z, c, t};
+  }
+
+  /**
+   * Gets the rasterized index corresponding
+   * to the given Z, C and T coordinates.
+   */
+  public static int getIndex(Reader reader, int image, int z, int c, int t) {
+    String order = reader.getMetadata().getDimensionOrder(image);
+    int zSize = reader.getMetadata().getSizeZ(image);
+    int cSize = reader.getMetadata().getEffectiveSizeC(image);
+    int tSize = reader.getMetadata().getSizeT(image);
+    int num = reader.getMetadata().getImageCount();
+    return getIndex(order, zSize, cSize, tSize, num, z, c, t);
+  }
+
+  /**
+   * Gets the rasterized index corresponding
+   * to the given Z, C and T coordinates.
+   *
+   * @param order Dimension order.
+   * @param zSize Total number of focal planes.
+   * @param cSize Total number of channels.
+   * @param tSize Total number of time points.
+   * @param num Total number of image planes (zSize * cSize * tSize),
+   *   specified as a consistency check.
+   * @param z Z coordinate of ZCT coordinate triple to convert to 1D index.
+   * @param c C coordinate of ZCT coordinate triple to convert to 1D index.
+   * @param t T coordinate of ZCT coordinate triple to convert to 1D index.
+   */
+  public static int getIndex(String order, int zSize, int cSize, int tSize,
+    int num, int z, int c, int t)
+  {
+    // check DimensionOrder
+    if (order == null) {
+      throw new IllegalArgumentException("Dimension order is null");
+    }
+    if (!order.startsWith("XY") && !order.startsWith("YX")) {
+      throw new IllegalArgumentException("Invalid dimension order: " + order);
+    }
+    int iz = order.indexOf("Z") - 2;
+    int ic = order.indexOf("C") - 2;
+    int it = order.indexOf("T") - 2;
+    if (iz < 0 || iz > 2 || ic < 0 || ic > 2 || it < 0 || it > 2) {
+      throw new IllegalArgumentException("Invalid dimension order: " + order);
+    }
+
+    // check SizeZ
+    if (zSize <= 0) {
+      throw new IllegalArgumentException("Invalid Z size: " + zSize);
+    }
+    if (z < 0 || z >= zSize) {
+      throw new IllegalArgumentException("Invalid Z index: " + z + "/" + zSize);
+    }
+
+    // check SizeC
+    if (cSize <= 0) {
+      throw new IllegalArgumentException("Invalid C size: " + cSize);
+    }
+    if (c < 0 || c >= cSize) {
+      throw new IllegalArgumentException("Invalid C index: " + c + "/" + cSize);
+    }
+
+    // check SizeT
+    if (tSize <= 0) {
+      throw new IllegalArgumentException("Invalid T size: " + tSize);
+    }
+    if (t < 0 || t >= tSize) {
+      throw new IllegalArgumentException("Invalid T index: " + t + "/" + tSize);
+    }
+
+    // check image count
+    if (num <= 0) {
+      throw new IllegalArgumentException("Invalid image count: " + num);
+    }
+    if (num != zSize * cSize * tSize) {
+      // if this happens, there is probably a bug in metadata population --
+      // either one of the ZCT sizes, or the total number of images --
+      // or else the input file is invalid
+      throw new IllegalArgumentException("ZCT size vs image count mismatch " +
+        "(sizeZ=" + zSize + ", sizeC=" + cSize + ", sizeT=" + tSize +
+        ", total=" + num + ")");
+    }
+
+    // assign rasterization order
+    int v0 = iz == 0 ? z : (ic == 0 ? c : t);
+    int v1 = iz == 1 ? z : (ic == 1 ? c : t);
+    int v2 = iz == 2 ? z : (ic == 2 ? c : t);
+    int len0 = iz == 0 ? zSize : (ic == 0 ? cSize : tSize);
+    int len1 = iz == 1 ? zSize : (ic == 1 ? cSize : tSize);
+
+    return v0 + v1 * len0 + v2 * len0 * len1;
   }
 }
