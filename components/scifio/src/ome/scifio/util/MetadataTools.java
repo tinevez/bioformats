@@ -1,5 +1,7 @@
 package ome.scifio.util;
 
+import java.util.Map;
+
 import ome.scifio.FormatException;
 import ome.scifio.Metadata;
 import ome.scifio.io.RandomAccessOutputStream;
@@ -65,6 +67,18 @@ public class MetadataTools {
 
     if (src.getDimensionOrder(iNo) == null) {
       throw new FormatException("DimensionOrder #" + iNo + " is null");
+    }
+  }
+
+  /**
+   * Merges the given lists of metadata, prepending the
+   * specified prefix for the destination keys.
+   */
+  public static void merge(Map<String, Object> src, Map<String, Object> dest,
+    String prefix)
+  {
+    for (String key : src.keySet()) {
+      dest.put(prefix + key, src.get(key));
     }
   }
 }
