@@ -4,21 +4,14 @@ import java.io.IOException;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Set;
-import java.util.Vector;
 
-import loci.common.DataTools;
 import loci.common.Location;
 import loci.common.RandomAccessInputStream;
-import loci.common.services.DependencyException;
-import loci.common.services.ServiceFactory;
 import loci.formats.in.DefaultMetadataOptions;
 import loci.formats.in.MetadataLevel;
 import loci.formats.in.MetadataOptions;
 import loci.formats.meta.FilterMetadata;
-import loci.formats.meta.IMetadata;
 import loci.formats.meta.MetadataStore;
-import loci.formats.ome.OMEXMLMetadata;
-import loci.formats.services.OMEXMLService;
 import ome.scifio.Checker;
 import ome.scifio.Parser;
 import ome.scifio.Reader;
@@ -82,32 +75,33 @@ import ome.xml.model.enums.handlers.PulseEnumHandler;
  * Defers to ome.scifio.Reader
  *
  */
+@Deprecated
 public abstract class SCIFIOFormatReader extends FormatReader {
 
   // -- Fields --
-  
+
   /** Scifio Checker for deference */
   protected Checker checker;
-  
+
   /** Scifio Parser for deference */
   protected Parser parser;
-  
+
   /** Scifio Reader for deference */
   protected Reader reader;
 
   /** Scifio Translator for deference */
   protected Translator translator;
-  
+
   // -- Constructors --
 
   public SCIFIOFormatReader(String format, String suffix) {
     super(format, suffix);
   }
-  
+
   public SCIFIOFormatReader(String format, String[] suffixes) {
     super(format, suffixes);
   }
-  
+
   // -- Internal FormatReader API methods --
 
   /**
@@ -118,11 +112,13 @@ public abstract class SCIFIOFormatReader extends FormatReader {
    * @throws FormatException if a parsing error occurs processing the file.
    * @throws IOException if an I/O error occurs processing the file
    */
+  @Deprecated
+  @Override
   protected void initFile(String id) throws FormatException, IOException {
     LOGGER.debug("{}.initFile({})", this.getClass().getName(), id);
     if (currentId != null) {
       String[] s = getUsedFiles();
-      for (int i=0; i<s.length; i++) {
+      for (int i = 0; i < s.length; i++) {
         if (id.equals(s[i])) return;
       }
     }
@@ -136,6 +132,8 @@ public abstract class SCIFIOFormatReader extends FormatReader {
   }
 
   /** Returns true if the given file name is in the used files list. */
+  @Deprecated
+  @Override
   protected boolean isUsedFile(String file) {
     String[] usedFiles = getUsedFiles();
     for (String used : usedFiles) {
@@ -147,227 +145,174 @@ public abstract class SCIFIOFormatReader extends FormatReader {
   }
 
   /** Adds an entry to the specified Hashtable. */
+  @Deprecated
+  @Override
   protected void addMeta(String key, Object value,
     Hashtable<String, Object> meta)
   {
-    if (key == null || value == null || !isMetadataCollected()) {
-      return;
-    }
-
-    key = key.trim();
-
-    boolean string = value instanceof String || value instanceof Character;
-    boolean simple = string ||
-      value instanceof Number ||
-      value instanceof Boolean;
-
-    // string value, if passed in value is a string
-    String val = string ? String.valueOf(value) : null;
-
-    if (filterMetadata ||
-      (saveOriginalMetadata && (getMetadataStore() instanceof OMEXMLMetadata)))
-    {
-      // filter out complex data types
-      if (!simple) return;
-
-      // verify key & value are reasonable length
-      int maxLen = 8192;
-      if (key.length() > maxLen) return;
-      if (string && val.length() > maxLen) return;
-
-      // remove all non-printable characters
-      key = DataTools.sanitize(key);
-      if (string) val = DataTools.sanitize(val);
-
-      // verify key contains at least one alphabetic character
-      if (!key.matches(".*[a-zA-Z].*")) return;
-
-      // remove &lt;, &gt; and &amp; to prevent XML parsing errors
-      String[] invalidSequences = new String[] {
-        "&lt;", "&gt;", "&amp;", "<", ">", "&"
-      };
-      for (int i=0; i<invalidSequences.length; i++) {
-        key = key.replaceAll(invalidSequences[i], "");
-        if (string) val = val.replaceAll(invalidSequences[i], "");
-      }
-
-      // verify key & value are not empty
-      if (key.length() == 0) return;
-      if (string && val.trim().length() == 0) return;
-
-      if (string) value = val;
-    }
-
-    meta.put(key, val == null ? value : val);
+    parser.addMeta(key, value, meta);
   }
 
   /** Adds an entry to the global metadata table. */
+  @Deprecated
+  @Override
   protected void addGlobalMeta(String key, Object value) {
     addMeta(key, value, getGlobalMetadata());
   }
 
   /** Adds an entry to the global metadata table. */
+  @Deprecated
+  @Override
   protected void addGlobalMeta(String key, boolean value) {
     addGlobalMeta(key, new Boolean(value));
   }
 
   /** Adds an entry to the global metadata table. */
+  @Deprecated
+  @Override
   protected void addGlobalMeta(String key, byte value) {
     addGlobalMeta(key, new Byte(value));
   }
 
   /** Adds an entry to the global metadata table. */
+  @Deprecated
+  @Override
   protected void addGlobalMeta(String key, short value) {
     addGlobalMeta(key, new Short(value));
   }
 
   /** Adds an entry to the global metadata table. */
+  @Deprecated
+  @Override
   protected void addGlobalMeta(String key, int value) {
     addGlobalMeta(key, new Integer(value));
   }
 
   /** Adds an entry to the global metadata table. */
+  @Deprecated
+  @Override
   protected void addGlobalMeta(String key, long value) {
     addGlobalMeta(key, new Long(value));
   }
 
   /** Adds an entry to the global metadata table. */
+  @Deprecated
+  @Override
   protected void addGlobalMeta(String key, float value) {
     addGlobalMeta(key, new Float(value));
   }
 
   /** Adds an entry to the global metadata table. */
+  @Deprecated
+  @Override
   protected void addGlobalMeta(String key, double value) {
     addGlobalMeta(key, new Double(value));
   }
 
   /** Adds an entry to the global metadata table. */
+  @Deprecated
+  @Override
   protected void addGlobalMeta(String key, char value) {
     addGlobalMeta(key, new Character(value));
   }
 
   /** Gets a value from the global metadata table. */
+  @Deprecated
+  @Override
   protected Object getGlobalMeta(String key) {
     return metadata.get(key);
   }
 
   /** Adds an entry to the metadata table for the current series. */
+  @Deprecated
+  @Override
   protected void addSeriesMeta(String key, Object value) {
-    addMeta(key, value, core[series].seriesMetadata);
+    addMeta(key, value, reader.getMetadata().getImageMetadata(getSeries()));
   }
 
   /** Adds an entry to the metadata table for the current series. */
+  @Deprecated
+  @Override
   protected void addSeriesMeta(String key, boolean value) {
     addSeriesMeta(key, new Boolean(value));
   }
 
   /** Adds an entry to the metadata table for the current series. */
+  @Deprecated
+  @Override
   protected void addSeriesMeta(String key, byte value) {
     addSeriesMeta(key, new Byte(value));
   }
 
   /** Adds an entry to the metadata table for the current series. */
+  @Deprecated
+  @Override
   protected void addSeriesMeta(String key, short value) {
     addSeriesMeta(key, new Short(value));
   }
 
   /** Adds an entry to the metadata table for the current series. */
+  @Deprecated
+  @Override
   protected void addSeriesMeta(String key, int value) {
     addSeriesMeta(key, new Integer(value));
   }
 
   /** Adds an entry to the metadata table for the current series. */
+  @Deprecated
+  @Override
   protected void addSeriesMeta(String key, long value) {
     addSeriesMeta(key, new Long(value));
   }
 
   /** Adds an entry to the metadata table for the current series. */
+  @Deprecated
+  @Override
   protected void addSeriesMeta(String key, float value) {
     addSeriesMeta(key, new Float(value));
   }
 
   /** Adds an entry to the metadata table for the current series. */
+  @Deprecated
+  @Override
   protected void addSeriesMeta(String key, double value) {
     addSeriesMeta(key, new Double(value));
   }
 
   /** Adds an entry to the metadata table for the current series. */
+  @Deprecated
+  @Override
   protected void addSeriesMeta(String key, char value) {
     addSeriesMeta(key, new Character(value));
   }
 
   /** Gets an entry from the metadata table for the current series. */
+  @Deprecated
+  @Override
   protected Object getSeriesMeta(String key) {
-    return core[series].seriesMetadata.get(key);
+    return reader.getMetadata().getImageMetadata(getSeries()).get(key);
   }
 
   /** Reads a raw plane from disk. */
-  protected byte[] readPlane(RandomAccessInputStream s, int x, int y,
-    int w, int h, byte[] buf) throws IOException
+  @Deprecated
+  @Override
+  protected byte[] readPlane(RandomAccessInputStream s, int x, int y, int w,
+    int h, byte[] buf) throws IOException
   {
-    return readPlane(s, x, y, w, h, 0, buf);
+    return reader.readPlane(
+      new ome.scifio.io.RandomAccessInputStream(s.getFile()), getSeries(), x,
+      y, w, h, buf);
   }
 
   /** Reads a raw plane from disk. */
-  protected byte[] readPlane(RandomAccessInputStream s, int x, int y,
-    int w, int h, int scanlinePad, byte[] buf) throws IOException
+  @Deprecated
+  @Override
+  protected byte[] readPlane(RandomAccessInputStream s, int x, int y, int w,
+    int h, int scanlinePad, byte[] buf) throws IOException
   {
-    int c = getRGBChannelCount();
-    int bpp = FormatTools.getBytesPerPixel(getPixelType());
-    if (x == 0 && y == 0 && w == getSizeX() && h == getSizeY() &&
-      scanlinePad == 0)
-    {
-      s.read(buf);
-    }
-    else if (x == 0 && w == getSizeX() && scanlinePad == 0) {
-      if (isInterleaved()) {
-        s.skipBytes(y * w * bpp * c);
-        s.read(buf, 0, h * w * bpp * c);
-      }
-      else {
-        int rowLen = w * bpp;
-        for (int channel=0; channel<c; channel++) {
-          s.skipBytes(y * rowLen);
-          s.read(buf, channel * h * rowLen, h * rowLen);
-          if (channel < c - 1) {
-            // no need to skip bytes after reading final channel
-            s.skipBytes((getSizeY() - y - h) * rowLen);
-          }
-        }
-      }
-    }
-    else {
-      int scanlineWidth = getSizeX() + scanlinePad;
-      if (isInterleaved()) {
-        s.skipBytes(y * scanlineWidth * bpp * c);
-        for (int row=0; row<h; row++) {
-          s.skipBytes(x * bpp * c);
-          s.read(buf, row * w * bpp * c, w * bpp * c);
-          if (row < h - 1) {
-            // no need to skip bytes after reading final row
-            s.skipBytes(bpp * c * (scanlineWidth - w - x));
-          }
-        }
-      }
-      else {
-        for (int channel=0; channel<c; channel++) {
-          s.skipBytes(y * scanlineWidth * bpp);
-          for (int row=0; row<h; row++) {
-            s.skipBytes(x * bpp);
-            s.read(buf, channel * w * h * bpp + row * w * bpp, w * bpp);
-            if (row < h - 1 || channel < c - 1) {
-              // no need to skip bytes after reading final row of final channel
-              s.skipBytes(bpp * (scanlineWidth - w - x));
-            }
-          }
-          if (channel < c - 1) {
-            // no need to skip bytes after reading final channel
-            s.skipBytes(scanlineWidth * bpp * (getSizeY() - y - h));
-          }
-        }
-      }
-    }
-    return buf;
+    return reader.readPlane(
+      new ome.scifio.io.RandomAccessInputStream(s.getFile()), getSeries(), x,
+      y, w, h, buf);
   }
 
   /** Return a properly configured loci.formats.meta.FilterMetadata. */
@@ -410,7 +355,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
   @Deprecated
   @Override
   public boolean isThisType(String name, boolean open) {
-	  return checker.isFormat(name, open);
+    return checker.isFormat(name, open);
   }
 
   /* @see IFormatReader#isThisType(byte[]) */
@@ -424,7 +369,8 @@ public abstract class SCIFIOFormatReader extends FormatReader {
   @Deprecated
   @Override
   public boolean isThisType(RandomAccessInputStream stream) throws IOException {
-    return checker.isFormat(new ome.scifio.io.RandomAccessInputStream(stream.getFile()));
+    return checker.isFormat(new ome.scifio.io.RandomAccessInputStream(
+      stream.getFile()));
   }
 
   /* @see IFormatReader#getImageCount() */
@@ -517,127 +463,153 @@ public abstract class SCIFIOFormatReader extends FormatReader {
   }
 
   /* @see IFormatReader#isFalseColor() */
+  @Deprecated
+  @Override
   public boolean isFalseColor() {
-    FormatTools.assertId(currentId, true, 1);
-    return core[series].falseColor;
+    return reader.getMetadata().isFalseColor(getSeries());
   }
 
   /* @see IFormatReader#get8BitLookupTable() */
+  @Deprecated
+  @Override
   public byte[][] get8BitLookupTable() throws FormatException, IOException {
-    return null;
+    try {
+      return reader.getMetadata().get8BitLookupTable(getSeries());
+    }
+    catch (ome.scifio.FormatException e) {
+      throw new FormatException(e);
+    }
   }
 
   /* @see IFormatReader#get16BitLookupTable() */
+  @Deprecated
+  @Override
   public short[][] get16BitLookupTable() throws FormatException, IOException {
-    return null;
+    try {
+      return reader.getMetadata().get16BitLookupTable(getSeries());
+    }
+    catch (ome.scifio.FormatException e) {
+      throw new FormatException(e);
+    }
   }
 
   /* @see IFormatReader#getChannelDimLengths() */
+  @Deprecated
+  @Override
   public int[] getChannelDimLengths() {
-    FormatTools.assertId(currentId, true, 1);
-    if (core[series].cLengths == null) return new int[] {core[series].sizeC};
-    return core[series].cLengths;
+    return reader.getMetadata().getChannelDimLengths(getSeries());
   }
 
   /* @see IFormatReader#getChannelDimTypes() */
+  @Deprecated
+  @Override
   public String[] getChannelDimTypes() {
-    FormatTools.assertId(currentId, true, 1);
-    if (core[series].cTypes == null) return new String[] {FormatTools.CHANNEL};
-    return core[series].cTypes;
+    return reader.getMetadata().getChannelDimTypes(getSeries());
   }
 
   /* @see IFormatReader#getThumbSizeX() */
+  @Deprecated
+  @Override
   public int getThumbSizeX() {
-    FormatTools.assertId(currentId, true, 1);
-    if (core[series].thumbSizeX == 0) {
-      int sx = getSizeX();
-      int sy = getSizeY();
-      int thumbSizeX = 0;
-      if (sx > sy) thumbSizeX = THUMBNAIL_DIMENSION;
-      else if (sy > 0) thumbSizeX = sx * THUMBNAIL_DIMENSION / sy;
-      if (thumbSizeX == 0) thumbSizeX = 1;
-      return thumbSizeX;
-    }
-    return core[series].thumbSizeX;
+    return reader.getMetadata().getThumbSizeX(getSeries());
   }
 
   /* @see IFormatReader#getThumbSizeY() */
+  @Deprecated
+  @Override
   public int getThumbSizeY() {
-    FormatTools.assertId(currentId, true, 1);
-    if (core[series].thumbSizeY == 0) {
-      int sx = getSizeX();
-      int sy = getSizeY();
-      int thumbSizeY = 1;
-      if (sy > sx) thumbSizeY = THUMBNAIL_DIMENSION;
-      else if (sx > 0) thumbSizeY = sy * THUMBNAIL_DIMENSION / sx;
-      if (thumbSizeY == 0) thumbSizeY = 1;
-      return thumbSizeY;
-    }
-    return core[series].thumbSizeY;
+    return reader.getMetadata().getThumbSizeY(getSeries());
   }
 
   /* @see IFormatReader.isLittleEndian() */
+  @Deprecated
+  @Override
   public boolean isLittleEndian() {
-    FormatTools.assertId(currentId, true, 1);
-    return core[series].littleEndian;
+    return reader.getMetadata().isLittleEndian(getSeries());
   }
 
   /* @see IFormatReader#getDimensionOrder() */
+  @Deprecated
+  @Override
   public String getDimensionOrder() {
-    FormatTools.assertId(currentId, true, 1);
-    return core[series].dimensionOrder;
+    return reader.getMetadata().getDimensionOrder(getSeries());
   }
 
   /* @see IFormatReader#isOrderCertain() */
+  @Deprecated
+  @Override
   public boolean isOrderCertain() {
-    FormatTools.assertId(currentId, true, 1);
-    return core[series].orderCertain;
+    return reader.getMetadata().isOrderCertain(getSeries());
   }
 
   /* @see IFormatReader#isThumbnailSeries() */
+  @Deprecated
+  @Override
   public boolean isThumbnailSeries() {
-    FormatTools.assertId(currentId, true, 1);
-    return core[series].thumbnail;
+    return reader.getMetadata().isThumbnailImage(getSeries());
   }
 
   /* @see IFormatReader#isInterleaved() */
+  @Deprecated
+  @Override
   public boolean isInterleaved() {
-    return isInterleaved(0);
+    return reader.getMetadata().isInterleaved(0);
   }
 
   /* @see IFormatReader#isInterleaved(int) */
+  @Deprecated
+  @Override
   public boolean isInterleaved(int subC) {
-    FormatTools.assertId(currentId, true, 1);
-    return core[series].interleaved;
+    return reader.getMetadata().isInterleaved(getSeries());
   }
 
   /* @see IFormatReader#openBytes(int) */
+  @Deprecated
+  @Override
   public byte[] openBytes(int no) throws FormatException, IOException {
-    return openBytes(no, 0, 0, getSizeX(), getSizeY());
+    try {
+      return reader.openBytes(getSeries(), no);
+    }
+    catch (ome.scifio.FormatException e) {
+      throw new FormatException(e);
+    }
   }
 
   /* @see IFormatReader#openBytes(int, byte[]) */
+  @Deprecated
+  @Override
   public byte[] openBytes(int no, byte[] buf)
     throws FormatException, IOException
   {
-    return openBytes(no, buf, 0, 0, getSizeX(), getSizeY());
+    try {
+      return reader.openBytes(getSeries(), no, buf);
+    }
+    catch (ome.scifio.FormatException e) {
+      throw new FormatException(e);
+    }
   }
 
   /* @see IFormatReader#openBytes(int, int, int, int, int) */
+  @Deprecated
+  @Override
   public byte[] openBytes(int no, int x, int y, int w, int h)
     throws FormatException, IOException
   {
-    int bpp = FormatTools.getBytesPerPixel(getPixelType());
-    int ch = getRGBChannelCount();
-    byte[] newBuffer = new byte[w * h * ch * bpp];
-    return openBytes(no, newBuffer, x, y, w, h);
+    try {
+      return reader.openBytes(getSeries(), no, x, y, w, h);
+    }
+    catch (ome.scifio.FormatException e) {
+      throw new FormatException(e);
+    }
   }
 
   /* @see IFormatReader#openBytes(int, byte[], int, int, int, int) */
-  public abstract byte[] openBytes(int no, byte[] buf, int x, int y,
-    int w, int h) throws FormatException, IOException;
+  public abstract byte[] openBytes(int no, byte[] buf, int x, int y, int w,
+    int h) throws FormatException, IOException;
 
   /* @see IFormatReader#openPlane(int, int, int, int, int int) */
+  @Deprecated
+  @Override
   public Object openPlane(int no, int x, int y, int w, int h)
     throws FormatException, IOException
   {
@@ -646,24 +618,30 @@ public abstract class SCIFIOFormatReader extends FormatReader {
   }
 
   /* @see IFormatReader#openThumbBytes(int) */
+  @Deprecated
+  @Override
   public byte[] openThumbBytes(int no) throws FormatException, IOException {
-    FormatTools.assertId(currentId, true, 1);
-    return FormatTools.openThumbBytes(this, no);
-  }
-
-  /* @see IFormatReader#close(boolean) */
-  public void close(boolean fileOnly) throws IOException {
-    if (in != null) in.close();
-    if (!fileOnly) {
-      in = null;
-      currentId = null;
+    try {
+      return reader.openThumbBytes(getSeries(), no);
+    }
+    catch (ome.scifio.FormatException e) {
+      throw new FormatException(e);
     }
   }
 
+  /* @see IFormatReader#close(boolean) */
+  @Deprecated
+  @Override
+  public void close(boolean fileOnly) throws IOException {
+    parser.close(fileOnly);
+    reader.close(fileOnly);
+  }
+
   /* @see IFormatReader#getSeriesCount() */
+  @Deprecated
+  @Override
   public int getSeriesCount() {
-    FormatTools.assertId(currentId, true, 1);
-    return core.length;
+    return reader.getMetadata().getImageCount();
   }
 
   /* @see IFormatReader#setSeries(int) */
@@ -680,44 +658,52 @@ public abstract class SCIFIOFormatReader extends FormatReader {
   }
 
   /* @see IFormatReader#setGroupFiles(boolean) */
+  @Deprecated
+  @Override
   public void setGroupFiles(boolean groupFiles) {
-    FormatTools.assertId(currentId, false, 1);
-    group = groupFiles;
+    reader.setGroupFiles(groupFiles);
   }
 
   /* @see IFormatReader#isGroupFiles() */
+  @Deprecated
+  @Override
   public boolean isGroupFiles() {
-    return group;
+    return reader.isGroupFiles();
   }
 
   /* @see IFormatReader#fileGroupOption(String) */
-  public int fileGroupOption(String id)
-    throws FormatException, IOException
-  {
-    return FormatTools.CANNOT_GROUP;
+  @Deprecated
+  @Override
+  public int fileGroupOption(String id) throws FormatException, IOException {
+    return ome.scifio.util.FormatTools.CANNOT_GROUP;
   }
 
   /* @see IFormatReader#isMetadataComplete() */
+  @Deprecated
+  @Override
   public boolean isMetadataComplete() {
-    FormatTools.assertId(currentId, true, 1);
-    return core[series].metadataComplete;
+    return reader.getMetadata().isMetadataComplete(getSeries());
   }
 
   /* @see IFormatReader#setNormalized(boolean) */
+  @Deprecated
+  @Override
   public void setNormalized(boolean normalize) {
-    FormatTools.assertId(currentId, false, 1);
-    normalizeData = normalize;
+    reader.setNormalized(normalize);
   }
 
   /* @see IFormatReader#isNormalized() */
+  @Deprecated
+  @Override
   public boolean isNormalized() {
-    return normalizeData;
+    return reader.isNormalized();
   }
 
   /**
    * @deprecated
    * @see IFormatReader#setMetadataCollected(boolean)
    */
+  // TODO remove?
   public void setMetadataCollected(boolean collect) {
     FormatTools.assertId(currentId, false, 1);
     MetadataLevel level = collect ? MetadataLevel.ALL : MetadataLevel.MINIMUM;
@@ -728,81 +714,86 @@ public abstract class SCIFIOFormatReader extends FormatReader {
    * @deprecated
    * @see IFormatReader#isMetadataCollected()
    */
+  // TODO remove?
   public boolean isMetadataCollected() {
     return getMetadataOptions().getMetadataLevel() == MetadataLevel.ALL;
   }
 
   /* @see IFormatReader#setOriginalMetadataPopulated(boolean) */
+  @Deprecated
+  @Override
   public void setOriginalMetadataPopulated(boolean populate) {
-    FormatTools.assertId(currentId, false, 1);
-    saveOriginalMetadata = populate;
+    parser.setOriginalMetadataPopulated(populate);
   }
 
   /* @see IFormatReader#isOriginalMetadataPopulated() */
+  @Deprecated
+  @Override
   public boolean isOriginalMetadataPopulated() {
-    return saveOriginalMetadata;
+    return parser.isOriginalMetadataPopulated();
   }
 
   /* @see IFormatReader#getUsedFiles() */
+  @Deprecated
+  @Override
   public String[] getUsedFiles() {
-    return getUsedFiles(false);
+    return parser.getUsedFiles();
   }
 
   /* @see IFormatReader#getUsedFiles() */
+  @Deprecated
+  @Override
   public String[] getUsedFiles(boolean noPixels) {
-    int oldSeries = getSeries();
-    Vector<String> files = new Vector<String>();
-    for (int i=0; i<getSeriesCount(); i++) {
-      setSeries(i);
-      String[] s = getSeriesUsedFiles(noPixels);
-      if (s != null) {
-        for (String file : s) {
-          if (!files.contains(file)) {
-            files.add(file);
-          }
-        }
-      }
-    }
-    setSeries(oldSeries);
-    return files.toArray(new String[files.size()]);
+    return parser.getUsedFiles(noPixels);
   }
 
   /* @see IFormatReader#getSeriesUsedFiles() */
+  @Deprecated
+  @Override
   public String[] getSeriesUsedFiles() {
-    return getSeriesUsedFiles(false);
+    return parser.getImageUsedFiles(getSeries());
   }
 
   /* @see IFormatReader#getSeriesUsedFiles(boolean) */
+  @Deprecated
+  @Override
   public String[] getSeriesUsedFiles(boolean noPixels) {
-    return noPixels ? null : new String[] {currentId};
+    return parser.getImageUsedFiles(getSeries(), noPixels);
   }
 
   /* @see IFormatReader#getAdvancedUsedFiles(boolean) */
+  @Deprecated
+  @Override
   public FileInfo[] getAdvancedUsedFiles(boolean noPixels) {
-    String[] files = getUsedFiles(noPixels);
-    if (files == null) return null;
-    FileInfo[] infos = new FileInfo[files.length];
-    for (int i=0; i<infos.length; i++) {
-      infos[i] = new FileInfo();
-      infos[i].filename = files[i];
-      infos[i].reader = this.getClass();
-      infos[i].usedToInitialize = files[i].endsWith(getCurrentFile());
+    ome.scifio.FileInfo[] tmpInfo = parser.getAdvancedUsedFiles(noPixels);
+    FileInfo[] info = new FileInfo[tmpInfo.length];
+
+    for (int i = 0; i < tmpInfo.length; i++) {
+      info[i] = new FileInfo();
+      info[i].filename = tmpInfo[i].filename;
+      info[i].reader = tmpInfo[i].reader;
+      info[i].usedToInitialize = tmpInfo[i].usedToInitialize;
     }
-    return infos;
+
+    return info;
   }
 
   /* @see IFormatReader#getAdvancedSeriesUsedFiles(boolean) */
+  @Deprecated
+  @Override
   public FileInfo[] getAdvancedSeriesUsedFiles(boolean noPixels) {
-    String[] files = getSeriesUsedFiles(noPixels);
-    if (files == null) return null;
-    FileInfo[] infos = new FileInfo[files.length];
-    for (int i=0; i<infos.length; i++) {
-      infos[i] = new FileInfo();
-      infos[i].filename = files[i];
-      infos[i].reader = this.getClass();
-      infos[i].usedToInitialize = files[i].endsWith(getCurrentFile());
+    ome.scifio.FileInfo[] tmpInfo =
+      parser.getAdvancedImageUsedFiles(getSeries(), noPixels);
+    FileInfo[] info = new FileInfo[tmpInfo.length];
+
+    for (int i = 0; i < tmpInfo.length; i++) {
+      info[i] = new FileInfo();
+      info[i].filename = tmpInfo[i].filename;
+      info[i].reader = tmpInfo[i].reader;
+      info[i].usedToInitialize = tmpInfo[i].usedToInitialize;
     }
-    return infos;
+
+    return info;
   }
 
   /* @see IFormatReader#getCurrentFile() */
@@ -811,89 +802,93 @@ public abstract class SCIFIOFormatReader extends FormatReader {
   }
 
   /* @see IFormatReader#getIndex(int, int, int) */
+  @Deprecated
+  @Override
   public int getIndex(int z, int c, int t) {
-    FormatTools.assertId(currentId, true, 1);
-    return FormatTools.getIndex(this, z, c, t);
+    return ome.scifio.util.FormatTools.getIndex(reader, getSeries(), z, c, t);
   }
 
   /* @see IFormatReader#getZCTCoords(int) */
+  @Deprecated
+  @Override
   public int[] getZCTCoords(int index) {
-    FormatTools.assertId(currentId, true, 1);
-    return FormatTools.getZCTCoords(this, index);
+    return ome.scifio.util.FormatTools.getZCTCoords(reader, index);
   }
 
   /* @see IFormatReader#getMetadataValue(String) */
+  @Deprecated
+  @Override
   public Object getMetadataValue(String field) {
-    FormatTools.assertId(currentId, true, 1);
-    return getGlobalMeta(field);
+    return reader.getMetadata().getMetadataValue(getSeries(), field);
   }
 
   /* @see IFormatReader#getSeriesMetadataValue(String) */
+  @Deprecated
+  @Override
   public Object getSeriesMetadataValue(String field) {
-    FormatTools.assertId(currentId, true, 1);
-    return getSeriesMeta(field);
+    return reader.getMetadata().getImageMetadataValue(getSeries(), field);
   }
 
   /* @see IFormatReader#getGlobalMetadata() */
+  @Deprecated
+  @Override
   public Hashtable<String, Object> getGlobalMetadata() {
-    FormatTools.assertId(currentId, true, 1);
-    return metadata;
+    return reader.getMetadata().getGlobalMetadata();
   }
 
   /* @see IFormatReader#getSeriesMetadata() */
+  @Deprecated
+  @Override
   public Hashtable<String, Object> getSeriesMetadata() {
-    FormatTools.assertId(currentId, true, 1);
-    return core[series].seriesMetadata;
+    return reader.getMetadata().getImageMetadata(getSeries());
   }
 
-  /** @deprecated */
+  @Deprecated
+  @Override
   public Hashtable<String, Object> getMetadata() {
     FormatTools.assertId(currentId, true, 1);
     Hashtable<String, Object> h =
       new Hashtable<String, Object>(getGlobalMetadata());
     int oldSeries = getSeries();
 
-    IMetadata meta = getMetadataStore() instanceof IMetadata ?
-      (IMetadata) getMetadataStore() : null;
-
-    for (int series=0; series<getSeriesCount(); series++) {
+    for (int series = 0; series < getSeriesCount(); series++) {
       String name = "Series " + series;
-      if (meta != null) {
-        String realName = meta.getImageName(series);
-        if (realName != null && realName.trim().length() != 0) {
-          name = realName;
-        }
-      }
       setSeries(series);
-      MetadataTools.merge(getSeriesMetadata(), h, name + " ");
+      ome.scifio.util.MetadataTools.merge(getSeriesMetadata(), h, name + " ");
     }
+
     setSeries(oldSeries);
     return h;
   }
 
   /* @see IFormatReader#getCoreMetadata() */
+  @Deprecated
+  @Override
   public CoreMetadata[] getCoreMetadata() {
-    FormatTools.assertId(currentId, true, 1);
-    return core;
+    throw new IllegalStateException(
+      "CoreMetadata objects are not used by SCIFIO-deferring readers. Please use getReader().getMetadata() to access the SCIFIO Metadata.");
   }
 
   /* @see IFormatReader#setMetadataFiltered(boolean) */
+  @Deprecated
+  @Override
   public void setMetadataFiltered(boolean filter) {
-    FormatTools.assertId(currentId, false, 1);
-    filterMetadata = filter;
+    parser.setMetadataFiltered(filter);
   }
 
   /* @see IFormatReader#isMetadataFiltered() */
+  @Deprecated
+  @Override
   public boolean isMetadataFiltered() {
-    return filterMetadata;
+    return parser.isMetadataFiltered();
   }
 
   /* @see IFormatReader#setMetadataStore(MetadataStore) */
   public void setMetadataStore(MetadataStore store) {
     FormatTools.assertId(currentId, false, 1);
     if (store == null) {
-      throw new IllegalArgumentException("Metadata object cannot be null; " +
-        "use loci.formats.meta.DummyMetadata instead");
+      throw new IllegalArgumentException("Metadata object cannot be null; "
+        + "use loci.formats.meta.DummyMetadata instead");
     }
     metadataStore = store;
   }
@@ -925,50 +920,84 @@ public abstract class SCIFIOFormatReader extends FormatReader {
   }
 
   /* @see IFormatReader#getPossibleDomains(String) */
+  @Deprecated
+  @Override
   public String[] getPossibleDomains(String id)
     throws FormatException, IOException
   {
-    return domains;
+    return reader.getDomains();
   }
 
   /* @see IFormatReader#getDomains() */
+  @Deprecated
+  @Override
   public String[] getDomains() {
     FormatTools.assertId(currentId, true, 1);
-    return domains;
+    return reader.getDomains();
   }
 
   /* @see IFormatReader#getOptimalTileWidth() */
+  @Deprecated
+  @Override
   public int getOptimalTileWidth() {
-    FormatTools.assertId(currentId, true, 1);
-    return getSizeX();
+    return reader.getOptimalTileWidth(getSeries());
   }
 
   /* @see IFormatReader#getOptimalTileHeight() */
+  @Deprecated
+  @Override
   public int getOptimalTileHeight() {
-    FormatTools.assertId(currentId, true, 1);
-     int bpp = FormatTools.getBytesPerPixel(getPixelType());
-     int maxHeight = (1024 * 1024) / (getSizeX() * getRGBChannelCount() * bpp);
-     return (int) Math.min(maxHeight, getSizeY());
+    return reader.getOptimalTileHeight(getSeries());
   }
 
   // -- IFormatHandler API methods --
 
   /* @see IFormatHandler#isThisType(String) */
+  @Deprecated
   @Override
   public boolean isThisType(String name) {
     // if necessary, open the file for further analysis
-    return isThisType(name, true);
+    return checker.isFormat(name, true);
   }
 
   /* @see IFormatHandler#setId(String) */
+  @Deprecated
+  @Override
   public void setId(String id) throws FormatException, IOException {
     if (!id.equals(currentId)) {
+      currentId = id;
     }
+    reader.setSource(id);
   }
 
   /* @see IFormatHandler#close() */
+  @Deprecated
+  @Override
   public void close() throws IOException {
-    close(false);
+    parser.close();
+    reader.close();
+  }
+
+  // -- SCIFIO Utility Methods --
+
+  /** Returns the SCIFIO reader being used for deferrment */
+  public ome.scifio.Reader getReader() {
+    return reader;
+  }
+
+  /** Returns the SCIFIO checker being used for deferrment */
+  public Checker getChecker() {
+    return checker;
+  }
+
+  /** Returns the SCIFIO parser being used for deferrment */
+  public Parser getParser() {
+    return parser;
+  }
+
+  /** Returns the SCIFIO translator being used for deferrment */
+  public Translator getTranslator() {
+    return translator;
   }
 
   // -- Metadata enumeration convenience methods --
@@ -1025,6 +1054,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("Binning creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.Compression} enumeration
    * value for the given String.
@@ -1041,6 +1071,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("Compression creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.ContrastMethod} enumeration
    * value for the given String.
@@ -1059,6 +1090,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("ContrastMethod creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.Correction} enumeration
    * value for the given String.
@@ -1075,6 +1107,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("Correction creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.DetectorType} enumeration
    * value for the given String.
@@ -1091,6 +1124,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("DetectorType creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.DimensionOrder} enumeration
    * value for the given String.
@@ -1109,6 +1143,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("DimensionOrder creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.ExperimentType} enumeration
    * value for the given String.
@@ -1127,6 +1162,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("ExperimentType creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.FilamentType} enumeration
    * value for the given String.
@@ -1143,6 +1179,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("FilamentType creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.FillRule} enumeration
    * value for the given String.
@@ -1159,6 +1196,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("FillRule creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.FilterType} enumeration
    * value for the given String.
@@ -1175,6 +1213,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("FilterType creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.FontFamily} enumeration
    * value for the given String.
@@ -1191,6 +1230,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("FontFamily creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.FontStyle} enumeration
    * value for the given String.
@@ -1207,6 +1247,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("FontStyle creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.IlluminationType} enumeration
    * value for the given String.
@@ -1225,6 +1266,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("IlluminationType creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.Immersion} enumeration
    * value for the given String.
@@ -1241,6 +1283,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("Immersion creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.LaserMedium} enumeration
    * value for the given String.
@@ -1257,6 +1300,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("LaserMedium creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.LaserType} enumeration
    * value for the given String.
@@ -1273,6 +1317,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("LaserType creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.LineCap} enumeration
    * value for the given String.
@@ -1289,6 +1334,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("LineCap creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.Marker} enumeration
    * value for the given String.
@@ -1305,6 +1351,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("Marker creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.Medium} enumeration
    * value for the given String.
@@ -1321,6 +1368,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("Medium creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.MicrobeamManipulationType}
    * enumeration value for the given String.
@@ -1340,6 +1388,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("MicrobeamManipulationType creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.MicroscopeType} enumeration
    * value for the given String.
@@ -1358,6 +1407,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("MicroscopeType creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.NamingConvention} enumeration
    * value for the given String.
@@ -1376,6 +1426,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("NamingConvention creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.PixelType} enumeration
    * value for the given String.
@@ -1392,6 +1443,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       throw new FormatException("PixelType creation failed", e);
     }
   }
+
   /**
    * Retrieves an {@link ome.xml.model.enums.Pulse} enumeration
    * value for the given String.

@@ -15,6 +15,7 @@ import loci.formats.gui.AWTImageTools;
  * Defers to ome.scifio.in.BIFormatReader
  *
  */
+@Deprecated
 public abstract class SCIFIOBIFormatReader extends SCIFIOFormatReader {
 
   // -- Constructors --
@@ -34,29 +35,17 @@ public abstract class SCIFIOBIFormatReader extends SCIFIOFormatReader {
   /**
    * @see loci.formats.IFormatReader#openBytes(int, byte[], int, int, int, int)
    */
+  @Deprecated
+  @Override
   public byte[] openBytes(int no, byte[] buf, int x, int y, int w, int h)
     throws FormatException, IOException
   {
-    FormatTools.checkPlaneParameters(this, no, buf.length, x, y, w, h);
-
-    BufferedImage data = (BufferedImage) openPlane(no, x, y, w, h);
-    switch (data.getColorModel().getComponentSize(0)) {
-      case 8:
-        byte[] t = AWTImageTools.getBytes(data, false);
-        System.arraycopy(t, 0, buf, 0, (int) Math.min(t.length, buf.length));
-        break;
-      case 16:
-        short[][] ts = AWTImageTools.getShorts(data);
-        for (int c=0; c<ts.length; c++) {
-          int offset = c * ts[c].length * 2;
-          for (int i=0; i<ts[c].length && offset < buf.length; i++) {
-            DataTools.unpackBytes(ts[c][i], buf, offset, 2, isLittleEndian());
-            offset += 2;
-          }
-        }
-        break;
+    try {
+      return reader.openBytes(getSeries(), no, buf, x, y, w, h);
     }
-    return buf;
+    catch (ome.scifio.FormatException e) {
+      throw new FormatException(e);
+    }
   }
 
   // -- IFormatHandler API methods --

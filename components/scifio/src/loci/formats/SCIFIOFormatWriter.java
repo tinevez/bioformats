@@ -12,26 +12,28 @@ import ome.scifio.Writer;
  * Defers to ome.scifio.Writer 
  *
  */
+@Deprecated
 public abstract class SCIFIOFormatWriter extends FormatWriter {
 
   // -- Fields --
 
   /** Scifio Writer for deference */
   protected Writer writer;
-  
+
   // -- Constructor --
 
   public SCIFIOFormatWriter(String format, String suffix) {
     super(format, suffix);
   }
-  
+
   public SCIFIOFormatWriter(String format, String[] suffixes) {
     super(format, suffixes);
   }
-  
+
   // -- IFormatWriter API methods --
 
   /* @see IFormatWriter#changeOutputFile(String) */
+  @Deprecated
   @Override
   public void changeOutputFile(String id) throws FormatException, IOException {
     try {
@@ -43,6 +45,7 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   }
 
   /* @see IFormatWriter#saveBytes(int, byte[]) */
+  @Deprecated
   @Override
   public void saveBytes(int no, byte[] buf) throws FormatException, IOException
   {
@@ -55,6 +58,7 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   }
 
   /* @see IFormatWriter#savePlane(int, Object) */
+  @Deprecated
   @Override
   public void savePlane(int no, Object plane)
     throws FormatException, IOException
@@ -68,6 +72,7 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   }
 
   /* @see IFormatWriter#savePlane(int, Object, int, int, int, int) */
+  @Deprecated
   @Override
   public void savePlane(int no, Object plane, int x, int y, int w, int h)
     throws FormatException, IOException
@@ -85,6 +90,7 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   }
 
   /* @see IFormatWriter#setSeries(int) */
+  @Deprecated
   @Override
   public void setSeries(int series) throws FormatException {
     if (series < 0) throw new FormatException("Series must be > 0.");
@@ -103,28 +109,35 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   }
 
   /* @see IFormatWriter#setInterleaved(boolean) */
+  @Deprecated
   @Override
   public void setInterleaved(boolean interleaved) {
-    //TODO need setters
+    writer.getMetadata().setInterleaved(getSeries(), interleaved);
   }
 
   /* @see IFormatWriter#isInterleaved() */
+  @Deprecated
   @Override
   public boolean isInterleaved() {
     return writer.getMetadata().isInterleaved(getSeries());
   }
 
   /* @see IFormatWriter#setValidBitsPerPixel(int) */
+  @Deprecated
   @Override
   public void setValidBitsPerPixel(int bits) {
-    //TODO need setters
+    writer.getMetadata().setBitsPerPixel(getSeries(), bits);
   }
 
   /* @see IFormatWriter#canDoStacks() */
+  @Deprecated
   @Override
-  public boolean canDoStacks() { return false; }
+  public boolean canDoStacks() {
+    return false;
+  }
 
   /* @see IFormatWriter#setMetadataRetrieve(MetadataRetrieve) */
+  @Deprecated
   @Override
   public void setMetadataRetrieve(MetadataRetrieve retrieve) {
     FormatTools.assertId(currentId, false, 1);
@@ -136,32 +149,49 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   }
 
   /* @see IFormatWriter#getMetadataRetrieve() */
+  @Deprecated
   @Override
   public MetadataRetrieve getMetadataRetrieve() {
     return metadataRetrieve;
   }
 
   /* @see IFormatWriter#setColorModel(ColorModel) */
+  @Deprecated
   @Override
-  public void setColorModel(ColorModel model) { writer.setColorModel(model); }
+  public void setColorModel(ColorModel model) {
+    writer.setColorModel(model);
+  }
 
   /* @see IFormatWriter#getColorModel() */
+  @Deprecated
   @Override
-  public ColorModel getColorModel() { return writer.getColorModel(); }
+  public ColorModel getColorModel() {
+    return writer.getColorModel();
+  }
 
   /* @see IFormatWriter#setFramesPerSecond(int) */
+  @Deprecated
   @Override
-  public void setFramesPerSecond(int rate) { writer.setFramesPerSecond(rate); }
+  public void setFramesPerSecond(int rate) {
+    writer.setFramesPerSecond(rate);
+  }
 
   /* @see IFormatWriter#getFramesPerSecond() */
+  @Deprecated
   @Override
-  public int getFramesPerSecond() { return writer.getFramesPerSecond(); }
+  public int getFramesPerSecond() {
+    return writer.getFramesPerSecond();
+  }
 
   /* @see IFormatWriter#getCompressionTypes() */
+  @Deprecated
   @Override
-  public String[] getCompressionTypes() { return writer.getCompressionTypes(); }
+  public String[] getCompressionTypes() {
+    return writer.getCompressionTypes();
+  }
 
   /* @see IFormatWriter#setCompression(compress) */
+  @Deprecated
   @Override
   public void setCompression(String compress) throws FormatException {
     // check that this is a valid type
@@ -174,36 +204,59 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   }
 
   /* @see IFormatWriter#setCodecOptions(CodecOptions) */
+  @Deprecated
   @Override
   public void setCodecOptions(CodecOptions options) {
-    //TODO writer.setCodecOptions(options);
+    ome.scifio.codec.CodecOptions scifioOptions =
+      new ome.scifio.codec.CodecOptions();
+    scifioOptions.width = options.width;
+    scifioOptions.height = options.height;
+    scifioOptions.channels = options.channels;
+    scifioOptions.littleEndian = options.littleEndian;
+    scifioOptions.interleaved = options.interleaved;
+    scifioOptions.signed = options.signed;
+    scifioOptions.maxBytes = options.maxBytes;
+    scifioOptions.previousImage = options.previousImage;
+    scifioOptions.lossless = options.lossless;
+    scifioOptions.colorModel = options.colorModel;
+    scifioOptions.quality = options.quality;
+    scifioOptions.tileWidth = options.tileWidth;
+    scifioOptions.tileHeight = options.tileHeight;
+    scifioOptions.tileGridXOffset = options.tileGridXOffset;
+    scifioOptions.tileGridYOffset = options.tileGridYOffset;
+    writer.setCodecOptions(scifioOptions);
   }
 
   /* @see IFormatWriter#getCompression() */
+  @Deprecated
   @Override
   public String getCompression() {
     return writer.getCompression();
   }
 
   /* @see IFormatWriter#getPixelTypes() */
+  @Deprecated
   @Override
   public int[] getPixelTypes() {
     return writer.getPixelTypes(getCompression());
   }
 
   /* @see IFormatWriter#getPixelTypes(String) */
+  @Deprecated
   @Override
   public int[] getPixelTypes(String codec) {
     return writer.getPixelTypes(codec);
   }
 
   /* @see IFormatWriter#isSupportedType(int) */
+  @Deprecated
   @Override
   public boolean isSupportedType(int type) {
     return writer.isSupportedType(type);
   }
 
   /* @see IFormatWriter#setWriteSequentially(boolean) */
+  @Deprecated
   @Override
   public void setWriteSequentially(boolean sequential) {
     writer.setWriteSequentially(sequential);
@@ -282,6 +335,7 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   // -- IFormatHandler API methods --
 
   /* @see IFormatHandler#setId(String) */
+  @Deprecated
   @Override
   public void setId(String id) throws FormatException, IOException {
     if (id.equals(currentId)) return;
@@ -296,6 +350,7 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   }
 
   /* @see IFormatHandler#close() */
+  @Deprecated
   @Override
   public void close() throws IOException {
     writer.close();
