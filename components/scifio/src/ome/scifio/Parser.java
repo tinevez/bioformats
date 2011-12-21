@@ -3,7 +3,10 @@ package ome.scifio;
 import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
+import java.util.Set;
 
+import ome.scifio.MetadataLevel;
+import ome.scifio.MetadataOptions;
 import ome.scifio.io.RandomAccessInputStream;
 
 /**
@@ -127,4 +130,13 @@ public interface Parser<M extends Metadata> extends MetadataHandler<M> {
 
   /** Adds an entry to the specified Hashtable */
   void addMeta(String key, Object value, Hashtable<String, Object> meta);
+  
+  /** Returns a list of MetadataLevel options for determining the granularity of MetadataCollection */
+  Set<MetadataLevel> getSupportedMetadataLevels();
+
+  /** Sets the MetadataOptions of this Parser */
+  void setMetadataOptions(MetadataOptions options);
+
+  /** Returns the MetadataOptions for this Parser */
+  MetadataOptions getMetadataOptions();
 }

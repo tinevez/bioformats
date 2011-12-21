@@ -2,9 +2,14 @@ package ome.scifio;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Set;
 import java.util.Vector;
 
+import ome.scifio.MetadataLevel;
+import ome.scifio.DefaultMetadataOptions;
+import ome.scifio.MetadataOptions;
 import ome.scifio.common.DataTools;
 import ome.scifio.io.RandomAccessInputStream;
 import ome.scifio.util.FormatTools;
@@ -30,6 +35,9 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
 
   /** Whether or not to save proprietary metadata in the MetadataStore. */
   protected boolean saveOriginalMetadata = false;
+  
+  /** Metadata parsing options. */
+  protected MetadataOptions metadataOptions = new DefaultMetadataOptions();
 
   // -- Constructors --
 
@@ -152,6 +160,31 @@ public abstract class AbstractParser<M extends Metadata> implements Parser<M> {
       infos[i].usedToInitialize = files[i].endsWith(in.getFileName());
     }
     return infos;
+  }
+  
+  /* (non-Javadoc)
+   * @see ome.scifio.Parser#getSupportedMetadataLevels()
+   */
+  public Set<MetadataLevel> getSupportedMetadataLevels() {
+    Set<MetadataLevel> supportedLevels = new HashSet<MetadataLevel>();
+    supportedLevels.add(MetadataLevel.ALL);
+    supportedLevels.add(MetadataLevel.NO_OVERLAYS);
+    supportedLevels.add(MetadataLevel.MINIMUM);
+    return supportedLevels;
+  }
+
+  /* (non-Javadoc)
+   * @see ome.scifio.Parser#getMetadataOptions()
+   */
+  public MetadataOptions getMetadataOptions() {
+    return metadataOptions;
+  }
+  
+  /* (non-Javadoc)
+   * @see ome.scifio.Parser#setMetadataOptions(loci.formats.in.MetadataOptions)
+   */
+  public void setMetadataOptions(MetadataOptions options) {
+    this.metadataOptions = options;
   }
 
   // -- AbstractParser Methods --
