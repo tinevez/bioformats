@@ -144,5 +144,45 @@ public class CodecOptions {
     options.lossless = true;
     return options;
   }
+  
+  public static CodecOptions convertOptions(ome.scifio.codec.CodecOptions scoptions) {
+    CodecOptions options = new CodecOptions();
+    options.width = scoptions.width;
+    options.height = scoptions.height;
+    options.channels = scoptions.channels;
+    options.littleEndian = scoptions.littleEndian;
+    options.interleaved = scoptions.interleaved;
+    options.signed = scoptions.signed;
+    options.maxBytes = scoptions.maxBytes;
+    options.previousImage = scoptions.previousImage;
+    options.lossless = scoptions.lossless;
+    options.colorModel = scoptions.colorModel;
+    options.quality = scoptions.quality;
+    options.tileWidth = scoptions.tileWidth;
+    options.tileHeight = scoptions.tileHeight;
+    options.tileGridXOffset = scoptions.tileGridXOffset;
+    options.tileGridYOffset = scoptions.tileGridYOffset;
+    return options;
+  }
+  
+  public static ome.scifio.codec.CodecOptions convertOptions(CodecOptions options) {
+    ome.scifio.codec.CodecOptions scoptions = new ome.scifio.codec.CodecOptions();
+    scoptions.width = options.width;
+    scoptions.height = options.height;
+    scoptions.channels = options.channels;
+    scoptions.littleEndian = options.littleEndian;
+    scoptions.interleaved = options.interleaved;
+    scoptions.signed = options.signed;
+    scoptions.maxBytes = options.maxBytes;
+    scoptions.previousImage = options.previousImage;
+    scoptions.lossless = options.lossless;
+    scoptions.colorModel = options.colorModel;
+    scoptions.quality = options.quality;
+    scoptions.tileWidth = options.tileWidth;
+    scoptions.tileHeight = options.tileHeight;
+    scoptions.tileGridXOffset = options.tileGridXOffset;
+    scoptions.tileGridYOffset = options.tileGridYOffset;
+    return scoptions;
+  }
 
 }
