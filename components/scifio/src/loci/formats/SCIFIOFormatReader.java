@@ -768,16 +768,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
   @Override
   public FileInfo[] getAdvancedUsedFiles(boolean noPixels) {
     ome.scifio.FileInfo[] tmpInfo = parser.getAdvancedUsedFiles(noPixels);
-    FileInfo[] info = new FileInfo[tmpInfo.length];
-
-    for (int i = 0; i < tmpInfo.length; i++) {
-      info[i] = new FileInfo();
-      info[i].filename = tmpInfo[i].filename;
-      info[i].reader = tmpInfo[i].reader;
-      info[i].usedToInitialize = tmpInfo[i].usedToInitialize;
-    }
-
-    return info;
+    return convertFileInfo(tmpInfo);
   }
 
   /* @see IFormatReader#getAdvancedSeriesUsedFiles(boolean) */
@@ -786,13 +777,17 @@ public abstract class SCIFIOFormatReader extends FormatReader {
   public FileInfo[] getAdvancedSeriesUsedFiles(boolean noPixels) {
     ome.scifio.FileInfo[] tmpInfo =
       parser.getAdvancedImageUsedFiles(getSeries(), noPixels);
-    FileInfo[] info = new FileInfo[tmpInfo.length];
+    return convertFileInfo(tmpInfo);
+  }
+  
+  private FileInfo[] convertFileInfo(ome.scifio.FileInfo[] source) {
+    FileInfo[] info = new FileInfo[source.length];
 
-    for (int i = 0; i < tmpInfo.length; i++) {
+    for (int i = 0; i < source.length; i++) {
       info[i] = new FileInfo();
-      info[i].filename = tmpInfo[i].filename;
-      info[i].reader = tmpInfo[i].reader;
-      info[i].usedToInitialize = tmpInfo[i].usedToInitialize;
+      info[i].filename = source[i].filename;
+      info[i].reader = source[i].reader;
+      info[i].usedToInitialize = source[i].usedToInitialize;
     }
 
     return info;
