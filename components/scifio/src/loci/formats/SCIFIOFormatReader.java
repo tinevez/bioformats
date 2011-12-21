@@ -123,6 +123,8 @@ public abstract class SCIFIOFormatReader extends FormatReader {
       }
     }
 
+    core = new CoreMetadata[1];
+    core[0] = new CoreMetadata();
     series = 0;
     close();
     currentId = id;
@@ -865,8 +867,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
   @Deprecated
   @Override
   public CoreMetadata[] getCoreMetadata() {
-    throw new IllegalStateException(
-      "CoreMetadata objects are not used by SCIFIO-deferring readers. Please use getReader().getMetadata() to access the SCIFIO Metadata.");
+    return core;
   }
 
   /* @see IFormatReader#setMetadataFiltered(boolean) */
@@ -965,7 +966,10 @@ public abstract class SCIFIOFormatReader extends FormatReader {
   @Override
   public void setId(String id) throws FormatException, IOException {
     if (!id.equals(currentId)) {
-      currentId = id;
+      initFile(id);
+      for(int i = 0; i < getImageCount(); i++) {
+        core[i] = new CoreMetadata(reader.getMetadata(), i);
+      }
     }
     reader.setSource(id);
   }
