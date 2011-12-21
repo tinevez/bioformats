@@ -21,7 +21,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package loci.formats.in;
+package ome.scifio;
 
 /**
  * <dl><dt><b>Source code:</b></dt>
@@ -30,29 +30,30 @@ package loci.formats.in;
  *
  * @author callan
  */
-public class DefaultMetadataOptions extends AbstractMetadataOptions {
+public class DefaultMetadataOptions implements MetadataOptions {
 
   private MetadataLevel level;
 
   public DefaultMetadataOptions() {
-    scOptions = new ome.scifio.DefaultMetadataOptions(convertLevel(MetadataLevel.ALL));
+    this.level = MetadataLevel.ALL;
   }
 
   public DefaultMetadataOptions(MetadataLevel level) {
-    scOptions = new ome.scifio.DefaultMetadataOptions(convertLevel(level));
+    this.level = level;
   }
 
   /* (non-Javadoc)
    * @see loci.formats.in.MetadataOptions#getMetadataLevel()
    */
   public MetadataLevel getMetadataLevel() {
-    return convertLevel(scOptions.getMetadataLevel());
+    return level;
   }
 
   /* (non-Javadoc)
    * @see loci.formats.in.MetadataOptions#setMetadataLevel(loci.formats.in.MetadataLevel)
    */
   public void setMetadataLevel(MetadataLevel level) {
-    scOptions.setMetadataLevel(convertLevel(level));
+    this.level = level;
   }
+
 }

@@ -1,5 +1,5 @@
 //
-// MetadataOptions.java
+// MetadataLevel.java
 //
 
 /*
@@ -21,25 +21,19 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package loci.formats.in;
+package ome.scifio;
 
 /**
  * <dl><dt><b>Source code:</b></dt>
- * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/bio-formats/src/loci/formats/in/MetadataOptions.java">Trac</a>,
- * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/bio-formats/src/loci/formats/in/MetadataOptions.java;hb=HEAD">Gitweb</a></dd></dl>
+ * <dd><a href="http://trac.openmicroscopy.org.uk/ome/browser/bioformats.git/components/bio-formats/src/loci/formats/in/MetadataLevel.java">Trac</a>,
+ * <a href="http://git.openmicroscopy.org/?p=bioformats.git;a=blob;f=components/bio-formats/src/loci/formats/in/MetadataLevel.java;hb=HEAD">Gitweb</a></dd></dl>
  *
  * @author callan
  */
-public interface MetadataOptions {
+public enum MetadataLevel {
 
-  void setMetadataLevel(MetadataLevel level);
-
-  MetadataLevel getMetadataLevel();
-
-  MetadataLevel convertLevel(ome.scifio.MetadataLevel level);
-  
-  ome.scifio.MetadataLevel convertLevel(MetadataLevel level);
-  
-  ome.scifio.MetadataOptions getSCOptions();
+  MINIMUM,
+  NO_OVERLAYS,
+  ALL;
 
 }

@@ -21,7 +21,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
-package loci.formats.in;
+package ome.scifio;
 
 /**
  * <dl><dt><b>Source code:</b></dt>
@@ -35,11 +35,5 @@ public interface MetadataOptions {
   void setMetadataLevel(MetadataLevel level);
 
   MetadataLevel getMetadataLevel();
-
-  MetadataLevel convertLevel(ome.scifio.MetadataLevel level);
-  
-  ome.scifio.MetadataLevel convertLevel(MetadataLevel level);
-  
-  ome.scifio.MetadataOptions getSCOptions();
 
 }
