@@ -168,6 +168,31 @@ public class CoreMetadata {
     thumbnail = r.isThumbnailSeries();
     r.setSeries(series);
   }
+  
+  public CoreMetadata(ome.scifio.Metadata scmeta, int series) {
+    sizeX = scmeta.getSizeX(series);
+    sizeY = scmeta.getSizeY(series);
+    sizeZ = scmeta.getSizeZ(series);
+    sizeC = scmeta.getSizeC(series);
+    sizeT = scmeta.getSizeT(series);
+    thumbSizeX = scmeta.getThumbSizeX(series);
+    thumbSizeY = scmeta.getThumbSizeY(series);
+    pixelType = scmeta.getPixelType(series);
+    bitsPerPixel = scmeta.getBitsPerPixel(series);
+    imageCount = scmeta.getImageCount();
+    cLengths = scmeta.getChannelDimLengths(series);
+    cTypes = scmeta.getChannelDimTypes(series);
+    dimensionOrder = scmeta.getDimensionOrder(series);
+    orderCertain = scmeta.isOrderCertain(series);
+    rgb = scmeta.isRGB(series);
+    littleEndian = scmeta.isLittleEndian(series);
+    interleaved = scmeta.isInterleaved(series);
+    indexed = scmeta.isIndexed(series);
+    falseColor = scmeta.isFalseColor(series);
+    metadataComplete = scmeta.isMetadataComplete(series);
+    seriesMetadata = scmeta.getImageMetadata(series);
+    thumbnail = scmeta.isThumbnailImage(series);
+  }
 
   // -- Object methods --
 
