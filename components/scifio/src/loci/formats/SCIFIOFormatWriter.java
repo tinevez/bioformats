@@ -207,24 +207,7 @@ public abstract class SCIFIOFormatWriter extends FormatWriter {
   @Deprecated
   @Override
   public void setCodecOptions(CodecOptions options) {
-    ome.scifio.codec.CodecOptions scifioOptions =
-      new ome.scifio.codec.CodecOptions();
-    scifioOptions.width = options.width;
-    scifioOptions.height = options.height;
-    scifioOptions.channels = options.channels;
-    scifioOptions.littleEndian = options.littleEndian;
-    scifioOptions.interleaved = options.interleaved;
-    scifioOptions.signed = options.signed;
-    scifioOptions.maxBytes = options.maxBytes;
-    scifioOptions.previousImage = options.previousImage;
-    scifioOptions.lossless = options.lossless;
-    scifioOptions.colorModel = options.colorModel;
-    scifioOptions.quality = options.quality;
-    scifioOptions.tileWidth = options.tileWidth;
-    scifioOptions.tileHeight = options.tileHeight;
-    scifioOptions.tileGridXOffset = options.tileGridXOffset;
-    scifioOptions.tileGridYOffset = options.tileGridYOffset;
-    writer.setCodecOptions(scifioOptions);
+    writer.setCodecOptions(CodecOptions.convertOptions(options));
   }
 
   /* @see IFormatWriter#getCompression() */
