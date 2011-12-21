@@ -338,8 +338,20 @@ public abstract class SCIFIOFormatReader extends FormatReader {
   /* (non-Javadoc)
    * @see loci.formats.IMetadataConfigurable#getMetadataOptions()
    */
+  @Deprecated
+  @Override
   public MetadataOptions getMetadataOptions() {
     return metadataOptions;
+  }
+  
+  /* (non-Javadoc)
+   * @see loci.formats.IMetadataConfigurable#setMetadataOptions(loci.formats.in.MetadataOptions)
+   */
+  @Deprecated
+  @Override
+  public void setMetadataOptions(MetadataOptions options) {
+    this.metadataOptions = options;
+    parser.setMetadataOptions(options.getSCOptions());
   }
 
   // -- IFormatReader API methods --
@@ -705,7 +717,6 @@ public abstract class SCIFIOFormatReader extends FormatReader {
    * @deprecated
    * @see IFormatReader#setMetadataCollected(boolean)
    */
-  // TODO remove?
   public void setMetadataCollected(boolean collect) {
     FormatTools.assertId(currentId, false, 1);
     MetadataLevel level = collect ? MetadataLevel.ALL : MetadataLevel.MINIMUM;
@@ -716,7 +727,6 @@ public abstract class SCIFIOFormatReader extends FormatReader {
    * @deprecated
    * @see IFormatReader#isMetadataCollected()
    */
-  // TODO remove?
   public boolean isMetadataCollected() {
     return getMetadataOptions().getMetadataLevel() == MetadataLevel.ALL;
   }
@@ -1000,7 +1010,7 @@ public abstract class SCIFIOFormatReader extends FormatReader {
   }
 
   // -- Metadata enumeration convenience methods --
-
+  // TODO convert so SCIFIO?
   /**
    * Retrieves an {@link ome.xml.model.enums.AcquisitionMode} enumeration
    * value for the given String.
